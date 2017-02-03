@@ -100,16 +100,22 @@ module.exports = class Login extends React.Component {
                 electron.remote.getGlobal('mainWnd').center();
                 electron.remote.getGlobal('sharedObject').token = res;
               //LOAD REACT LOGGED IN DOM  window.location.href="./view/main.html";
-              */
+              *
 
               ReactDOM.render(
                 <Dashboard />,
-                document.getElementById('content')
+                document.getElementById('main-content')
               )
-
+*/
               ReactDOM.render(
                 <SideBar />,
-                document.getElementById('sidebar')
+                document.getElementById('main-content')
+              )
+              //The <SideBar> loads a content div which will allow the screens to change while the sidebar remains untouched
+
+              ReactDOM.render(
+              	<Dashboard />,
+              	document.getElementById('content')
               )
 
             })
@@ -128,7 +134,7 @@ module.exports = class Login extends React.Component {
     _handleRegistry() {
         ReactDOM.render(
         <Registration />,
-        document.getElementById('content')
+        document.getElementById('main-content')
       )
     }
 

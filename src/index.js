@@ -37,7 +37,7 @@ let createWindow = () => {
   mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools({undocked: true})
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

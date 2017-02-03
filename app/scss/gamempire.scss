@@ -84,6 +84,7 @@ body,
 #content {
   transition: 0.5s;
   padding-top: 2rem;
+  padding-left: 20px;
 }
 
 #main_content {
@@ -355,7 +356,7 @@ hr {
   top: 0;
   padding-right: 10px;
   /* To make the clicable area of a little larger than the visible area so users can easily click it */
-  cursor: url("../app/img/arrow_out.png"), auto;
+  cursor: url("../../app/img/arrow_out.png"), auto;
 }
 
 .toggleNav:hover {
@@ -876,7 +877,7 @@ label {
 .sidenav {
   height: 100%;
   /* 100% Full-height */
-  width: 0;
+  width: 214;
   /* 0 width - change this with JavaScript */
   position: fixed;
   /* Stay in place */

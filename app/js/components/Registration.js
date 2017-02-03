@@ -236,7 +236,7 @@ module.exports = class Registration extends React.Component {
     _backToLogin() {
         ReactDOM.render(
         <Login />,
-        document.getElementById('content')
+        document.getElementById('main-content')
       );
     }
 

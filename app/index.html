@@ -21,20 +21,37 @@ var ipc = electron.ipcRenderer;
       <button id="close-btn" title="Close" onclick="ipc.sendSync('closeWindow')"></button>
     </div><!-- title bar buttons -->
   </div><!-- title bar -->
-  <div id="content"></div>
-  <div id="sidebar"></div>
+  <div id="main-content"></div>
   <script src="js/index.js"></script>
   <!-- build:remove -->
   <!-- Connect to server process -->
   <script>require('electron-connect').client.create()</script>
   <!-- end:build -->
   <script>
-		$( document ).ready(function() {
-			if (navigator.appVersion.indexOf("Mac")!=-1) {
+  function toggleNav() {
+      $("#mySidenav, #content").toggleClass("navOpen");
+      if ( $("#mySidenav").hasClass("navOpen") ) {
+          //do something it does have the protected class!
+          $(".toggleNav").css({"cursor":"url('../app/img/arrow_in.png'), auto"});
+      }else{
+          $(".toggleNav").css({"cursor":"url('../app/img/arrow_out.png'), auto"});
+      }
+  }
+
+  function openNav() {
+    document.getElementById("mySidenav").style.width = "250px";
+    document.getElementById("main_content").style.marginLeft = "250px";
+  }
+  function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main_content").style.marginLeft = "0";
+  }
+  $( document ).ready(function() {
+    if (navigator.appVersion.indexOf("Mac")!=-1) {
 			  //MAC
 			  $("#title-bar-btns").hide();
 			  $("#titleicon").hide();
-			  
+
 			} else {
 			  //PC
 			}
@@ -43,7 +60,7 @@ var ipc = electron.ipcRenderer;
 			$( window ).resize(function() {
 			      $("body").css({"height":"calc(100% - 35px)"});
 			});
-       
+
 		});
 	</script>
 </body>
