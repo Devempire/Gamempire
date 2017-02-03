@@ -39,6 +39,11 @@ let createWindow = () => {
   // Open the DevTools.
   mainWindow.webContents.openDevTools({undocked: true})
 
+  mainWindow.webContents.on('did-finish-load',() => {
+    mainWindow.setTitle(mainWindow.getTitle());
+  });
+
+
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
     // Dereference the window object, usually you would store windows

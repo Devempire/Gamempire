@@ -38,7 +38,9 @@ module.exports = class Login extends React.Component {
     }
 
     render() {
-
+      var title = "Login - Gamempire"
+      document.title = title
+      document.getElementById('title').textContent = title
         return (
 
 

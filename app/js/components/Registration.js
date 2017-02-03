@@ -21,7 +21,9 @@ module.exports = class Registration extends React.Component {
     }
 
     render() {
-
+      var title = "Registration - Gamempire"
+      document.title = title
+      document.getElementById('title').textContent = title
 
         return (
 

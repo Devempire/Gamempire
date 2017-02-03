@@ -263,6 +263,16 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   render() {
+    var title = "Profile Edit - Gamempire"
+    document.title = title
+    document.getElementById('title').textContent = title
+
+    //Removes all Active class from Menu
+    $("#mySidenav>a.active").removeClass("active");
+
+    //Set Dashbaord as active in menu
+    $( "#_ProfileEdit" ).addClass('active');
+
     if(this.state.response){
       return (
         <div>

@@ -14,7 +14,7 @@ var ipc = electron.ipcRenderer;
 <body>
   <div id="titleBar">
     <div id="titleicon" class="titleicon"></div> <!-- icon -->
-    <span id="title" class="title">Gamempire Login</span> <!-- title of page -->
+    <span id="title" class="title"></span> <!-- title of page -->
     <div id="title-bar-btns"> <!-- close, minimize, maximize buttons -->
       <button id="min-btn" title="Minimize" onclick="ipc.sendSync('Minimize')"></button>
       <button id="max-btn" title="Maximize" onclick="ipc.sendSync('Maximize')"></button>

@@ -28,4 +28,4 @@ injectTapEventPlugin();
 ReactDOM.render(
   <Login />,
   document.getElementById('main-content')
-)
+);
