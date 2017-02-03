@@ -107,6 +107,11 @@ module.exports = class Login extends React.Component {
                 document.getElementById('content')
               )
 
+              ReactDOM.render(
+                <SideBar />,
+                document.getElementById('sidebar')
+              )
+
             })
 
             .fail((res)=>{

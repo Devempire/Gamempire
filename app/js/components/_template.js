@@ -2,7 +2,7 @@ module.exports = React.createClass({
   render () {
     return (
       <div>
-        <h1>Welcome Gamempire Developpers!</h1>
+        <h1>Welcome Gamempire Developers!</h1>
       </div>
     )
   }
