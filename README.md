@@ -19,15 +19,7 @@ npm install --global gulp-cli
 
 #### 3. Build and Launch App
 
-Watches source files for changes.
-
-Converts SASS to CSS.
-
-Compacts CSS.
-
-Currently DOES NOT compact HTLM.
-
-Renders from React.
+Watches and Builds application
 
 Run this command in your project directory:
 ```sh
