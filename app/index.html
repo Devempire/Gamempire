@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>BERB Welcome</title>
+  <link rel="stylesheet" href="./css/foundation.min.css">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/gamempire.css">
+  <link rel="stylesheet" href="./css/shake.css">
+</head>
+<script type="text/javascript">
+const electron = require('electron');
+var ipc = electron.ipcRenderer;
+</script>
+<body>
+  <div id="titleBar">
+    <div id="titleicon" class="titleicon"></div> <!-- icon -->
+    <span id="title" class="title">Gamempire Login</span> <!-- title of page -->
+    <div id="title-bar-btns"> <!-- close, minimize, maximize buttons -->
+      <button id="min-btn" title="Minimize" onclick="ipc.sendSync('Minimize')"></button>
+      <button id="max-btn" title="Maximize" onclick="ipc.sendSync('Maximize')"></button>
+      <button id="close-btn" title="Close" onclick="ipc.sendSync('closeWindow')"></button>
+    </div><!-- title bar buttons -->
+  </div><!-- title bar -->
+  <div id="content"></div>
+  <script src="js/index.js"></script>
+  <!-- build:remove -->
+  <!-- Connect to server process -->
+  <script>require('electron-connect').client.create()</script>
+  <!-- end:build -->
+</body>
+</html>
