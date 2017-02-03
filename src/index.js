@@ -1,6 +1,9 @@
 
 'use strict'
 
+//change the value to false when package, true for developing
+let isDevelopment = true;
+
 const electron = require('electron')
 // Module to control application life.
 global.electron = electron
@@ -22,10 +25,10 @@ let mainWindow
 let createWindow = () => {
   // Create the browser window.
   mainWindow  = new BrowserWindow({
-    minHeight: 477,
+    minHeight: 480,
     minWidth: 276,
     width: 276,
-    height: 477,
+    height: 480,
     frame: false,
     thickFrame: true,
     titleBarStyle: 'hidden',
@@ -36,12 +39,12 @@ let createWindow = () => {
   // and load the index.html of the app.
   mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools({undocked: true})
+  if (isDevelopment) {
+    // Open the DevTools.
+    mainWindow.webContents.openDevTools({undocked: true})
+  }
 
-  mainWindow.webContents.on('did-finish-load',() => {
-    mainWindow.setTitle(mainWindow.getTitle());
-  });
+  mainWindow.center();
 
 
   // Emitted when the window is closed.
@@ -57,6 +60,12 @@ let createWindow = () => {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   createWindow();
+
+  ipc.on('loggedIn', function(event, arg){
+    event.returnValue='';
+    mainWindow.setContentSize(1152, 648);
+    mainWindow.center();
+  });//exit/close button
 
   ipc.on('closeWindow', function(event, arg){
     event.returnValue='';

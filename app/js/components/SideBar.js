@@ -16,7 +16,7 @@ module.exports = global.Bar = React.createClass({
 						<a id="8" >+</a>
 						*/}
 						<a href="#" id="8" onClick={this._Logout}>Logout </a>
-						<div className="toggleNav" onClick={toggleNav}></div>
+						<div className="toggleNav" onClick={this.toggleNav}></div>
 			    </div>
 					<div id="content">
               <div id="main_content"></div>
@@ -24,6 +24,16 @@ module.exports = global.Bar = React.createClass({
 			</t>
 
 		);
+	},
+	toggleNav(){
+				$("#mySidenav, #content").toggleClass("navOpen");
+				if ( $("#mySidenav").hasClass("navOpen") ) {
+						//do something it does have the protected class!
+						$(".toggleNav").css({"cursor":"url('../app/img/arrow_in.png'), auto"});
+				}else{
+						$(".toggleNav").css({"cursor":"url('../app/img/arrow_out.png'), auto"});
+				}
+
 	},
 
 	_Dashboard(){

@@ -108,7 +108,7 @@ module.exports = class Login extends React.Component {
                 <Dashboard />,
                 document.getElementById('main-content')
               )
-*/
+*/            ipc.sendSync('loggedIn')
               ReactDOM.render(
                 <SideBar />,
                 document.getElementById('main-content')

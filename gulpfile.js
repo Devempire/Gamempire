@@ -1,14 +1,8 @@
 'use strict'
 
 /*
-  Hello!
-  It is unlikely that you should touch this Gulpfile. If you want to, however, I can't stop you. I'm not there!
-  Here's some things you can do if you'd like:
-  - If you want to brand your app, you'll want to update the `gulp package-osx`, `gulp package-windows`, and
-    `gulp package-linux` tasks. You can find documentation for the electronPackager() function at the github repo
-    joaomoreno/gulp-atom-electron. There are a few basic branding things you can do there.
-  - If you want to contemplate the universe and just feel small and meaningless in general, listen to Neil DeGrasse
-    Tyson talk for an extended period of time!
+gulp serve - to launch server, watch and electron for dev
+gulp package-windows build-production - to package windows applicaion. Will be placed in ./release/windows.zip
 */
 
 const gulp = require('gulp')
@@ -95,14 +89,14 @@ gulp.task('build-client-html-production', (done) => {
 })
 
 gulp.task('build-client-assets', (done) => {
-  glob('./app/assets/**/*', (err, files) => {
+  glob('./app/img/**/*', (err, files) => {
     if (err) done(err)
 
     let tasks = files.map((entry) => {
       console.log(entry)
       return gulp.src(entry)
         .pipe(rename({
-          dirname: 'assets'
+          dirname: 'img'
         }))
         .pipe(gulp.dest('./build'))
     })
