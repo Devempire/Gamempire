@@ -51,6 +51,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Logout(){
+		ipc.sendSync('loggedOut')
 		ReactDOM.render(
 		  <Login />,
 		  document.getElementById('main-content')

@@ -65,7 +65,13 @@ app.on('ready', function() {
     event.returnValue='';
     mainWindow.setContentSize(1152, 648);
     mainWindow.center();
-  });//exit/close button
+  });//Logged in resize
+
+  ipc.on('loggedOut', function(event, arg){
+    event.returnValue='';
+    mainWindow.setContentSize(276, 480);
+    mainWindow.center();
+  });//Logged out resize
 
   ipc.on('closeWindow', function(event, arg){
     event.returnValue='';
