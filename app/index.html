@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>BERB Welcome</title>
+  <title>Gamempire</title>
   <link rel="stylesheet" href="./css/foundation.min.css">
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/gamempire.css">
@@ -28,5 +28,23 @@ var ipc = electron.ipcRenderer;
   <!-- Connect to server process -->
   <script>require('electron-connect').client.create()</script>
   <!-- end:build -->
+  <script>
+		$( document ).ready(function() {
+			if (navigator.appVersion.indexOf("Mac")!=-1) {
+			  //MAC
+			  $("#title-bar-btns").hide();
+			  $("#titleicon").hide();
+			  
+			} else {
+			  //PC
+			}
+        	$("body").css({"height":"calc(100% - 35px)"});
+        	$("#username").focus();
+			$( window ).resize(function() {
+			      $("body").css({"height":"calc(100% - 35px)"});
+			});
+       
+		});
+	</script>
 </body>
 </html>
