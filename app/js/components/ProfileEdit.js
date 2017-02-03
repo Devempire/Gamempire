@@ -83,7 +83,7 @@ module.exports = global.ProfileEdit = React.createClass({
       <div key={i} data-grid={el} className="noselect">
         <h3> Edit Your personal Info</h3>
         <hr/>
-        <input className='profilepic' id='profilepic' type='image' onClick={this.openFileExp} src={'./img/GamEmpireLogo.png'} draggable="false"/>
+        <input className='profilepic' id='profilepic' type='image' onClick={this.openFileExp} src={'./../app/img/GamEmpireLogo.png'} draggable="false"/>
         <input className='uploadedpic' onChange={this.uploadPic} id='uploadedpic' type='file' accept="image/*"/>
         <br></br>
         <font id='uploadmsg' color='red'></font>

@@ -243,7 +243,7 @@ module.exports = global.Dashboard = React.createClass({
     return (
     <div key={i} data-grid={el}>
     <h2>{el.i} </h2>
-    <div className="gameImage" style={{background: 'url(./img/'+gameImage+'.png)'}}>
+    <div className="gameImage" style={{background: 'url(./../app/img/'+gameImage+'.png)'}}>
     <div className="row">
     <div className="overlay">
     { el.i =="Overwatch" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
@@ -294,7 +294,7 @@ module.exports = global.Dashboard = React.createClass({
         <div className="noselect">
         <div className="row profileHeader">
         <div onClick={this.goToProfileEdit} className="column small-8 user noselect">
-          <img className="avatar" height="60" width="60" src="./img/GamEmpireLogo.png" /><div>
+          <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" /><div>
           <h3>{this.state.username} </h3><p> talk something to me </p></div></div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
         </div>
