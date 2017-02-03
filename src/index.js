@@ -10,7 +10,7 @@ const BrowserWindow = electron.BrowserWindow
 var ipc = electron.ipcMain;
 
 const path = require('path')
-var iconPath = __dirname + 'img/logo.ico';
+var iconPath = __dirname + '../../app/img/logo.ico';
 global.sharedObject = {
   token: 'empty'
 }
