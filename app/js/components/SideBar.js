@@ -1,11 +1,13 @@
 module.exports = global.Bar = React.createClass({
 
 	render() {
-		return (
-			<t>
+		return <div>
 			    <div id="mySidenav" className="sidenav">
 						<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashbaord</a>
 						<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
+						<a href="#" onClick={this._Discord} id="_Discord">Discord</a>
+
+
 					{	/* NOT WORKING YET
 						<a href="#" id="2">Gaming Tools</a>
 						<a href="#" id="3">Video Streams</a>
@@ -15,15 +17,15 @@ module.exports = global.Bar = React.createClass({
 						<a href="#" id="7">Chat </a>-->
 						<a id="8" >+</a>
 						*/}
+
+
 						<a href="#" id="8" onClick={this._Logout}>Logout </a>
 						<div className="toggleNav" onClick={this.toggleNav}></div>
 			    </div>
 					<div id="content">
               <div id="main_content"></div>
 		    	</div>
-			</t>
-
-		);
+		</div>;
 	},
 	toggleNav(){
 				$("#mySidenav, #content").toggleClass("navOpen");
@@ -46,6 +48,13 @@ module.exports = global.Bar = React.createClass({
 	_ProfileEdit(){
 		ReactDOM.render(
 			<ProfileEdit />,
+			document.getElementById('content')
+		);
+	},
+
+	_Discord(){
+		ReactDOM.render(
+			<Discord />,
 			document.getElementById('content')
 		);
 	},

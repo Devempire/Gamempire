@@ -688,6 +688,19 @@ label {
   background-size: 50px 50px;
 }
 
+.discordFrame{
+  border: 0;
+  width: 100%;
+}
+
+webview {
+  display: block !important;       /* iframes are inline by default */
+  border: none !important;         /* Reset default border */
+  height: 98vh !important;        /* Viewport-relative units */
+  width: 100vw !important;
+}
+
+
 .noselect {
   -webkit-touch-callout: none;
   /* iOS Safari */

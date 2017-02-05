@@ -60,6 +60,18 @@ let createWindow = () => {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   createWindow();
+  ipc.on('disable-x-frame', (event, arg) => {
+
+    session.fromPartition(arg.partition).webRequest.onHeadersReceived({}, (d, c) => {
+
+  	if(d.responseHeaders['x-frame-options'] || d.responseHeaders['X-Frame-Options']){
+  		delete d.responseHeaders['x-frame-options'];
+  		delete d.responseHeaders['X-Frame-Options'];
+  	}
+  	c({cancel: false, responseHeaders: d.responseHeaders, statusLine: d.statusLine});
+    });
+
+  });
 
   ipc.on('loggedIn', function(event, arg){
     event.returnValue='';
