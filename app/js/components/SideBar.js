@@ -19,16 +19,22 @@ module.exports = global.Bar = React.createClass({
 						*/}
 
 
-						<a href="#" id="8" onClick={this._Logout}>Logout </a>
+						<a href="#" id="_Logout" onClick={this._Logout}>Logout </a>
 						<div className="toggleNav" onClick={this.toggleNav}></div>
 			    </div>
 					<div id="content">
               <div id="main_content"></div>
 		    	</div>
-		</div>;
+					<div className="discordFrame" id="discordFrame">
+					<script>
+		      ipcRenderer.send('disable-x-frame', webview.partition);
+		      </script>
+					<webview className="discordFrame" src="https://discordapp.com/login"></webview>
+					</div>
+					</div>;
 	},
 	toggleNav(){
-				$("#mySidenav, #content").toggleClass("navOpen");
+				$("#mySidenav, #content, #discordFrame").toggleClass("navOpen");
 				if ( $("#mySidenav").hasClass("navOpen") ) {
 						//do something it does have the protected class!
 						$(".toggleNav").css({"cursor":"url('../app/img/arrow_in.png'), auto"});
@@ -43,6 +49,8 @@ module.exports = global.Bar = React.createClass({
 		  <Dashboard />,
 		  document.getElementById('content')
 		);
+		document.getElementById('discordFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
 	},
 
 	_ProfileEdit(){
@@ -50,13 +58,18 @@ module.exports = global.Bar = React.createClass({
 			<ProfileEdit />,
 			document.getElementById('content')
 		);
+		document.getElementById('discordFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
 	},
 
 	_Discord(){
-		ReactDOM.render(
-			<Discord />,
-			document.getElementById('content')
-		);
+		document.getElementById('content').style.visibility = "hidden";
+		document.getElementById('discordFrame').style.visibility = "visible";
+		var title = "Discord - Gamempire"
+		document.title = title
+		document.getElementById('title').textContent = title
+		$("#mySidenav>a.active").removeClass("active");
+		$( "#_Discord" ).addClass('active');
 	},
 
 	_Logout(){
@@ -66,5 +79,4 @@ module.exports = global.Bar = React.createClass({
 		  document.getElementById('main-content')
 		);
 	}
-
 });

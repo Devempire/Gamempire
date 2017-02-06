@@ -346,6 +346,9 @@ hr {
   transform: translateX(265px);
 }
 
+#discordFrame.navOpen {
+  transform: translateX(265px);
+}
 .toggleNav {
   transition: all 0.25s;
   height: 100%;
@@ -689,10 +692,15 @@ label {
 }
 
 .discordFrame{
+  transition: 0.5s;
+  padding-top: 25px;
+  padding-left: 16px;
+  top: 0;
+  left: 0;
+  position: fixed;
   border: 0;
-  margin-top: -28px;
   width: 100%;
-  height: calc(100vh - 39px) !important;        /* Viewport-relative units */
+  height: calc(100vh - 0px) !important;        /* Viewport-relative units */
 }
 
 

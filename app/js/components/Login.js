@@ -96,24 +96,13 @@ module.exports = class Login extends React.Component {
             .done((res) =>{
               $( ".content-loading" ).fadeOut( "slow" );
               electron.remote.getGlobal('sharedObject').token = res;
-              //$("#content").html("Welcome! You are logged in.")
-              /*
-                electron.remote.getGlobal('mainWnd').setContentSize(1152, 648);
-                electron.remote.getGlobal('mainWnd').center();
-                electron.remote.getGlobal('sharedObject').token = res;
-              //LOAD REACT LOGGED IN DOM  window.location.href="./view/main.html";
-              *
-
-              ReactDOM.render(
-                <Dashboard />,
-                document.getElementById('main-content')
-              )
-*/            ipc.sendSync('loggedIn')
+              ipc.sendSync('loggedIn')
               ReactDOM.render(
                 <SideBar />,
                 document.getElementById('main-content')
               )
               //The <SideBar> loads a content div which will allow the screens to change while the sidebar remains untouched
+              document.getElementById('discordFrame').style.visibility = "hidden";
 
               ReactDOM.render(
               	<Dashboard />,
