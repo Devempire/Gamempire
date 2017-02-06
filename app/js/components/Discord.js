@@ -10,7 +10,8 @@ module.exports = global.Discord = React.createClass({
       <script>
       ipcRenderer.send('disable-x-frame', webview.partition);
       </script>
-      <webview className="discordFrame" id="discordFrame" src="https://discordapp.com/login" ></webview>
+
+			<webview className="discordFrame" id="discordFrame" src="https://discordapp.com/login"></webview>
     </div>;
 	}
 

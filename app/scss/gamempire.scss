@@ -690,15 +690,11 @@ label {
 
 .discordFrame{
   border: 0;
+  margin-top: -28px;
   width: 100%;
+  height: calc(100vh - 39px) !important;        /* Viewport-relative units */
 }
 
-webview {
-  display: block !important;       /* iframes are inline by default */
-  border: none !important;         /* Reset default border */
-  height: 98vh !important;        /* Viewport-relative units */
-  width: 100vw !important;
-}
 
 
 .noselect {
