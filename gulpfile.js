@@ -3,6 +3,7 @@
 /*
 gulp serve - to launch server, watch and electron for dev
 gulp package-windows build-production - to package windows applicaion. Will be placed in ./release/windows.zip
+gulp package-osx build-production -- to package windows applicaion. Will be placed in ./release/
 */
 
 const gulp = require('gulp')
