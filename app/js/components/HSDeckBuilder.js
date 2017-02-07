@@ -42,9 +42,9 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
   },
 
-  resetLayout() {
-    this.setState({layouts: {}});
-  },
+  // resetLayout() {
+  //   this.setState({layouts: {}});
+  // },
 
   onBreakpointChange(breakpoint, cols) {
     this.setState({
@@ -307,7 +307,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
   },
 
   render() {
-  	//{this.state.renderChild ? <SignUpWindow unmountMe={this.handleChildUnmount} /> : null}
+  	
     return (
       <div>
 	      <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange} 
