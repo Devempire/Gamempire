@@ -21,7 +21,6 @@ global.Registration = require('./components/Registration.js')
 global.Dashboard = require('./components/Dashboard.js')
 global.ProfileEdit = require('./components/ProfileEdit.js')
 global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
-global.Discord = require('./components/Discord.js')
 global.SideBar = require('./components/SideBar.js')
 //let Index = require('./components/index.js')
 injectTapEventPlugin();
