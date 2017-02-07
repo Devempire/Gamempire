@@ -37,7 +37,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
       myDeckFinal:[],
       decks:[],
       neutral:[],
-      classCards:[]
+      classCards:[],
+      cardCounter: 0
     };
 
   },
@@ -225,7 +226,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
     //myDeck is for during deck creation, the deck names need to be clickable
     //to call removeCard function to remove a desired card.
-    //myDeckFinal is for publishing the deck, the deck names are not clikable
+    //myDeckFinal is for publishing the deck, the deck names are not clickable
     //and only for display.
     if (i < 30 && card_rarity != 'Legendary' && count < 2) {
       this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
@@ -261,6 +262,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
     this.state.myDeck.splice(index, 1);
     this.setState({myDeck: this.state.myDeck.concat([])});
+    this.state.myDeckFinal.splice(index, 1);
+    this.setState({myDeckFinal: this.state.myDeckFinal.concat([])});
   },
 
   handleSubmit(event) {
@@ -307,6 +310,17 @@ module.exports = global.HSDeckBuilder = React.createClass({
   },
 
   render() {
+
+    var title = "Hearthstone Deck Builder - Gamempire"
+    document.title = title
+    document.getElementById('title').textContent = title
+
+    //Removes all Active class from Menu
+    $("#mySidenav>a.active").removeClass("active");
+
+    //Set Dashbaord as active in menu
+    $( "#_HSDeckBuilder" ).addClass('active');
+    
   	
     return (
       <div>
