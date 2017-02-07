@@ -5,7 +5,7 @@ module.exports = global.Bar = React.createClass({
 		    <div id="mySidenav" className="sidenav">
 				<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashbaord</a>
 				<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
-				<a href="#" onClick={this._GamingTools} id="_GamingTools">Gaming Tools</a>
+				<a href="#" onClick={this._HSDeckBuilder} id="_HSDeckBuilder">Hearthstone Deck Builder</a>
 				<a href="#" onClick={this._Discord} id="_Discord">Discord</a>
 
 				{	
@@ -62,9 +62,9 @@ module.exports = global.Bar = React.createClass({
 		document.getElementById('content').style.visibility = "visible";
 	},
 
-	_GamingTools(){
+	_HSDeckBuilder(){
 		ReactDOM.render(
-			<GamingTools />,
+			<HSDeckBuilder />,
 			document.getElementById('content')
 		);
 		document.getElementById('discordFrame').style.visibility = "hidden";

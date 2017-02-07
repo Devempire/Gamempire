@@ -7,7 +7,7 @@ const originalLayouts = getFromLS('layouts') || {};
 var unirest = require('unirest');
 
 //Hearthstone Deck Builder
-module.exports = global.GamingTools = React.createClass({
+module.exports = global.HSDeckBuilder = React.createClass({
   mixins: [PureRenderMixin],
 
   getDefaultProps() {
