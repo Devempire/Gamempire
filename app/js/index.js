@@ -5,6 +5,8 @@ const $ = require('jquery')
 const _ = require('lodash')
 const moment = require('moment')
 const PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin.js')
+global.$ = require('jquery')
+
 
 window.React = React
 window.ReactDOM = ReactDOM

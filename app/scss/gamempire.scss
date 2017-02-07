@@ -342,11 +342,18 @@ hr {
   transform: translateX(0px);
 }
 
+/* For sidebar to slide over other divs */
 #content.navOpen {
   transform: translateX(265px);
 }
 
 #discordFrame.navOpen {
+  transform: translateX(265px);
+}
+#soundcloudFrame.navOpen {
+  transform: translateX(265px);
+}
+#spotifyFrame.navOpen {
   transform: translateX(265px);
 }
 .toggleNav {

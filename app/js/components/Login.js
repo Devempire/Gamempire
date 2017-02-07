@@ -102,6 +102,12 @@ module.exports = class Login extends React.Component {
                 document.getElementById('main-content')
               )
               //The <SideBar> loads a content div which will allow the screens to change while the sidebar remains untouched
+
+              //Always alive content loads, and needs to be imediatley set to invisible.
+              //currently displays white screen for split second when rendering the elements in sidebar.js
+              //TODO: find faster way to way.
+              document.getElementById('spotifyFrame').style.visibility = "hidden";
+              document.getElementById('soundcloudFrame').style.visibility = "hidden";
               document.getElementById('discordFrame').style.visibility = "hidden";
 
               ReactDOM.render(
@@ -122,7 +128,7 @@ module.exports = class Login extends React.Component {
             },200);
             });
     }
-    
+
     _handleRegistry() {
         ReactDOM.render(
         <Registration />,
