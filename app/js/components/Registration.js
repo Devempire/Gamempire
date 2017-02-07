@@ -16,9 +16,9 @@ module.exports = class Registration extends React.Component {
 
     }
 
-    dismiss() {
-        this.props.unmountMe();
-    }
+    // dismiss() {
+    //     this.props.unmountMe();
+    // }
 
     render() {
       var title = "Registration - Gamempire"

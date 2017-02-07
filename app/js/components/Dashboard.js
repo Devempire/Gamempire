@@ -18,9 +18,9 @@ module.exports = global.Dashboard = React.createClass({
     //this.handleChildUnmount = this.handleChildUnmount.bind(this);
   },
 
-  handleChildUnmount() {
-    this.setState({renderChild: false});
-  },
+  // handleChildUnmount() {
+  //   this.setState({renderChild: false});
+  // },
 
   getInitialState() {
     return {
@@ -299,7 +299,7 @@ module.exports = global.Dashboard = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
-    {this.state.renderChild ? <SignUpWindow unmountMe={this.handleChildUnmount} /> : null}
+   
     if (this.state.response) {
       return (
         <div className="noselect">

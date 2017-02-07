@@ -9,12 +9,12 @@ module.exports = class Login extends React.Component {
             password: null
         };
 
-        this.handleChildUnmount = this.handleChildUnmount.bind(this);
+        // this.handleChildUnmount = this.handleChildUnmount.bind(this);
     }
 
-    handleChildUnmount() {
-        this.setState({renderChild: false});
-    }
+    // handleChildUnmount() {
+    //     this.setState({renderChild: false});
+    // }
 
     userSubmit(e) {
        if (e.key == 'Enter') {
@@ -122,6 +122,7 @@ module.exports = class Login extends React.Component {
             },200);
             });
     }
+    
     _handleRegistry() {
         ReactDOM.render(
         <Registration />,
