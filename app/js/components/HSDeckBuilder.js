@@ -25,7 +25,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
   // },
 
   getInitialState() {
-    
+
     return {
     	layouts: JSON.parse(JSON.stringify(originalLayouts)),
     	selectclass:'',
@@ -75,7 +75,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     //   var i = 0;
     //   while (i < result.body.length) {
     //     this.setState({neutral: this.state.neutral.concat(<li key={i}>
-    //       <a href="#" name={result.body[i].name} value={result.body[i].rarity} 
+    //       <a href="#" name={result.body[i].name} value={result.body[i].rarity}
     //       onClick={this.putCardToDeck}>{result.body[i].name}</a></li>)});
     //     i++;
     //   };
@@ -170,7 +170,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
   putClassCards(i, deck) {
     while (i < deck.length) {
       this.setState({classCards: this.state.classCards.concat(<li key={i}>
-        <a href="#" name={deck[i].name} value={deck[i].rarity} 
+        <a href="#" name={deck[i].name} value={deck[i].rarity}
         onClick={this.putCardToDeck}>{deck[i].name}</a></li>)});
       i++;
     };
@@ -230,13 +230,13 @@ module.exports = global.HSDeckBuilder = React.createClass({
     //and only for display.
     if (i < 30 && card_rarity != 'Legendary' && count < 2) {
       this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
-          <a href="#" name={card_name} value={card_rarity} 
+          <a href="#" name={card_name} value={card_rarity}
           onClick={this.removeCard}>{card_name}</a></li>)});
       this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
           {card_name}</li>)});
     } else if (i < 30 && card_rarity == 'Legendary' && count < 1) {
       this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
-          <a href="#" name={card_name} value={card_rarity} 
+          <a href="#" name={card_name} value={card_rarity}
           onClick={this.removeCard}>{card_name}</a></li>)});
       this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
           {card_name}</li>)});
@@ -319,11 +319,11 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
     //Set Dashbaord as active in menu
     $( "#_HSDeckBuilder" ).addClass('active');
-    
+
   	//{this.state.renderChild ? <SignUpWindow unmountMe={this.handleChildUnmount} /> : null}
     return (
       <div>
-	      <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange} 
+	      <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
 	          onBreakpointChange={this.onBreakpointChange} {...this.props}>
 	          {_.map(this.state.decks, this.deckBuilder)}
 	      </ResponsiveReactGridLayout>
@@ -353,23 +353,23 @@ module.exports = global.HSDeckBuilder = React.createClass({
           <h6>Description: </h6>
           <input type="text" name="description" id="deck_desc"></input>
 
-          <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange} 
+          <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
-              <div key="1" data-grid={{x: 0, y: 0, w: 1, h: 8, static: true}}>
+              <div key="1" data-grid={{x: 0, y: 0, w: 1, h: 8, static: true}} className="hearthstone_scroll">
                 <h4>{this.state.selectclass} Cards</h4>
                 <input type="text" id="class_card" onKeyUp={this.searchClassCards} placeholder="Search a Card"></input>
                 <ul id="class_card_list">
                   {this.state.classCards}
                 </ul>
               </div>
-              <div key="2" data-grid={{x: 1, y: 0, w: 1, h: 8, static: true}}>
+              <div key="2" data-grid={{x: 1, y: 0, w: 1, h: 8, static: true}} className="hearthstone_scroll">
                 <h4>Neutral Cards</h4>
                 <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
                 <ul id="neutral_card_list">
                   {this.state.neutral}
                 </ul>
               </div>
-              <div key="3" data-grid={{x: 2, y: 0, w: 1, h: 14, static: true}}>
+              <div key="3" data-grid={{x: 2, y: 0, w: 1, h: 14, static: true}} className="hearthstone_scroll">
                 <h4>Deck</h4>
                 <ul id="deck_list">
                   {this.state.myDeck}
@@ -389,7 +389,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         </div>
       </div>
 	  )
-  } 
+  }
 });
 
 function getFromLS(key) {
