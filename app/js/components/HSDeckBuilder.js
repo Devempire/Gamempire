@@ -367,21 +367,21 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
           <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
-              <div key="11asd" data-grid={{x: 0, y: 0, w: 1, h: 8, static: true}} className="hearthstone_scroll">
+              <div key="1" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
                 <h4>{this.state.selectclass} Cards</h4>
                 <input type="text" id="class_card" onKeyUp={this.searchClassCards} placeholder="Search a Card"></input>
                 <ul id="class_card_list">
                   {this.state.classCards}
                 </ul>
               </div>
-              <div key="22das" data-grid={{x: 1, y: 0, w: 1, h: 8, static: true}} className="hearthstone_scroll">
+              <div key="2" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
                 <h4>Neutral Cards</h4>
                 <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
                 <ul id="neutral_card_list">
                   {this.state.neutral}
                 </ul>
               </div>
-              <div key="3asd" data-grid={{x: 2, y: 0, w: 1, h: 14, static: true}} className="hearthstone_scroll">
+              <div key="3" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
                 <h4>Deck</h4>
                 <ul id="deck_list">
                   {this.state.myDeck}
