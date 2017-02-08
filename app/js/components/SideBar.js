@@ -3,7 +3,7 @@ module.exports = global.Bar = React.createClass({
 	render() {
 		return <div>
 		    <div id="mySidenav" className="sidenav">
-					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashbaord</a>
+					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
 					<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#" onClick={this._HSDeckBuilder} id="_HSDeckBuilder">Hearthstone Deck Builder</a>
 					<a href="#" onClick={this._Discord} id="_Discord">Discord</a>

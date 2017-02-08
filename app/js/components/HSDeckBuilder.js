@@ -247,7 +247,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var deck_list = [];
     var card_name = event.target.getAttribute('name');
 
-    //First, put all card names in the deck list into a list
+    //First, put all card names in the deck into a list
     for (var i = 0; i < this.state.myDeck.length; i++) {
       deck_list.push(this.state.myDeck[i].props.children.props.children);
     }
