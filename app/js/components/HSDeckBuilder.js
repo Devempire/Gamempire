@@ -218,8 +218,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var i = this.state.myDeck.length;
     var count = 0;
 
-    for (var j = 0; j < this.state.myDeckFinal.length; j++) {
-      if (this.state.myDeckFinal[j].props.children == card_name) {
+    for (var j = 0; j < this.state.myDeck.length; j++) {
+      if (this.state.myDeck[j].props.children == card_name) {
         count++;
       }
     }
