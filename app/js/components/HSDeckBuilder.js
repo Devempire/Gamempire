@@ -296,7 +296,6 @@ module.exports = global.HSDeckBuilder = React.createClass({
       title:'',
       description:'',
       classCards:[],
-
     });
   },
 
