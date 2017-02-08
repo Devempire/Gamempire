@@ -284,17 +284,17 @@ module.exports = global.HSDeckBuilder = React.createClass({
         maxH: 14,
         minW: 1,
         maxW: 3
-      })
+      }),
+      showDeckBuilder:false,
+      showAddDeck:true,
     });
-
-    // this.setState({showDeckBuilder: false});
-    // this.setState({showAddDeck: true});
+    console.log(this.state.showDeckBuilder);
+    console.log(this.state.showAddDeck);
   },
 
   deckBuilder(el) {
     console.log(el);
     var i = el.i;
-    //console.log(i);
     var title = document.getElementById('deck_title').value;
     var description = document.getElementById('deck_desc').value;
 
