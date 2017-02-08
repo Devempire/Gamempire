@@ -38,7 +38,6 @@ module.exports = global.HSDeckBuilder = React.createClass({
       decks:[],
       neutral:[],
       classCards:[],
-      cardCounter: 0,
       title:'',
       description:'',
     };
@@ -278,7 +277,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({
       decks: this.state.decks.concat({
         i: i.toString(),
-        x: i,
+        x: i % 3,
         y: row,
         w: width,
         h: height,
@@ -286,6 +285,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         maxH: 14,
         minW: 1,
         maxW: 3,
+        hero:this.state.selectclass,
         title:this.state.title,
         description:this.state.description,
         decks:this.state.myDeckFinal,
@@ -304,12 +304,14 @@ module.exports = global.HSDeckBuilder = React.createClass({
   deckBuilder(el) {
     console.log(el);
     var i = el.i;
+    var hero = el.hero;
     var title = el.title;
     var description = el.description;
 
     return (
       <div key={i} data-grid={el}>
-        <h3>{title}</h3>
+        <h3>{hero}</h3>
+        <h4>{title}</h4>
         <h6>{description}</h6>
         <ul>
           {el.decks}
