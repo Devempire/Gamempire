@@ -199,7 +199,7 @@ module.exports = global.Dashboard = React.createClass({
 
                               })
                             });
-                        var list =$("#gameusername").val().split("#");
+                        var list = $("#gameusername").val().split("#");
 
                         $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
                        this.setState({
@@ -208,7 +208,7 @@ module.exports = global.Dashboard = React.createClass({
                       });
                     });
                     $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                       var H =JSON.parse(res);
+                       var H = JSON.parse(res);
 
                        this.setState({
                         hero:H[0].name,

@@ -267,14 +267,6 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({myDeckFinal: this.state.myDeckFinal.concat([])});
   },
 
-  titlevalue(event){
-    this.setState({title: event.target.value});
-  },
-
-  description(event){
-    this.setState({description: event.target.value});
-  },
-
 
   handleSubmit(event) {
     event.preventDefault();
@@ -303,6 +295,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
       selectclass:'',
       title:'',
       description:'',
+      classCards:[],
 
     });
   },
@@ -364,9 +357,10 @@ module.exports = global.HSDeckBuilder = React.createClass({
         <div className="row dropFade" style={{display: this.state.showDeckBuilder ? 'block' : 'none'}}>
           <h5>Create a Deck: </h5>
           <h6>Title: </h6>
-          <input type="text" name="title" id="deck_title" onChange={this.titlevalue}></input>
+          <input type="text" name="title" id="deck_title" onChange={(event) => {this.setState({title: event.target.value})}} value={this.state.title}></input>
           <h6>Description: </h6>
-          <input type="text" name="description" id="deck_desc" onChange={this.descriptionvalue}></input>
+          <input type="text" name="description" id="deck_desc" onChange={(event) => {this.setState({description
+            : event.target.value})}} value={this.state.description}></input>
 
           <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
