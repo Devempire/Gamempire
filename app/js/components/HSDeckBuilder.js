@@ -258,7 +258,6 @@ module.exports = global.HSDeckBuilder = React.createClass({
     for (var j = 0; j < deck_list.length; j++) {
       if (deck_list[j] == card_name) {
         var index = j;
-        break;
       }
     }
 
