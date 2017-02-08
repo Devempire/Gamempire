@@ -268,7 +268,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
-    var i = this.state.decks.length;
+    var i = document.getElementById('deck_title').value + Date.now();
     var width = 1;
     var height = 14;
     var row = 14;
@@ -283,20 +283,20 @@ module.exports = global.HSDeckBuilder = React.createClass({
         minH: 14,
         maxH: 14,
         minW: 1,
-        maxW: 3
+        maxW: 3,
+        title:document.getElementById('deck_title').value,
+        description:document.getElementById('deck_desc').value,
       }),
       showDeckBuilder:false,
       showAddDeck:true,
     });
-    console.log(this.state.showDeckBuilder);
-    console.log(this.state.showAddDeck);
   },
 
   deckBuilder(el) {
     console.log(el);
     var i = el.i;
-    var title = document.getElementById('deck_title').value;
-    var description = document.getElementById('deck_desc').value;
+    var title = el.title;
+    var description = el.description;
 
     return (
       <div key={i} data-grid={el}>
