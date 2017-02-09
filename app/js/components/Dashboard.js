@@ -36,6 +36,7 @@ module.exports = global.Dashboard = React.createClass({
       selectinterest:[],
       selectgame:'',
       showStore:false,
+      gamename:'',
       img:null,
       level:null,
       avatar:null,
@@ -151,8 +152,20 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   handleSubmit(event) {
-    alert('Your favorite Game is: ' + this.state.selectgame);
     event.preventDefault();
+    if(this.state.gamename == ''){
+       $("#msg").html("username in game must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
+        $("#msg").addClass('label warning input-group-field');
+        $("#msg").addClass("shake");
+        $("#msg").show();
+        setTimeout(function () {
+          $("#msg").removeClass("shake");
+        },200);
+        return false;
+      
+    }
+    
+    
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/user/load",
 
@@ -199,6 +212,8 @@ module.exports = global.Dashboard = React.createClass({
 
                               }),
                               showStore:false,
+                              gamename:'',
+                              selectgame:'',
 
                             });
 
@@ -230,6 +245,7 @@ module.exports = global.Dashboard = React.createClass({
                              alert("opps!");
                          });
                      });
+            
             
   },
 
@@ -332,11 +348,16 @@ module.exports = global.Dashboard = React.createClass({
                   <option value="Overwatch">Overwatch</option>
                   <option value="Dota2">Dota2</option>
                   <option value="League of Legends">League of Legends</option>
+                  <option value="StarCraft II">StarCraft II</option>
+                  <option value="CSGO">CSGO</option>
+                  <option value="Call of Duty">Call of Duty</option>
+                  <option value="Heroes of the Storm">Heroes of the Storm</option>
+                  <option value="Halo 5">Halo 5</option>
               </select>
-              <br/> Username with battletags:
+              <br/> Username in Game:
               <br></br>
-
-              <input id="gameusername" type="text" placeholder="YourTag#0000"/>
+              <input id="gameusername" type="text" placeholder="YourTag#0000 OR Yourname" onChange={(event) => {this.setState({gamename: event.target.value})}} value={this.state.gamename}/>
+               <center><div className="input-group-field" id="msg"></div></center>
               <button className="button" type="submit" value="Submit" >Submit</button>
             </form>
           </div>
