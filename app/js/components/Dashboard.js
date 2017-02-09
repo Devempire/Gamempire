@@ -324,8 +324,11 @@ module.exports = global.Dashboard = React.createClass({
         <div className="noselect">
         <div className="row profileHeader">
         <div onClick={this.goToProfileEdit} className="column small-8 user noselect">
-          <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" /><div>
-          <h3>{this.state.username} </h3><p> talk something to me </p></div></div>
+          <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" />
+          <div>
+            <h3>{this.state.username} </h3><p> talk something to me </p>
+          </div>
+        </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
         </div>
 
