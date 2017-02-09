@@ -2,13 +2,13 @@ module.exports = global.Bar = React.createClass({
 
 	render() {
 		return <div>
-		    <div id="mySidenav" className="sidenav">
+		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
 					<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#" onClick={this._HSDeckBuilder} id="_HSDeckBuilder">Hearthstone Deck Builder</a>
 					<a href="#" onClick={this._Discord} id="_Discord">Discord</a>
 					<a href="#" onClick={this._Soundcloud} id="_Soundcloud">Soundcloud</a>
-
+					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 					{
 
 					/* NOT WORKING YET
@@ -42,11 +42,16 @@ module.exports = global.Bar = React.createClass({
 					<webview className="discordFrame" src="" ></webview>
 				</div>
 
+				<div className="discordFrame" id="playgroundFrame">
+					<Playground />
+
+				</div>
+
 		</div>;
 	},
 
 	toggleNav(){
-		$("#mySidenav, #content, #discordFrame, #soundcloudFrame, #spotifyFrame").toggleClass("navOpen");
+		$("#mySidenav, #content, #discordFrame, #soundcloudFrame, #spotifyFrame, #playgroundFrame").toggleClass("navOpen");
 		if ( $("#mySidenav").hasClass("navOpen") ) {
 				//do something it does have the protected class!
 				$(".toggleNav").css({"cursor":"url('../app/img/arrow_in.png'), auto"});
@@ -60,6 +65,7 @@ module.exports = global.Bar = React.createClass({
 		  	<Dashboard />,
 		  	document.getElementById('content')
 		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('spotifyFrame').style.visibility = "hidden";
 		document.getElementById('soundcloudFrame').style.visibility = "hidden";
 		document.getElementById('discordFrame').style.visibility = "hidden";
@@ -71,6 +77,7 @@ module.exports = global.Bar = React.createClass({
 			<ProfileEdit />,
 			document.getElementById('content')
 		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('spotifyFrame').style.visibility = "hidden";
 		document.getElementById('soundcloudFrame').style.visibility = "hidden";
 		document.getElementById('discordFrame').style.visibility = "hidden";
@@ -82,6 +89,7 @@ module.exports = global.Bar = React.createClass({
 			<HSDeckBuilder />,
 			document.getElementById('content')
 		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('spotifyFrame').style.visibility = "hidden";
 		document.getElementById('soundcloudFrame').style.visibility = "hidden";
 		document.getElementById('discordFrame').style.visibility = "hidden";
@@ -89,6 +97,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Discord(){
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('spotifyFrame').style.visibility = "hidden";
 		document.getElementById('soundcloudFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "hidden";
@@ -101,6 +110,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Soundcloud(){
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('spotifyFrame').style.visibility = "hidden";
 		document.getElementById('soundcloudFrame').style.visibility = "visible";
 		document.getElementById('discordFrame').style.visibility = "hidden";
@@ -113,6 +123,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Spotify(){
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('spotifyFrame').style.visibility = "visible";
 		document.getElementById('soundcloudFrame').style.visibility = "hidden";
 		document.getElementById('discordFrame').style.visibility = "hidden";
@@ -122,6 +133,19 @@ module.exports = global.Bar = React.createClass({
 		document.getElementById('title').textContent = title
 		$("#mySidenav>a.active").removeClass("active");
 		$( "#_Spotify" ).addClass('active');
+	},
+
+	_Playground(){
+		document.getElementById('spotifyFrame').style.visibility = "hidden";
+		document.getElementById('soundcloudFrame').style.visibility = "hidden";
+		document.getElementById('discordFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "hidden";
+		document.getElementById('playgroundFrame').style.visibility = "visible";
+		var title = "Playground - Gamempire"
+		document.title = title
+		document.getElementById('title').textContent = title
+		$("#mySidenav>a.active").removeClass("active");
+		$( "#_Playground" ).addClass('active');
 	},
 
 	_Logout(){
