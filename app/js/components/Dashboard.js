@@ -307,6 +307,10 @@ module.exports = global.Dashboard = React.createClass({
         document.getElementById('content'));
   },
 
+  editAboutMe(event) {
+    this.setState({aboutMe:event.target.value});
+  },
+
   render() {
     // Set Titles
     var title = "Dashboard - Gamempire"
@@ -319,7 +323,6 @@ module.exports = global.Dashboard = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
-   
     if (this.state.response) {
       return (
         <div className="noselect">
@@ -328,7 +331,7 @@ module.exports = global.Dashboard = React.createClass({
           <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" />
           <div>
             <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
-            <textarea rows="1" cols="30" placeholder="About Me" onBlur={this.editAboutMe} id="aboutme">{this.state.aboutMe}</textarea>
+            <textarea rows="1" cols="20" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe}></textarea>
           </div>
         </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
