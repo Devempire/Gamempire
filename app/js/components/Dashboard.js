@@ -49,6 +49,7 @@ module.exports = global.Dashboard = React.createClass({
       hero2:null,
       image2:null,
       time2:null,
+      aboutMe:'About Me',
     };
 
   },
@@ -306,6 +307,16 @@ module.exports = global.Dashboard = React.createClass({
         document.getElementById('content'));
   },
 
+  editAboutMe() {
+    var aboutMe = document.getElementById('aboutme');
+    var button = document.getElementById('savebutton');
+    var newEl = document.createElement('input');
+    var aboutMeVal = this.state.aboutMe;
+    newEl.setAttribute("type", "text");
+    newEl.setAttribute("value", aboutMeVal);
+    aboutMe.parentNode.replaceChild(newEl, aboutMe);
+  },
+
   render() {
     // Set Titles
     var title = "Dashboard - Gamempire"
@@ -325,10 +336,11 @@ module.exports = global.Dashboard = React.createClass({
         <div className="row profileHeader">
         <div className="column small-8 user noselect">
           <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" />
-          <div onClick={this.goToProfileEdit}>
-            <h3>{this.state.username} </h3> 
+          <div>
+            <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
+            <p onClick={this.editAboutMe} id="aboutme">{this.state.aboutMe}</p>
+            <button className="button" id="savebutton">Save</button>
           </div>
-          <p> talk something to me </p>
         </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
         </div>
