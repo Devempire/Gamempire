@@ -1050,3 +1050,12 @@ label {
     right: 19px;
 }
 /* End Playground CSS*/
+
+textarea{
+resize:none;
+border-style:hidden;
+}
+textarea:focus {
+  background: white;
+  color: black;
+}

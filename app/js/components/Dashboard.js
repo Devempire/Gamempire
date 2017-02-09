@@ -307,14 +307,8 @@ module.exports = global.Dashboard = React.createClass({
         document.getElementById('content'));
   },
 
-  editAboutMe() {
-    var aboutMe = document.getElementById('aboutme');
-    var button = document.getElementById('savebutton');
-    var newEl = document.createElement('input');
-    var aboutMeVal = this.state.aboutMe;
-    newEl.setAttribute("type", "text");
-    newEl.setAttribute("value", aboutMeVal);
-    aboutMe.parentNode.replaceChild(newEl, aboutMe);
+  editAboutMe(event) {
+    this.setState({aboutMe:event.target.value});
   },
 
   render() {
@@ -338,8 +332,8 @@ module.exports = global.Dashboard = React.createClass({
           <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" />
           <div>
             <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
-            <p onClick={this.editAboutMe} id="aboutme">{this.state.aboutMe}</p>
-            <button className="button" id="savebutton">Save</button>
+            <textarea rows="1" cols="10" value={this.state.aboutMe} onChange={this.editAboutMe}></textarea>
+            
           </div>
         </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
