@@ -197,37 +197,40 @@ module.exports = global.Dashboard = React.createClass({
                                 int:this.state.selectinterest,
                                 useringame:$("#gameusername").val(),
 
-                              })
+                              }),
+                              showStore:false,
+
                             });
+
                         var list = $("#gameusername").val().split("#");
-
+                        if(this.state.selectgame=="Overwatch"){
                         $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
-                       this.setState({
-                        level:res.data.level,
-                        avatar:res.data.avatar,
-                      });
-                    });
-                    $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                       var H = JSON.parse(res);
+                            this.setState({
+                              level:res.data.level,
+                              avatar:res.data.avatar,
+                              });
+                          });
+                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
+                            var H = JSON.parse(res);
+                            this.setState({
+                              hero:H[0].name,
+                              image:H[0].image,
+                              time:H[0].playtime,
+                              hero1:H[1].name,
+                              image1:H[1].image,
+                              time1:H[1].playtime,
+                              hero2:H[2].name,
+                              image2:H[2].image,
+                              time2:H[2].playtime,
 
-                       this.setState({
-                        hero:H[0].name,
-                        image:H[0].image,
-                        time:H[0].playtime,
-                        hero1:H[1].name,
-                        image1:H[1].image,
-                        time1:H[1].playtime,
-                        hero2:H[2].name,
-                        image2:H[2].image,
-                        time2:H[2].playtime,
-
-                    });
-                    });
-
-                     }).fail((err)=>{
+                            });
+                          });
+                        }
+                      }).fail((err)=>{
                              alert("opps!");
                          });
                      });
+            
   },
 
   onGame(el){
