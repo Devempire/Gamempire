@@ -8,13 +8,7 @@ module.exports = class Login extends React.Component {
             userName: null,
             password: null
         };
-
-        // this.handleChildUnmount = this.handleChildUnmount.bind(this);
     }
-
-    // handleChildUnmount() {
-    //     this.setState({renderChild: false});
-    // }
 
     userSubmit(e) {
        if (e.key == 'Enter') {
