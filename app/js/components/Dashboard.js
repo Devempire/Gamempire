@@ -58,7 +58,7 @@ module.exports = global.Dashboard = React.createClass({
   loadProfile(){
     if (typeof(Storage) !== "undefined") {
       this.setState({aboutMe:localStorage.getItem("aboutme")});
-      console.log("l"+this.state.aboutMe);
+
     } 
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/login/load",{
@@ -313,8 +313,8 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   editAboutMe(event) {
+
     this.setState({aboutMe:event.target.value});
-    localStorage.setItem('testObject', JSON.stringify(this.state.aboutMe));
   },
 
   render() {
