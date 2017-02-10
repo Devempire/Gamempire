@@ -1,9 +1,30 @@
+$primary-color: #ff4e4e;
+$secondary-color: #1A1E21;
+$background-color: #1D2428;
+
+/* 
+
+normal theme - dark red
+$primary-color: #ff4e4e;
+$secondary-color: #1d2428;
+$background-color: #0e1519;
+
+alt theme - dark blue
+$primary-color: #0095FF;
+$secondary-color: #1A1E21;
+$background-color: #1D2428;
+
+alt theme - white blue
+$primary-color: blue;
+$secondary-color: #grey;
+$background-color: #f1f1f1;
+*/
 /*@import '../../node_modules/foundation/scss/foundation.scss';
 
 */
 /*html,
 body {
-    background-color: #0e1519;
+    background-color: $background-color;
     font-weight: 300;
     color: #818181;
     box-shadow: 0 0.5px 0 rgba(0,0,0,0.15), 0 -0.5px 0 rgba(0,0,0,0.15), 0.5px 0 0 rgba(0,0,0,0.15), -0.5px 0 0 rgba(0,0,0,0.15), 0 1px 1px rgba(0, 0, 0, 0.15);
@@ -17,9 +38,9 @@ html {
 
 body {
   /* Old background colour
-    background-color: #1d2428;
+    background-color: $secondary-color;
     */
-  background-color: #0e1519;
+  background-color: $background-color;
   font-weight: 300;
   color: #818181;
   position: absolute;
@@ -30,6 +51,14 @@ body {
   overflow-y: auto;
   overflow-x: hidden;
   height: calc(100% - 35px);
+}
+
+body * {
+  cursor: default;
+}
+
+::selection {
+  background-color: $primary-color;
 }
 
 /* Let's get this party started */
@@ -92,7 +121,7 @@ body,
 }
 
 hr {
-  border-bottom: 1px solid #1d2428;
+  border-bottom: 1px solid $secondary-color;
 }
 
 #dialog {
@@ -111,23 +140,23 @@ hr {
 }
 
 .react-grid-item {
-  background: #0e1519;
+  background: $background-color;
   color: #818181;
   overflow: hidden;
   transition: outline ease-in-out 0.25s, text ease-in-out 0.25s!important;
   padding: 25px;
   padding-top: 0px;
-  outline: 1px solid #1d2428;
+  outline: 1px solid $secondary-color;
 }
 
 .react-grid-item:hover {
-  outline: 1px solid #ff4e4e;
+  outline: 1px solid $primary-color;
 }
 
 .react-grid-item h2 {
   color: #818181;
   text-align: center;
-  background: #0e1519;
+  background: $background-color;
   margin: 0;
   font-size: 25px;
   font-weight: 300;
@@ -136,7 +165,7 @@ hr {
 }
 
 .react-grid-item:hover h2 {
-  color: #ff4e4e;
+  color: $primary-color;
 }
 
 .react-grid-item .menu {
@@ -161,31 +190,29 @@ hr {
   -webkit-app-region: drag;
   user-select: none;
   height: 25px;
-  background: #1d2428;
+  background: $secondary-color;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 9999;
-  border-bottom: 1px solid #0e1519;
+  border-bottom: 1px solid $background-color;
 }
 
 .sidenav {
-  background-color: #1d2428;
-  width: 247px;
-  padding: 18px 33px 18px 0px;
-  transform: translateX(-260px);
+  background-color: $secondary-color;
+  width: 175px;
+  padding: 40px 33px 18px 0px;
+  transform: translateX(-192px);
   overflow-x: inherit;
   box-sizing: content-box;
-  border-right: 1px solid #0e1519;
+  border-right: 1px solid $background-color;
+  overflow: hidden;
 }
 
-.sidenav:hover {
-  box-shadow: 2px 0 5px 0 rgba(0, 0, 0, 0.45);
-}
 
 .sidenav .active {
-  color: #ff4e4e;
+  color: $primary-color;
 }
 
 .gameImage {
@@ -193,22 +220,22 @@ hr {
   background-repeat: no-repeat!important;
   min-height: 245px!important;
   background-position: 50%!important;
-  border-bottom: 1px solid #1d2428;
+  border-bottom: 1px solid $secondary-color;
   position: relative;
 }
 
 .react-grid-item > .react-resizable-handle {
   transition: background-color 0.3s ease-in-out;
-  background-color: #1d2428;
+  background-color: $secondary-color;
 }
 
 .react-grid-item > .react-resizable-handle:hover {
-  background-color: #ff4e4e;
+  background-color: $primary-color;
 }
 
 .react-grid-placeholder {
   background-color: rgba(29, 36, 40, 0.3)!important;
-  border: 1px dashed #ff4e4e;
+  border: 1px dashed $primary-color;
   opacity: 1!important;
 }
 
@@ -218,7 +245,7 @@ hr {
 
 .overlay {
   z-index: 10;
-  background: #0e1519;
+  background: $background-color;
   position: absolute;
   top: 0;
   left: 0;
@@ -233,12 +260,6 @@ hr {
 .user {
   display: -webkit-inline-box;
   text-align: left;
-  cursor: pointer;
-}
-
-.user:hover h3,
-.user:hover h5 {
-  color: #ff4e4e;
 }
 
 .overlay .user {
@@ -277,7 +298,7 @@ hr {
   display: inline;
   margin-right: 10px;
   padding: 2px;
-  border: 1px solid #1d2428;
+  border: 1px solid $secondary-color;
 }
 
 .react-grid-item:hover .overlay {
@@ -294,6 +315,19 @@ hr {
   padding: 8px 0 8px 0;
   animation-name: leftFade;
   animation-duration: 1s;
+  transform: translateX(-25px);
+  opacity: 0;
+}
+
+@for $i from 1 through 10 {
+    .sidenav a:nth-child(#{$i}) {
+        transition: transform 0.3s linear $i/25+0.1+s, opacity 0.3s linear $i/25+0.1+s, color 0.3s linear;
+    }
+}
+
+.sidenav.navOpen a {
+  transform: translateX(0);
+  opacity: 1;
 }
 
 .sidenav svg {
@@ -345,6 +379,7 @@ hr {
 /* For sidebar to slide over other divs */
 #content.navOpen {
   transform: translateX(265px);
+  width: calc(100% - 265px);
 }
 
 #discordFrame.navOpen {
@@ -373,7 +408,7 @@ hr {
 }
 
 .toggleNav:hover {
-  background-color: rgba(62, 67, 70, 0.5);
+  background-color: rgba(255,255,255,0.1);
 }
 
 .toggleNav:after {
@@ -400,22 +435,24 @@ hr {
 [type=color],
 textarea,
 select {
-  background-color: #1d2428;
-  color: #ececec;
-  border-radius: 1px;
-  box-shadow: none;
-  border: 1px solid #767676;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  height: 2.4375rem;
-  margin: 0 0 1rem;
-  font-family: inherit;
-  font-size: 1rem;
-  transition: box-shadow .5s, border-color .3s ease-in-out;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  outline: none;
+    background-color: transparent;
+    color: #ececec;
+    border-radius: 0!important;
+    box-shadow: none;
+    border: none;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2.4375rem;
+    margin: 0 0 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: box-shadow .5s, border-color .3s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border-bottom: 1px solid $secondary-color;
+    border-image-slice: 1;
 }
 
 [type=text]:focus,
@@ -434,41 +471,45 @@ select {
 [type=color]:focus,
 textarea:focus,
 select:focus {
-  border: 1px solid #ff4e4e;
-  background-color: #1d2428;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  outline: none;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45);
+    border: none;
+    background-color: $background-color;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    box-shadow: none;
+    border-image-slice: 1;
+    border-bottom: 1px solid $primary-color;
 }
 
 .required {
-  position: relative;
+    position: relative;
 }
 
 .required:after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #ff4e4e;
-  font-weight: 900;
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: $primary-color;
+    font-weight: 900;
 }
 
 .required .input-group-label {
-  height: 2.4375rem;
-  background: #45494a;
-  border: 1px solid #767676;
-  color: #818181;
-  border-radius: 0px 1px 1px 0px;
-  line-height: 2.9375rem;
-  display: inline-block;
-  font-size: 1.25rem;
+    height: 2.4375rem;
+    background: none;
+    border: none;
+    color: $primary-color;
+    border-radius: 0px 1px 1px 0px;
+    line-height: 2.9375rem;
+    display: inline-block;
+    font-size: 1.25rem;
+    position: absolute;
+    right: 0px;
 }
 
 .validationError {
   height: auto;
-  background: #ff4e4e;
+  background: $primary-color;
   width: 100%;
   display: inline-block;
   color: #fefefe;
@@ -483,7 +524,7 @@ select:focus {
   content: "";
   width: 15px;
   height: 15px;
-  background: #ff4e4e;
+  background: $primary-color;
   position: absolute;
   top: 24px;
   left: calc(50% - 8.5px);
@@ -526,28 +567,32 @@ select:focus {
   padding: .85em 1em;
   margin: 0 0 1rem;
   font-size: .9rem;
-  background-color: #ff4e4e;
+  background-color: $primary-color;
   color: #fefefe;
   outline: none;
   width: 100%;
   cursor: default;
 }
 
+.button.secondary {
+    background-color: $secondary-color;
+}
+
 table tbody,
 table tfoot,
 table thead {
   border: 1px solid #818181;
-  background-color: #0e1519;
+  background-color: $background-color;
   color: #818181;
 }
 
 table tbody tr:nth-child(even) {
   border-bottom: 0;
-  background-color: #1d2428;
+  background-color: $secondary-color;
 }
 
 table thead {
-  background: #1d2428;
+  background: $secondary-color;
   color: #fff;
 }
 
@@ -821,7 +866,11 @@ label {
 }
 
 .react-grid-item {
+<<<<<<< HEAD
   background: transaprent;
+=======
+  background: transparent;
+>>>>>>> origin/master
   transition: all 200ms ease;
   transition-property: left, top;
 }
@@ -886,35 +935,13 @@ label {
   cursor: se-resize;
 }
 
-/* The side navigation menu */
-
-.sidenav {
-  height: 100%;
-  /* 100% Full-height */
-  width: 214;
-  /* 0 width - change this with JavaScript */
-  position: fixed;
-  /* Stay in place */
-  z-index: 1;
-  /* Stay on top */
-  top: 0;
-  left: 0;
-  background-color: #111;
-  /* Black*/
-  overflow-x: hidden;
-  /* Disable horizontal scroll */
-  padding-top: 60px;
-  /* Place content 60px from the top */
-  transition: 0.5s;
-  /* 0.5 second transition effect to slide in the sidenav */
-}
 
 /* The navigation menu links */
 
 .sidenav a {
   padding: 8px 8px 8px 32px;
   text-decoration: none;
-  font-size: 25px;
+  font-size: 1rem;
   color: #818181;
   display: block;
   transition: 0.3s;
