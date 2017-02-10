@@ -32,6 +32,10 @@ body {
   height: calc(100% - 35px);
 }
 
+body * {
+  cursor: default;
+}
+
 /* Let's get this party started */
 
 ::-webkit-scrollbar {
@@ -233,12 +237,6 @@ hr {
 .user {
   display: -webkit-inline-box;
   text-align: left;
-  cursor: pointer;
-}
-
-.user:hover h3,
-.user:hover h5 {
-  color: #ff4e4e;
 }
 
 .overlay .user {
@@ -345,6 +343,7 @@ hr {
 /* For sidebar to slide over other divs */
 #content.navOpen {
   transform: translateX(265px);
+  width: calc(100% - 265px);
 }
 
 #discordFrame.navOpen {
@@ -400,22 +399,24 @@ hr {
 [type=color],
 textarea,
 select {
-  background-color: #1d2428;
-  color: #ececec;
-  border-radius: 1px;
-  box-shadow: none;
-  border: 1px solid #767676;
-  display: block;
-  box-sizing: border-box;
-  width: 100%;
-  height: 2.4375rem;
-  margin: 0 0 1rem;
-  font-family: inherit;
-  font-size: 1rem;
-  transition: box-shadow .5s, border-color .3s ease-in-out;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  outline: none;
+    background-color: transparent;
+    color: #ececec;
+    border-radius: 0!important;
+    box-shadow: none;
+    border: none;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2.4375rem;
+    margin: 0 0 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: box-shadow .5s, border-color .3s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    border-bottom: 1px solid #1d2428;
+    border-image-slice: 1;
 }
 
 [type=text]:focus,
@@ -434,36 +435,40 @@ select {
 [type=color]:focus,
 textarea:focus,
 select:focus {
-  border: 1px solid #ff4e4e;
-  background-color: #1d2428;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  outline: none;
-  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45);
+    border: none;
+    background-color: #0e1519;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45);
+    border-image-slice: 1;
+    border-bottom: 1px solid #ff4e4e;
 }
 
 .required {
-  position: relative;
+    position: relative;
 }
 
 .required:after {
-  content: '';
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #ff4e4e;
-  font-weight: 900;
+    content: '';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #ff4e4e;
+    font-weight: 900;
 }
 
 .required .input-group-label {
-  height: 2.4375rem;
-  background: #45494a;
-  border: 1px solid #767676;
-  color: #818181;
-  border-radius: 0px 1px 1px 0px;
-  line-height: 2.9375rem;
-  display: inline-block;
-  font-size: 1.25rem;
+    height: 2.4375rem;
+    background: none;
+    border: none;
+    color: #ff4e4e;
+    border-radius: 0px 1px 1px 0px;
+    line-height: 2.9375rem;
+    display: inline-block;
+    font-size: 1.25rem;
+    position: absolute;
+    right: 0px;
 }
 
 .validationError {
@@ -821,7 +826,7 @@ label {
 }
 
 .react-grid-item {
-  background: grey;
+  background: transparent;
   transition: all 200ms ease;
   transition-property: left, top;
 }
@@ -1050,12 +1055,3 @@ label {
     right: 19px;
 }
 /* End Playground CSS*/
-
-textarea{
-resize:none;
-border-style:hidden;
-}
-textarea:focus {
-  background: white;
-  color: black;
-}
