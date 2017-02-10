@@ -76,6 +76,7 @@ module.exports = class Registration extends React.Component {
                         onChange={(event) => {this.setState({birthday: moment(event.target.value).format('YYYY-MM-DD')})}}/>
                     <span className="input-group-label">*</span>
                 </div>
+                <center><div className="input-group-field" id="signupmsg"></div></center>
                 <hr/>
                 <button className="button" type="submit" onClick={this._checkValid.bind(this)}>Sign Up</button>
                 <button className="button secondary" onClick={this._backToLogin.bind(this)}>Back to login</button>
@@ -184,25 +185,7 @@ module.exports = class Registration extends React.Component {
     }
 
      _register(){
-        let options = {
-            type: 'info',
-            buttons: ['Yes'],
-            title: 'Signup',
-            message: this.state.userName +" has registed",
-            defaultId: 0,
-            cancelId: 0
-        };
-
-        let options2 = {
-            type: 'info',
-            buttons: ['OK'],
-            title: 'Signup',
-            message: "Username or email already exist",
-            defaultId: 0,
-            cancelId: 0
-        };
-
-        console.log(this.state.birthday);
+       
         $.post(api_server+'/user/add',
 
                 {
@@ -218,20 +201,19 @@ module.exports = class Registration extends React.Component {
                 }
         )
             .done((res) =>{
-                dialog.showMessageBox(options, (response) => {
-                    if (response == 0) {
-                        console.log('OK pressed!');
-                        }
-                    });
+                
                 this._backToLogin();
             })
             .fail((res)=>{
-                dialog.showMessageBox(options2, (response) => {
-                    if (response == 0) {
-                        console.log('OK pressed!');
-                        }
-                    });
-            });
+                    $("#signupmsg").html("Username or email already exists !<button id='close' onclick='$(this).parent().hide();' >");
+                    $("#signupmsg").addClass('label warning');
+                    $("#signupmsg").addClass("shake");
+                    $("#signupmsg").show();
+                    setTimeout(function () {
+                        $("#signupmsg").removeClass("shake");
+                    },200);
+                    console.log("i am in trouble");
+                        });
 
     }
 

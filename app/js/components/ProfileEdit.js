@@ -67,7 +67,6 @@ module.exports = global.ProfileEdit = React.createClass({
                                 lastname:res.lastname,
                                 birthday:res.dateofbirth
                 });
-                console.log(this.state.response);
         });
     });
   },
@@ -122,24 +121,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
   uploadPic() {
 
-    let option1 = {
-      type: 'info',
-      buttons: ['Yes'],
-      title: 'Update profile picture',
-      message: "Successfully updated.",
-      defaultId: 0,
-      cancelId: 0
-    };
-
-    let option2 = {
-      type: 'info',
-      buttons: ['Yes'],
-      title: 'Update profile picture',
-      message: "Upload failed.",
-      defaultId: 0,
-      cancelId: 0
-    };
-
+    
     var pic = document.getElementById("uploadedpic").files;
     if (pic.length != 0) {
       document.getElementById("profilepic").src = pic[0].path;
@@ -291,14 +273,6 @@ module.exports = global.ProfileEdit = React.createClass({
 
   checkValid() {
 
-      let option1 = {
-          type: 'info',
-          buttons: ['Yes'],
-          title: 'Update personal info',
-          message: "Successfully updated.",
-          defaultId: 0,
-          cancelId: 0
-      };
 
       var namePattern = new RegExp('^[a-zA-Z ]{1,}$');
       var userPattern = new RegExp('^[a-zA-Z0-9]{3,}$');
@@ -352,7 +326,7 @@ module.exports = global.ProfileEdit = React.createClass({
                           }
                       }).done((res)=>{
                                   erroruname.innerHTML = "";
-                                  dialog.showMessageBox(option1);
+                                 
                               }).fail((err)=>{
                                   erroruname.innerHTML = "Username already exist!";
                               });
@@ -362,15 +336,6 @@ module.exports = global.ProfileEdit = React.createClass({
 
     checkPw(){
 
-        let option1 = {
-          type: 'info',
-          buttons: ['Yes'],
-          title: 'Update Password',
-          message: "Successfully updated!",
-          defaultId: 0,
-          cancelId: 0
-        };
-        var passPattern = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$');
         var newpw = $('#newpw').val();
         var oldpw =$('#oldpw').val();
         var cnewpw=$('#cnewpw').val();
@@ -380,8 +345,8 @@ module.exports = global.ProfileEdit = React.createClass({
         var errorcnewpass = document.getElementById('cnewpass');
         if (newpw == "") {
             errornewpass.innerHTML = "The field is empty.";
-        } else if (!passPattern.test(newpw)) {
-            errornewpass.innerHTML = "At least 6 length (1 Upper & 1 Lower letter & 1 digits)";
+        } else if (newpw.length <6) {
+            errornewpass.innerHTML = "At least 6 length";
         } else if (newpw == oldpw) {
             errornewpass.innerHTML = "Do not use your old password";
         } else {
@@ -416,7 +381,6 @@ module.exports = global.ProfileEdit = React.createClass({
                                 "password":newpw
                             }
                         }).done((res2)=>{
-                            dialog.showMessageBox(option1);
                             this.onRemoveItem();
 
                         });
@@ -432,14 +396,6 @@ module.exports = global.ProfileEdit = React.createClass({
 
     checkEmail(){
 
-        let option1 = {
-          type: 'info',
-          buttons: ['Yes'],
-          title: 'Update Email',
-          message: "Successfully updated!",
-          defaultId: 0,
-          cancelId: 0
-        };
         var emailPattern = new RegExp('^[a-zA-Z0-9]{1,}@[a-zA-Z]{1,}[.]{1}[a-zA-Z]{1,}$');
         var email = $('#email').val();
         var errornewemail = document.getElementById('newemail');
@@ -469,7 +425,6 @@ module.exports = global.ProfileEdit = React.createClass({
                             }
                         }).done((res)=>{
                             errornewemail.innerHTML = "";
-                            dialog.showMessageBox(option1);
                             this.onRemoveItem1();
 
                         }).fail((res)=>{
