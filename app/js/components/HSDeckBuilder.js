@@ -17,12 +17,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
       rowHeight: 50,
       verticalCompact: true
     };
-    //this.handleChildUnmount = this.handleChildUnmount.bind(this);
   },
-
-  // handleChildUnmount() {
-  // 	this.setState({renderChild: false});
-  // },
 
   getInitialState() {
 
@@ -331,7 +326,6 @@ module.exports = global.HSDeckBuilder = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_HSDeckBuilder" ).addClass('active');
 
-  	//{this.state.renderChild ? <SignUpWindow unmountMe={this.handleChildUnmount} /> : null}
     return (
       <div>
 	      <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}

@@ -4,7 +4,6 @@ ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
 const originalLayouts = getFromLS('layouts') || {};
 
-
 module.exports = global.Dashboard = React.createClass({
   mixins: [PureRenderMixin],
 
@@ -15,12 +14,7 @@ module.exports = global.Dashboard = React.createClass({
       rowHeight: 20,
       verticalCompact: true
     };
-    //this.handleChildUnmount = this.handleChildUnmount.bind(this);
   },
-
-  // handleChildUnmount() {
-  //   this.setState({renderChild: false});
-  // },
 
   getInitialState() {
     return {
@@ -51,13 +45,11 @@ module.exports = global.Dashboard = React.createClass({
       time2:null,
       aboutMe:'gt',
     };
-
   },
 
   loadProfile(){
     if (typeof(Storage) !== "undefined") {
       this.setState({aboutMe:localStorage.getItem("aboutme")});
-      console.log("l"+this.state.aboutMe);
     } 
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/login/load",{
@@ -167,13 +159,10 @@ module.exports = global.Dashboard = React.createClass({
           $("#msg").removeClass("shake");
         },200);
         return false;
-      
     }
-    
     
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/user/load",
-
               {
                  'token' :token
               }).done((d)=> {
@@ -250,8 +239,6 @@ module.exports = global.Dashboard = React.createClass({
                              alert("opps!");
                          });
                      });
-            
-            
   },
 
   onGame(el){
