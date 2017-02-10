@@ -43,81 +43,81 @@ module.exports = global.Dashboard = React.createClass({
       hero2:null,
       image2:null,
       time2:null,
-      aboutMe:'gt',
+      aboutMe:"about me",
+
     };
   },
 
   loadProfile(){
     if (typeof(Storage) !== "undefined") {
       this.setState({aboutMe:localStorage.getItem("aboutme")});
-    } 
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/login/load",{
-        'token': token
-        }).done((d)=> {
-            $.get(api_server+'/login/profile/'+ d._id + '/info').done((res)=>{
+      var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/login/load",{
+          'token': token
+          }).done((d)=> {
+              $.get(api_server+'/login/profile/'+ d._id + '/info').done((res)=>{
 
-                var g=res.gameinventory.length;
+                  var g=res.gameinventory.length;
 
-                this.setState({response: res,
-                                username:res.username,
-                                firstname:res.firstname,
-                                lastname:res.lastname});
-                for (var i = 0; i < g; i++) {
-                    if (i == 0) {
-                          var width = 12;
-                          var height = 13;
-                          var row = 0;
-                        } else {
-                          var width = 4;
-                          var height = 13;
-                          var row = 14;
-                        }
-                      this.setState({
-                                games: this.state.games.concat({
-                                  i: res.gameinventory[i].game,
-                                  x: 0 +4*(i-1),
-                                  y: row,
-                                  w: width,
-                                  h: height,
-                                  minH: 13,
-                                  maxH: 13,
-                                  minW: 4,
-                                  maxW: 12,
-                                  int:res.gameinventory[i].interest,
-                                  useringame:res.gameinventory[i].useringame,
-                                })
-                    });
-                    if(res.gameinventory[i].game =="Overwatch"){
-                      var names =res.gameinventory[i].useringame;
-                      var list =names.split("#");
-                      $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
-                         this.setState({
-                          level:res.data.level,
-                          avatar:res.data.avatar,
+                  this.setState({response: res,
+                                  username:res.username,
+                                  firstname:res.firstname,
+                                  lastname:res.lastname});
+                  for (var i = 0; i < g; i++) {
+                      if (i == 0) {
+                            var width = 12;
+                            var height = 13;
+                            var row = 0;
+                          } else {
+                            var width = 4;
+                            var height = 13;
+                            var row = 14;
+                          }
+                        this.setState({
+                                  games: this.state.games.concat({
+                                    i: res.gameinventory[i].game,
+                                    x: 0 +4*(i-1),
+                                    y: row,
+                                    w: width,
+                                    h: height,
+                                    minH: 13,
+                                    maxH: 13,
+                                    minW: 4,
+                                    maxW: 12,
+                                    int:res.gameinventory[i].interest,
+                                    useringame:res.gameinventory[i].useringame,
+                                  })
+                      });
+                      if(res.gameinventory[i].game =="Overwatch"){
+                        var names =res.gameinventory[i].useringame;
+                        var list =names.split("#");
+                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
+                           this.setState({
+                            level:res.data.level,
+                            avatar:res.data.avatar,
+                          });
                         });
-                      });
-                      $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                         var H =JSON.parse(res);
+                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
+                           var H =JSON.parse(res);
 
-                         this.setState({
-                          hero:H[0].name,
-                          image:H[0].image,
-                          time:H[0].playtime,
-                          hero1:H[1].name,
-                          image1:H[1].image,
-                          time1:H[1].playtime,
-                          hero2:H[2].name,
-                          image2:H[2].image,
-                          time2:H[2].playtime,
+                           this.setState({
+                            hero:H[0].name,
+                            image:H[0].image,
+                            time:H[0].playtime,
+                            hero1:H[1].name,
+                            image1:H[1].image,
+                            time1:H[1].playtime,
+                            hero2:H[2].name,
+                            image2:H[2].image,
+                            time2:H[2].playtime,
 
-                      });
-                      });
-                    }
-                }
-        });
-    });
-
+                        });
+                        });
+                      }
+                  }
+          });
+      });
+    }
   },
 
   componentWillMount: function(){
@@ -299,6 +299,7 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   editAboutMe(event) {
+
     this.setState({aboutMe:event.target.value});
   },
 
@@ -323,6 +324,7 @@ module.exports = global.Dashboard = React.createClass({
           <div>
             <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
             <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={(event) => {localStorage.setItem("aboutme", this.state.aboutMe)}}/>
+
           </div>
         </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
