@@ -57,6 +57,7 @@ module.exports = global.Dashboard = React.createClass({
 
   loadProfile(){
     if (typeof(Storage) !== "undefined") {
+
       this.setState({aboutMe:localStorage.getItem("aboutme")});
 
   
