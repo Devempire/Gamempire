@@ -51,6 +51,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	toggleNav(){
+
 		$("#mySidenav, #content, #discordFrame, #soundcloudFrame, #spotifyFrame, #playgroundFrame").toggleClass("navOpen");
 		if ( $("#mySidenav").hasClass("navOpen") ) {
 				//do something it does have the protected class!
@@ -58,6 +59,7 @@ module.exports = global.Bar = React.createClass({
 		}else{
 				$(".toggleNav").css({"cursor":"url('../app/img/arrow_out.png'), auto"});
 		}
+		ipc.sendSync('quicksize')
 	},
 
 	_Dashboard(){

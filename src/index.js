@@ -73,6 +73,11 @@ app.on('ready', function() {
 
   });
 
+  ipc.on('quicksize', function(event, arg){
+    event.returnValue='';
+
+  });//Logged in resize
+
   ipc.on('loggedIn', function(event, arg){
     event.returnValue='';
     mainWindow.setContentSize(1152, 648);
