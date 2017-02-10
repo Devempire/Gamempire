@@ -49,7 +49,7 @@ module.exports = global.Dashboard = React.createClass({
       hero2:null,
       image2:null,
       time2:null,
-      aboutMe:'About Me',
+      aboutMe:"about me",
     };
 
   },
@@ -309,6 +309,7 @@ module.exports = global.Dashboard = React.createClass({
 
   editAboutMe(event) {
     this.setState({aboutMe:event.target.value});
+    localStorage.setItem('testObject', JSON.stringify(this.state.aboutMe));
   },
 
   render() {
@@ -333,7 +334,6 @@ module.exports = global.Dashboard = React.createClass({
           <div>
             <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
             <textarea rows="1" cols="10" value={this.state.aboutMe} onChange={this.editAboutMe}></textarea>
-            
           </div>
         </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
