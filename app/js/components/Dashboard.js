@@ -59,7 +59,7 @@ module.exports = global.Dashboard = React.createClass({
     if (typeof(Storage) !== "undefined") {
       this.setState({aboutMe:localStorage.getItem("aboutme")});
 
-    } 
+  
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/login/load",{
         'token': token
@@ -126,7 +126,7 @@ module.exports = global.Dashboard = React.createClass({
                 }
         });
     });
-
+    }
   },
 
   componentWillMount: function(){
