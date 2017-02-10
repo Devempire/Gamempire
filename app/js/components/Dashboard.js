@@ -49,12 +49,16 @@ module.exports = global.Dashboard = React.createClass({
       hero2:null,
       image2:null,
       time2:null,
-      aboutMe:'',
+      aboutMe:'gt',
     };
 
   },
 
   loadProfile(){
+    if (typeof(Storage) !== "undefined") {
+      this.setState({aboutMe:localStorage.getItem("aboutme")});
+      console.log("l"+this.state.aboutMe);
+    } 
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/login/load",{
         'token': token
@@ -331,7 +335,7 @@ module.exports = global.Dashboard = React.createClass({
           <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" />
           <div>
             <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
-            <textarea rows="1" cols="20" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe}></textarea>
+            <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={(event) => {localStorage.setItem("aboutme", this.state.aboutMe)}}/>
           </div>
         </div>
         <div className="column small-4"><button className="button noselect" onClick={this.resetLayout}>Reset Layout</button></div>
