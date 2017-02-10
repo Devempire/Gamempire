@@ -336,8 +336,6 @@ module.exports = global.ProfileEdit = React.createClass({
 
     checkPw(){
 
-        
-        var passPattern = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$');
         var newpw = $('#newpw').val();
         var oldpw =$('#oldpw').val();
         var cnewpw=$('#cnewpw').val();
@@ -347,8 +345,8 @@ module.exports = global.ProfileEdit = React.createClass({
         var errorcnewpass = document.getElementById('cnewpass');
         if (newpw == "") {
             errornewpass.innerHTML = "The field is empty.";
-        } else if (!passPattern.test(newpw)) {
-            errornewpass.innerHTML = "At least 6 length (1 Upper & 1 Lower letter & 1 digits)";
+        } else if (newpw.length <6) {
+            errornewpass.innerHTML = "At least 6 length";
         } else if (newpw == oldpw) {
             errornewpass.innerHTML = "Do not use your old password";
         } else {
