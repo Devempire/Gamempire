@@ -42,7 +42,7 @@ module.exports = global.Bar = React.createClass({
 					<webview className="discordFrame" src="" ></webview>
 				</div>
 
-				<div className="discordFrame" id="playgroundFrame">
+				<div className="discordFrame hearthstone_scroll" id="playgroundFrame">
 					<Playground />
 
 				</div>
