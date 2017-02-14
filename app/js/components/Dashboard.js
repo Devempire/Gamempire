@@ -167,7 +167,7 @@ module.exports = global.Dashboard = React.createClass({
                  'token' :token
               }).done((d)=> {
                  $.ajax({
-                         url:api_server+"/user/profile/updategames",
+                         url:api_server+"/user/profile/addgames",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
