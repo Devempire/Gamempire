@@ -89,7 +89,7 @@ module.exports = global.Dashboard = React.createClass({
                                     useringame:res.gameinventory[i].useringame,
                                   })
                       });
-                      //if(res.gameinventory[i]._id.substring(0,12); =="58a42155f182"){
+                      
                       if(res.gameinventory[i].game =="Overwatch"){
                         var names =res.gameinventory[i].useringame;
                         var list =names.split("#");
@@ -162,6 +162,19 @@ module.exports = global.Dashboard = React.createClass({
         },200);
         return false;
     }
+    var L = this.state.games.length;
+    for (var i = 0; i < L; i++) {
+      if(this.state.selectgame == this.state.games[i].i){
+        $("#msg").html("the game already exist !<button id='close' onclick='$(this).parent().hide();' ></button>");
+        $("#msg").addClass('label warning input-group-field');
+        $("#msg").addClass("shake");
+        $("#msg").show();
+        setTimeout(function () {
+          $("#msg").removeClass("shake");
+        },200);
+        return false;
+      }
+    }
 
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/user/load",
@@ -179,6 +192,7 @@ module.exports = global.Dashboard = React.createClass({
                              interest:this.state.selectinterest
                          })
                      }).done((res)=>{
+
                       var i=this.state.games.length;
 
                         if (i == 0) {
@@ -284,6 +298,20 @@ module.exports = global.Dashboard = React.createClass({
           </div>
         </div>
         <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span>
+        <ul className="menu horizontal">
+        <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+        <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+        </svg>
+        </a></li>
+        <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+        </svg>
+        </a></li>
+        <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+        <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+        </svg>
+        </a></li>
+        </ul>
       </div>
     );
   },
