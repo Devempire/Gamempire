@@ -76,6 +76,7 @@ module.exports = global.Dashboard = React.createClass({
                         this.setState({
                                   games: this.state.games.concat({
                                     i: res.gameinventory[i].game,
+                                    j: i,
                                     x: 0 +4*(i-1),
                                     y: row,
                                     w: width,
@@ -193,6 +194,7 @@ module.exports = global.Dashboard = React.createClass({
                         this.setState({
                               games: this.state.games.concat({
                                 i: this.state.selectgame,
+                                j: i,
                                 x: 0+(i-1)*4,
                                 y: row,
                                 w: width,
@@ -258,7 +260,7 @@ module.exports = global.Dashboard = React.createClass({
         gameImage = i;
     };
     return (
-      <div key={i} data-grid={el}>
+      <div key={el.j} data-grid={el}>
         <h2>{el.i} </h2>
         <div className="gameImage" style={{background: 'url(./../app/img/'+gameImage+'.png)'}}>
           <div className="row">
