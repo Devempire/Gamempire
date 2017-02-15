@@ -274,6 +274,9 @@ module.exports = global.Dashboard = React.createClass({
     <button className="button" onClick={this.editgame(el)}>Edit</button>*/}
     </div>
     </div>
+    
+    <button className="button secondary hollow" >X</button>
+    
     <ul className="menu horizontal">
       <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
     <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
@@ -288,6 +291,7 @@ module.exports = global.Dashboard = React.createClass({
 </svg>
 </a></li>
     </ul>
+
     </div>
     );
   },
