@@ -287,6 +287,26 @@ module.exports = global.Dashboard = React.createClass({
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
+    var token = electron.remote.getGlobal('sharedObject').token;
+    $.post(api_server+"/user/load",
+              {
+                 'token' :token
+              }).done((d)=> {
+                 $.ajax({
+                         url:api_server+"/user/profile/removegames",
+                         type:"PUT",
+                         contentType: 'application/json; charset=utf-8',
+                         data:JSON.stringify({
+                             _id:d._id,
+                             game:i
+                         })
+                     }).done((res)=>{
+                      console.log("remvoed!");
+                     }).fail((res)=>{
+                      console.log("fail to remove");
+                     });
+                   });
+
   },
 
   goToProfileEdit() {
