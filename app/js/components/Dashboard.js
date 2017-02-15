@@ -89,6 +89,7 @@ module.exports = global.Dashboard = React.createClass({
                                     useringame:res.gameinventory[i].useringame,
                                   })
                       });
+                      //if(res.gameinventory[i]._id.substring(0,12); =="58a42155f182"){
                       if(res.gameinventory[i].game =="Overwatch"){
                         var names =res.gameinventory[i].useringame;
                         var list =names.split("#");
@@ -161,7 +162,7 @@ module.exports = global.Dashboard = React.createClass({
         },200);
         return false;
     }
-    
+
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/user/load",
               {
@@ -341,7 +342,7 @@ module.exports = global.Dashboard = React.createClass({
         <div className="column small-8 user noselect">
           <img className="avatar" height="60" width="60" src="./../app/img/GamEmpireLogo.png" />
           <div>
-            <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3> 
+            <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3>
             <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={(event) => {localStorage.setItem("aboutme", this.state.aboutMe)}}/>
 
           </div>
