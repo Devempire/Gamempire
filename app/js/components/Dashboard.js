@@ -206,7 +206,6 @@ module.exports = global.Dashboard = React.createClass({
                           var height = 13;
                           var row = 14;
                           var x = (i-1)%3 *4;
-                          console.log(x);
                         }
 
                         this.setState({
