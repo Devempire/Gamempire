@@ -24,7 +24,6 @@ module.exports = global.Dashboardv2 = React.createClass({
       games:[],
       widgets:[],
       response:undefined,
-      lw:undefined,
       username:null,
       lastname:null,
       firstname:null,
@@ -50,20 +49,19 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   loadWidgets(){
-    $.get(api_server+"/widget/show").done(function(res){
-      console.log(res);
+
+    $.get(api_server+"/widget/show").done((res)=>{
+      
       for (var i = 0; i < res.length; i++) {
          this.setState({
-          widgets:this.state.widgets.concat({
+          widgets: this.state.widgets.concat({
             value:res[i]._id,
             text:res[i].widgetname
-          }),
-          lw:true
+          })
          });
          
       }
-      console.log(this.state.widgets);
-    }).fail(function(err){
+    }).fail((err)=>{
       console.log("something wrong with the load widget");
     });
 
@@ -79,7 +77,6 @@ module.exports = global.Dashboardv2 = React.createClass({
               $.get(api_server+'/login/profile/'+ d._id + '/info').done((res)=>{
 
                   var g=res.gameinventory.length;
-
                   this.setState({response: res,
                                   username:res.username,
                                   firstname:res.firstname,
@@ -341,7 +338,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   onwidget(item){
     return (
-      <option value={item.value}>{item.text}</option>
+      <option  value={item.value}>{item.text}</option>
     );
 
   },
@@ -393,7 +390,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboardv2" ).addClass('active');
 
-    if (this.state.response &&this.state.lw) {
+    if (this.state.response) {
       return (
         <div className="noselect">
         <div className="row profileHeader">
