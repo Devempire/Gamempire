@@ -17,7 +17,7 @@ window._ = _
 window.moment = moment
 window.PureRenderMixin = PureRenderMixin
 window.ReactGridLayout = ReactGridLayout
-global.api_server = "http://localhost:8080";
+global.api_server = "http://gamempire.net";
 
 global.Login = require('./components/Login.js')
 global.Registration = require('./components/Registration.js')
