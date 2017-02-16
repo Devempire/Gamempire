@@ -9,6 +9,7 @@ module.exports = global.Bar = React.createClass({
 					<a href="#" onClick={this._Discord} id="_Discord">Discord</a>
 					<a href="#" onClick={this._Soundcloud} id="_Soundcloud">Soundcloud</a>
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
+					<a href="#" onClick={this._Dashboardv2} id="_Dashboardv2">Dashboard v2 [Buggy]</a>
 					{
 
 					/* NOT WORKING YET
@@ -148,6 +149,18 @@ module.exports = global.Bar = React.createClass({
 		document.getElementById('title').textContent = title
 		$("#mySidenav>a.active").removeClass("active");
 		$( "#_Playground" ).addClass('active');
+	},
+
+	_Dashboardv2(){
+		ReactDOM.render(
+				<Dashboardv2 />,
+				document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('spotifyFrame').style.visibility = "hidden";
+		document.getElementById('soundcloudFrame').style.visibility = "hidden";
+		document.getElementById('discordFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
 	},
 
 	_Logout(){
