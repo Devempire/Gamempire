@@ -338,7 +338,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   onwidget(item){
     return (
-      <option  value={item.value}>{item.text}</option>
+      <option key ={item.value} value={item.value}>{item.text}</option>
     );
 
   },
