@@ -50,7 +50,7 @@ module.exports = global.Dashboard = React.createClass({
 
   loadProfile(){
     if (typeof(Storage) !== "undefined") {
-      this.setState({aboutMe:localStorage.getItem("aboutme")});
+      this.setState({aboutMe:localStorage.getItem("aboutme")});
       var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/login/load",{
           'token': token
@@ -73,7 +73,7 @@ module.exports = global.Dashboard = React.createClass({
                             var x = (i-1)%3 *4;
                             var width = 4;
                             var height = 13;
-                            var row = 14;
+                            var row = 14*(1+((i-1)/3));
                           }
                         this.setState({
                                   games: this.state.games.concat({
@@ -166,7 +166,7 @@ module.exports = global.Dashboard = React.createClass({
     var L = this.state.games.length;
     for (var i = 0; i < L; i++) {
       if(this.state.selectgame == this.state.games[i].i){
-        $("#msg").html("the game already exist !<button id='close' onclick='$(this).parent().hide();' ></button>");
+        $("#msg").html("The game already exists!<button id='close' onclick='$(this).parent().hide();' ></button>");
         $("#msg").addClass('label warning input-group-field');
         $("#msg").addClass("shake");
         $("#msg").show();
@@ -204,7 +204,7 @@ module.exports = global.Dashboard = React.createClass({
                         } else {
                           var width = 4;
                           var height = 13;
-                          var row = 14;
+                          var row = 14*(1+((i-1)/3));
                           var x = (i-1)%3 *4;
                         }
 
