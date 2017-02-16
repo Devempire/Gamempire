@@ -65,10 +65,12 @@ module.exports = global.Dashboard = React.createClass({
                                   lastname:res.lastname});
                   for (var i = 0; i < g; i++) {
                       if (i == 0) {
+                            var x =0;
                             var width = 12;
                             var height = 13;
                             var row = 0;
                           } else {
+                            var x = (i-1)%3 *4;
                             var width = 4;
                             var height = 13;
                             var row = 14;
@@ -76,7 +78,7 @@ module.exports = global.Dashboard = React.createClass({
                         this.setState({
                                   games: this.state.games.concat({
                                     i: res.gameinventory[i].game,
-                                    x: 0 +4*(i-1),
+                                    x: x,
                                     y: row,
                                     w: width,
                                     h: height,
@@ -203,12 +205,14 @@ module.exports = global.Dashboard = React.createClass({
                           var width = 4;
                           var height = 13;
                           var row = 14;
+                          var x = (i-1)%3 *4;
+                          console.log(x);
                         }
 
                         this.setState({
                               games: this.state.games.concat({
                                 i: this.state.selectgame,
-                                x: 0+(i-1)*4,
+                                x: x,
                                 y: row,
                                 w: width,
                                 h: height,
