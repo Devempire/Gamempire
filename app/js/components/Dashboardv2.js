@@ -22,11 +22,12 @@ module.exports = global.Dashboardv2 = React.createClass({
       profile:{i:"profile",x: 100, y: 100, w: 0, h: 0, static: true},
       addgame:{i:"add",x: 100, y:100 , w: 0, h: 0, static: false},
       games:[],
+      widgets:[],
       response:undefined,
+      lw:undefined,
       username:null,
       lastname:null,
       firstname:null,
-      newCounter: 0,
       selectinterest:[],
       selectgame:'',
       showStore:false,
@@ -48,14 +49,20 @@ module.exports = global.Dashboardv2 = React.createClass({
     };
   },
 
-  loadWidgets () {
+  loadWidgets(){
     $.get(api_server+"/widget/show").done(function(res){
-      console.log("i am here");
+      console.log(res);
       for (var i = 0; i < res.length; i++) {
-         $('#selectWidget').append($('<option>', {value:res[i].widgetname, text:res[i].widgetname}));
-         console.log("add 1");
+         this.setState({
+          widgets:this.state.widgets.concat({
+            value:res[i]._id,
+            text:res[i].widgetname
+          }),
+          lw:true
+         });
+         
       }
-
+      console.log(this.state.widgets);
     }).fail(function(err){
       console.log("something wrong with the load widget");
     });
@@ -139,6 +146,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   componentWillMount: function(){
     this.loadProfile();
+    this.loadWidgets();
   },
 
   resetLayout() {
@@ -331,6 +339,13 @@ module.exports = global.Dashboardv2 = React.createClass({
     );
   },
 
+  onwidget(item){
+    return (
+      <option value={item.value}>{item.text}</option>
+    );
+
+  },
+
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
     var token = electron.remote.getGlobal('sharedObject').token;
@@ -378,7 +393,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboardv2" ).addClass('active');
 
-    if (this.state.response) {
+    if (this.state.response &&this.state.lw) {
       return (
         <div className="noselect">
         <div className="row profileHeader">
@@ -404,9 +419,9 @@ module.exports = global.Dashboardv2 = React.createClass({
               <h5>Add widget:</h5>
               <select value={this.state.selectgame} onChange={this.handleChange} id="selectWidget">
                   <option className="disabled" value="" disabled>Select a game</option>
-                  {this.loadWidgets()}
+                  {_.map(this.state.widgets, this.onwidget)}
               </select>
-              
+
               <br/> Username in Game:
               <br></br>
               <input id="gameusername" type="text" placeholder="YourTag#0000 OR Yourname" onChange={(event) => {this.setState({gamename: event.target.value})}} value={this.state.gamename}/>
