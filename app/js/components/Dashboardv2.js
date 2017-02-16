@@ -50,8 +50,10 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   loadWidgets () {
     $.get(api_server+"/widget/show").done(function(res){
+      console.log("i am here");
       for (var i = 0; i < res.length; i++) {
-         $('#selectWidget').append($('<option>', {value:res[i]._id, text:res[i].widgetname}));
+         $('#selectWidget').append($('<option>', {value:res[i].widgetname, text:res[i].widgetname}));
+         console.log("add 1");
       }
 
     }).fail(function(err){
@@ -137,7 +139,6 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   componentWillMount: function(){
     this.loadProfile();
-    this.loadWidgets();
   },
 
   resetLayout() {
@@ -403,16 +404,9 @@ module.exports = global.Dashboardv2 = React.createClass({
               <h5>Add widget:</h5>
               <select value={this.state.selectgame} onChange={this.handleChange} id="selectWidget">
                   <option className="disabled" value="" disabled>Select a game</option>
-                  <option value="Hearthstone">Hearthstone</option>
-                  <option value="Overwatch">Overwatch</option>
-                  <option value="Dota2">Dota2</option>
-                  <option value="League of Legends">League of Legends</option>
-                  <option value="StarCraft II">StarCraft II</option>
-                  <option value="CSGO">CSGO</option>
-                  <option value="Call of Duty">Call of Duty</option>
-                  <option value="Heroes of the Storm">Heroes of the Storm</option>
-                  <option value="Halo 5">Halo 5</option>
+                  {this.loadWidgets()}
               </select>
+              
               <br/> Username in Game:
               <br></br>
               <input id="gameusername" type="text" placeholder="YourTag#0000 OR Yourname" onChange={(event) => {this.setState({gamename: event.target.value})}} value={this.state.gamename}/>
@@ -455,11 +449,4 @@ function saveToLS(key, value) {
   }
 }
 
-$.get(api_server+"/widget/show").done(function(res){
-  for (var i = 0; i < res.length; i++) {
-     $('#selectWidget').append($('<option>', {value:res[i]._id, text:res[i].widgetname}));
-  }
 
-}).fail(function(err){
-  console.log("something wrong with the load widget");
-});
