@@ -57,7 +57,7 @@ module.exports = global.Dashboard = React.createClass({
           }).done((d)=> {
               $.get(api_server+'/login/profile/'+ d._id + '/info').done((res)=>{
 
-                  var g=res.gameinventory.length;
+                  var g=res.widgets.length;
 
                   this.setState({response: res,
                                   username:res.username,
@@ -183,7 +183,7 @@ module.exports = global.Dashboard = React.createClass({
                  'token' :token
               }).done((d)=> {
                  $.ajax({
-                         url:api_server+"/user/profile/addgames",
+                         url:api_server+"/user/profile/addwidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
@@ -325,7 +325,7 @@ module.exports = global.Dashboard = React.createClass({
                  'token' :token
               }).done((d)=> {
                  $.ajax({
-                         url:api_server+"/user/profile/removegames",
+                         url:api_server+"/user/profile/removeWidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({

@@ -19,6 +19,9 @@ module.exports = global.Dashboardv2 = React.createClass({
     };
   },
 
+  Soundcloud (){
+    this._child.Soundcloud();
+  },
   getInitialState() {
     return {
       layouts: JSON.parse(JSON.stringify(originalLayouts)),
@@ -256,7 +259,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
                             });
 
-                        var list = $("#gameusername").val().split("#");
+                        //var list = $("#gameusername").val().split("#");
                         if(this.state.selectgame=="Overwatch"){
                         $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
                             this.setState({
@@ -306,7 +309,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     return (
       <div key={el.i} data-grid={el} className="widgetFrame">
         <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-        <div dangerouslySetInnerHTML={listWidgets.Soundcloud().bind(this)} ref={div => this.dangerouslySetInnerHTML = __html} />
+        {listWidgets()}
       </div>
 
     );
@@ -427,3 +430,4 @@ function saveToLS(key, value) {
     }));
   }
 }
+
