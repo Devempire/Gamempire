@@ -19,9 +19,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     };
   },
 
-  Soundcloud (){
-    this._child.Soundcloud();
-  },
+
   getInitialState() {
     return {
       layouts: JSON.parse(JSON.stringify(originalLayouts)),
