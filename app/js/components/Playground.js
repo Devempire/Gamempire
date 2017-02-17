@@ -66,7 +66,7 @@ module.exports = global.Playground = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Playground" ).addClass('active');
     return <div>
-    <ResponsiveReactGridLayout className="layout" layouts={this.state.layouts}
+    <ResponsiveReactGridLayout className="layout" layouts={this.state.layouts} 
           breakpoints={{lg: 1042, md: 996, sm: 768, xs: 480, xxs: 0}}
           cols={{lg: 17, md: 12, sm: 8, xs: 4, xxs: 2}}>
 
@@ -120,7 +120,7 @@ module.exports = global.Playground = React.createClass({
 
           </div>
 
-          <div key={"2"} data-grid={{x: 3, y: 0, w: 5, h: 3}} className="widgetFrame" id="Discord">
+          <div key={"2"} data-grid={{x: 3, y: 0, w: 5, h: 3, draggableCancel: '.widget', draggableHandle: '.widgetTitle noselect'}} className="widgetFrame" id="Discord">
             <span className="widgetTitle noselect">Discord</span>
             <script>ipcRenderer.send('disable-x-frame', webview.partition);</script>
             <webview className="widget" src="https://discordapp.com/login" ></webview>
