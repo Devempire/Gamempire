@@ -126,7 +126,7 @@ module.exports = global.Playground = React.createClass({
           <div key={"3"} data-grid={{x: 8, y: 0, w: 8, h: 3}} className="widgetFrame" id="Soundcloud">
             <p className="widgetTitle noselect">Soundcloud</p>
             <script>ipcRenderer.send('disable-x-frame', webview.partition);</script>
-            <webview className="widget" src="https://soundcloud.com/charts/top" data-grid={{static: true}}></webview>
+            <webview className="widget" src="https://soundcloud.com/charts/top"></webview>
           </div>
 
           <div key={"4"} data-grid={{x: 0, y: 3, w: 8, h: 3}} className="widgetFrame" id="Messenger">
