@@ -298,11 +298,8 @@ module.exports = global.Dashboardv2 = React.createClass({
       cursor: 'pointer'
     };
     switch(i) {
-    case "League of Legends":
-        gameImage = "lol";
-        break;
     default:
-        gameImage = widgetname;
+        gameImage = i;
     };
     if (widgetname == "Soundcloud") {
       return (
@@ -315,7 +312,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       return (
         <div key={el.i} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          <div className="gameImage" style={{background: 'url(./../app/img/'+gameImage+'.png)'}}>
+          <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+gameImage+'.png)'}}>
             <div className="row">
               <div className="overlay">
                   { el.i =="Overwatch" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
@@ -470,4 +467,3 @@ function saveToLS(key, value) {
     }));
   }
 }
-
