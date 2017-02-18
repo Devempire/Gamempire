@@ -409,7 +409,7 @@ module.exports = global.Dashboard = React.createClass({
           </div>
 
           <div className="row">
-            <button style={{display: this.state.showStore ?  'none':'block' }} className="button secondary hollow" id="show" onClick={this.show}>+</button>
+            <button style={{display: this.state.showStore ?  'none':'block' }} className="button secondary 0e1519" id="show" onClick={this.show}>+</button>
           </div>
         </div>
       );

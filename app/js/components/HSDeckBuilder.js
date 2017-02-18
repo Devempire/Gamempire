@@ -391,7 +391,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
           </form>
         </div>
 	      <div className="row">
-        	<button style={{display: this.state.showAddDeck ? 'block':'none' }} className="button secondary hollow" id="show" onClick={this.show}>Add Hearthstone Deck</button>
+        	<button style={{display: this.state.showAddDeck ? 'block':'none' }} className="button secondary 0e1519" id="show" onClick={this.show}>Add Hearthstone Deck</button>
         </div>
       </div>
 	  )
