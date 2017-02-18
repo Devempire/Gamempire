@@ -44,6 +44,7 @@
     "react-grid-layout": "^0.13.9"
   },
   "dependencies": {
+    "foundation-sites": "^6.3.0",
     "soundcloud-node-api": "^0.0.8",
     "jquery": "^3.1.1",
     "lodash": "^4.13.1",

@@ -62,6 +62,23 @@ gulp.task('build-client-scss', (done) => {
   })
 })
 
+gulp.task('build-foundation-client-scss', (done) => {
+  glob('./node_modules/foundation-sites/scss/*.scss', (err, files) => {
+    if (err) done(err)
+
+    let tasks = files.map((entry) => {
+      return gulp.src(entry)
+        .pipe(sass())
+        .pipe(rename({
+          dirname: 'css'
+        }))
+        .pipe(gulp.dest('./build'))
+    })
+
+    es.merge(tasks).on('end', done)
+  })
+})
+
 gulp.task('build-client-html', (done) => {
   glob('./app/*.html', (err, files) => {
     if (err) done(err)
