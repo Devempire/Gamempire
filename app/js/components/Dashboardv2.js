@@ -290,6 +290,7 @@ module.exports = global.Dashboardv2 = React.createClass({
   onGame(el){
     var i = el.i;
     var widgetname = el.widgetname
+    var widgettype = el.type
     var gameImage;
     var removeStyle = {
       position: 'absolute',
@@ -308,7 +309,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       return (
         <div key={el.i} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          {listWidgets.soundCloud()}
+          {listWidgets.Soundcloud()}
         </div>
       );
     } else {
