@@ -1,5 +1,12 @@
-module.exports = global.listWidgets = function Soundcloud() {
+class listWidgets {
+	constructor() {
+  	}
+
+	Soundcloud() {
         return (
-         <webview className='widget' src='https://soundcloud.com/charts/top'></webview>
-       );
-      }
+        	<webview className='widget' src='https://soundcloud.com/charts/top'></webview>
+       	);
+    }
+}
+
+module.exports = global.listWidgets = new listWidgets();
