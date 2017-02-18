@@ -304,13 +304,20 @@ module.exports = global.Dashboardv2 = React.createClass({
     default:
         gameImage = i;
     };
-    return (
-      <div key={el.i} data-grid={el} className="widgetFrame">
-        <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-        {listWidgets()}
-      </div>
-
-    );
+    if (widgetname == "Soundcloud") {
+      return (
+        <div key={el.i} data-grid={el} className="widgetFrame">
+          <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+          {listWidgets.soundCloud()}
+        </div>
+      );
+    } else {
+      return (
+        <div key={el.i} data-grid={el} className="widgetFrame">
+          <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+        </div>
+      );
+    }
   },
 
   onwidget(item){
