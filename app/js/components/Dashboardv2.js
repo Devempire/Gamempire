@@ -290,7 +290,6 @@ module.exports = global.Dashboardv2 = React.createClass({
   onGame(el){
     var i = el.i;
     var widgetname = el.widgetname
-    var widgettype = el.type
     var gameImage;
     var removeStyle = {
       position: 'absolute',
@@ -303,7 +302,7 @@ module.exports = global.Dashboardv2 = React.createClass({
         gameImage = "lol";
         break;
     default:
-        gameImage = i;
+        gameImage = widgetname;
     };
     if (widgetname == "Soundcloud") {
       return (
@@ -316,6 +315,41 @@ module.exports = global.Dashboardv2 = React.createClass({
       return (
         <div key={el.i} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+          <div className="gameImage" style={{background: 'url(./../app/img/'+gameImage+'.png)'}}>
+            <div className="row">
+              <div className="overlay">
+                  { el.i =="Overwatch" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
+                                       </p></div></div>
+                                       <hr />
+                  <div className="row heroes">
+                    <div className="column small-4"><img src={this.state.image} />  <h6>{this.state.hero}</h6><p>{this.state.time}</p></div>
+                    <div className="column small-4"><img src={this.state.image1} /> <h6>{this.state.hero1}</h6><p>{this.state.time1} </p></div>
+                    <div className="column small-4"><img src={this.state.image2} /> <h6>{this.state.hero2}</h6> <p>{this.state.time2}</p> </div>
+                  </div>
+                </div>
+                ):(<p>example</p>) }
+              </div>
+              {/*<p>interest:</p>
+              <p>{el.int}</p>
+              <p>username in game : {el.useringame} </p>
+              <button className="button" onClick={this.editgame(el)}>Edit</button>*/}
+            </div>
+          </div>
+          <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span>
+          <ul className="menu horizontal">
+          <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+          </svg>
+          </a></li>
+          <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+          </svg>
+          </a></li>
+          <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+          <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+          </svg>
+          </a></li>
+          </ul>
         </div>
       );
     }
