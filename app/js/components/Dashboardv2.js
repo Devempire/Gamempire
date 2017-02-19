@@ -13,7 +13,7 @@ module.exports = global.Dashboardv2 = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 12, md: 12, sm: 12, xs: 4, xxs: 4},
+      cols: {lg: 18, md: 12, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
       verticalCompact: true
     };
@@ -101,6 +101,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   games: this.state.games.concat({
                                     i: res.widgets[i].widgetid,
                                     widgetname: res.widgets[i].widgetname,
+                                    widgetid: res.widgets[i].widgetid,
                                     x: x,
                                     y: row,
                                     w: width,
@@ -109,8 +110,6 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     maxH: 13,
                                     minW: 4,
                                     maxW: 12,
-                                    int:res.widgets[i].interest,
-                                    username:res.widgets[i].username,
                                   })
                       });
 
@@ -192,7 +191,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 */}
     var L = this.state.games.length;
     for (var i = 0; i < L; i++) {
-      if(this.state.selectgame == this.state.games[i].i){
+      if(this.state.selectgame === this.state.games[i].i){
         $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
         $("#msg").addClass('label warning input-group-field');
         $("#msg").addClass("shake");
@@ -239,14 +238,15 @@ module.exports = global.Dashboardv2 = React.createClass({
                               games: this.state.games.concat({
                                 i: this.state.selectgame,
                                 widgetname: this.state.selectwidgetname,
+                                widgetID: this.state.selectgame,
                                 x: x,
                                 y: row,
                                 w: width,
                                 h: height,
-                                minH: 13,
-                                maxH: 13,
-                                minW: 4,
-                                maxW: 12,
+                                minH: 5,
+                                maxH: 20,
+                                minW: 2,
+                                maxW: 18,
                                 int:this.state.selectinterest,
                                 username:$("#gameusername").val(),
 
@@ -288,68 +288,90 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   onGame(el){
-    var i = el.i;
-    var widgetname = el.widgetname
-    var gameImage;
+    var i = el.widgetid;
+    var widgetname = el.widgetname;
+    var widgetID;
+    var widgetTitle;
     var removeStyle = {
       position: 'absolute',
       right: '2px',
       top: 0,
       cursor: 'pointer'
     };
-    switch(i) {
+    switch(i, widgetname) {
     default:
-        gameImage = i;
+        widgetTitle = widgetname;
+        widgetID = i;
     };
-    if (widgetname == "Soundcloud") {
-      return (
-        <div key={el.i} data-grid={el} className="widgetFrame">
-          <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          {listWidgets.Soundcloud()}
-        </div>
-      );
-    } else {
-      return (
-        <div key={el.i} data-grid={el} className="widgetFrame">
-          <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+gameImage+'.png)'}}>
-            <div className="row">
-              <div className="overlay">
-                  { el.i =="Overwatch" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
-                                       </p></div></div>
-                                       <hr />
-                  <div className="row heroes">
-                    <div className="column small-4"><img src={this.state.image} />  <h6>{this.state.hero}</h6><p>{this.state.time}</p></div>
-                    <div className="column small-4"><img src={this.state.image1} /> <h6>{this.state.hero1}</h6><p>{this.state.time1} </p></div>
-                    <div className="column small-4"><img src={this.state.image2} /> <h6>{this.state.hero2}</h6> <p>{this.state.time2}</p> </div>
+
+
+    //not sure why we're hardcoding now. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
+    //This is where we should split up by Widget Type. Game related tool widgets will load differently from other widget types.
+    //if (widgetType=='social'){ }
+    //if (widgetType=='game'){ }
+    //if (widgetType=='music'){ }
+    //etc.
+
+    if (widgetID === "58a7823a27b83be81d3008ce" || widgetID === "58a7a0dd27b83be81d3008e3" || widgetID === "58a7c5a227b83be81d3008fa"){
+        return (
+          <div key={widgetID} data-grid={el} className="widgetFrame">
+            <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+            <div className="widget">
+            <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
+              <div className="row">
+                <div className="overlay">
+              {
+                //overwatch = 58a7c5a227b83be81d3008fa
+              }      { widgetID =="58a7c5a227b83be81d3008fa" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
+                                         </p></div></div>
+                                         <hr />
+                    <div className="row heroes">
+                      <div className="column small-4"><img src={this.state.image} />  <h6>{this.state.hero}</h6><p>{this.state.time}</p></div>
+                      <div className="column small-4"><img src={this.state.image1} /> <h6>{this.state.hero1}</h6><p>{this.state.time1} </p></div>
+                      <div className="column small-4"><img src={this.state.image2} /> <h6>{this.state.hero2}</h6> <p>{this.state.time2}</p> </div>
+                    </div>
                   </div>
+                  ):(<p>example</p>) }
                 </div>
-                ):(<p>example</p>) }
+                {/*<p>interest:</p>
+                <p>{el.int}</p>
+                <p>username in game : {el.useringame} </p>
+                <button className="button" onClick={this.editgame(el)}>Edit</button>*/}
               </div>
-              {/*<p>interest:</p>
-              <p>{el.int}</p>
-              <p>username in game : {el.useringame} </p>
-              <button className="button" onClick={this.editgame(el)}>Edit</button>*/}
+            </div>
+            <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span>
+            <ul className="menu horizontal">
+            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
+            <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+            </svg>
+            </a></li>
+            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+            </svg>
+            </a></li>
+            <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+            </svg>
+            </a></li>
+            </ul>
             </div>
           </div>
-          <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span>
-          <ul className="menu horizontal">
-          <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
-          <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
-          </svg>
-          </a></li>
-          <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-          </svg>
-          </a></li>
-          <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-          </svg>
-          </a></li>
-          </ul>
+        );
+    } else {
+
+
+    //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
+    //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
+      return (
+        <div key={el.i} data-grid={el} className="widgetFrame">
+          <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+          {listWidgets.loadwid(el.i)}
         </div>
       );
     }
+    console.log(widgetTitle + ' Loaded.');
+
+
   },
 
   onwidget(item){
@@ -404,11 +426,13 @@ module.exports = global.Dashboardv2 = React.createClass({
     $("#mySidenav>a.active").removeClass("active");
 
     //Set Dashbaord as active in menu
-    $( "#_Dashboardv2" ).addClass('active');
+    $( "#_Dashboard" ).addClass('active');
 
     if (this.state.response) {
       return (
         <div className="noselect">
+        <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3>
+        <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={(event) => {localStorage.setItem("aboutme", this.state.aboutMe)}}/>
 
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
@@ -422,6 +446,7 @@ module.exports = global.Dashboardv2 = React.createClass({
               <select value={this.state.selectgame} onChange={this.handleChange} id="selectWidget">
                   <option className="disabled" value="" disabled>Select a widget</option>
                   {_.map(this.state.widgets, this.onwidget)}
+
               </select>
 {/*
 <!-- make this go inside specific widget that needs username not for all widgets -->
@@ -429,9 +454,9 @@ module.exports = global.Dashboardv2 = React.createClass({
               <br></br>
               <input id="gameusername" type="text" placeholder="YourTag#0000 OR Yourname" onChange={(event) => {this.setState({gamename: event.target.value})}} value={this.state.gamename}/>
 */}
-               <center><div className="input-group-field" id="msg"></div></center>
               <button className="button" type="submit" value="Submit" >Add</button>
             </form>
+            <center><div className="input-group-field" id="msg"></div></center><br/>
           </div>
 
           <div className="row">
@@ -442,7 +467,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
     } else {
       return (
-        <div className="noselect">Loading</div>
+        <div className="content-loading"></div>
         );
     }
   }

@@ -101,12 +101,10 @@ module.exports = class Login extends React.Component {
               //currently displays white screen for split second when rendering the elements in sidebar.js
               //TODO: find faster way to way.
               document.getElementById('playgroundFrame').style.visibility = "hidden";
-              document.getElementById('spotifyFrame').style.visibility = "hidden";
-              document.getElementById('soundcloudFrame').style.visibility = "hidden";
-              document.getElementById('discordFrame').style.visibility = "hidden";
+
 
               ReactDOM.render(
-              	<Dashboard />,
+              	<Dashboardv2 />,
               	document.getElementById('content')
               )
 

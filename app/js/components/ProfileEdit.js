@@ -121,7 +121,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
   uploadPic() {
 
-    
+
     var pic = document.getElementById("uploadedpic").files;
     if (pic.length != 0) {
       document.getElementById("profilepic").src = pic[0].path;
@@ -191,7 +191,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
   backToDashboard() {
   let MainWindow =  ReactDOM.render(
-        <Dashboard />,
+        <Dashboardv2 />,
         document.getElementById('content'));
   },
 
@@ -267,7 +267,7 @@ module.exports = global.ProfileEdit = React.createClass({
         </div>
       );
     }else{
-        return (<div> Loading</div>);
+        return (<div className="content-loading"></div>);
     }
   },
 
@@ -326,7 +326,7 @@ module.exports = global.ProfileEdit = React.createClass({
                           }
                       }).done((res)=>{
                                   erroruname.innerHTML = "";
-                                 
+
                               }).fail((err)=>{
                                   erroruname.innerHTML = "Username already exist!";
                               });

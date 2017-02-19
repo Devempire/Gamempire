@@ -6,13 +6,15 @@ module.exports = global.Bar = React.createClass({
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
 					<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#" onClick={this._HSDeckBuilder} id="_HSDeckBuilder">Hearthstone Deck Builder</a>
-					<a href="#" onClick={this._Discord} id="_Discord">Discord</a>
-					<a href="#" onClick={this._Soundcloud} id="_Soundcloud">Soundcloud</a>
-					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
-					<a href="#" onClick={this._Dashboardv2} id="_Dashboardv2">Dashboard v2 [Buggy]</a>
 					{
+					/*
+					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 
-					/* NOT WORKING YET
+
+					<a href="#" onClick={this._Dashboardv2} id="_Dashboardv2">Dashboard v2 [Buggy]</a>
+
+
+					 NOT WORKING YET
 					<a href="#" onClick={this._Spotify} id="_Spotify">Spotify</a>
 
 					<a href="#" id="3">Video Streams</a>
@@ -25,26 +27,11 @@ module.exports = global.Bar = React.createClass({
 
 					<a href="#" id="_Logout" onClick={this._Logout}>Logout </a>
 					<div className="toggleNav" onClick={this.toggleNav}></div>
-		    </div>
+						    </div>
 				<div id="content">
           <div id="main_content"></div>
 	    	</div>
-				<div className="discordFrame" id="discordFrame">
-					<script>ipcRenderer.send('disable-x-frame', webview.partition);</script>
-					<webview className="discordFrame" src="https://discordapp.com/login"></webview>
-				</div>
-				<div className="discordFrame" id="soundcloudFrame">
-					<script>ipcRenderer.send('disable-x-frame', webview.partition);
-					webview.executeJavaScript('$( ".messages-wrapper" ).remove()');</script>
-					<webview className="discordFrame" src="https://soundcloud.com/charts/top" ></webview>
-				</div>
-				<div className="discordFrame" id="spotifyFrame">
-					<script>ipcRenderer.send('disable-x-frame', webview.partition);</script>
-					<webview className="discordFrame" src="" ></webview>
-				</div>
-
 				<div className="discordFrame hearthstone_scroll" id="playgroundFrame">
-					<Playground />
 
 				</div>
 
@@ -53,25 +40,24 @@ module.exports = global.Bar = React.createClass({
 
 	toggleNav(){
 
-		$("#mySidenav, #content, #discordFrame, #soundcloudFrame, #spotifyFrame, #playgroundFrame").toggleClass("navOpen");
+		$("#mySidenav, #content, #playgroundFrame").toggleClass("navOpen");
 		if ( $("#mySidenav").hasClass("navOpen") ) {
 				//do something it does have the protected class!
 				$(".toggleNav").css({"cursor":"url('../app/img/arrow_in.png'), auto"});
 		}else{
 				$(".toggleNav").css({"cursor":"url('../app/img/arrow_out.png'), auto"});
 		}
+		//quicksize might be obselete will remember to chekc back and remove
 		ipc.sendSync('quicksize')
 	},
 
 	_Dashboard(){
+
 		ReactDOM.render(
-		  	<Dashboard />,
+		  	<Dashboardv2 />,
 		  	document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
 	},
 
@@ -81,9 +67,6 @@ module.exports = global.Bar = React.createClass({
 			document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
 	},
 
@@ -93,55 +76,10 @@ module.exports = global.Bar = React.createClass({
 			document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
 	},
 
-	_Discord(){
-		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('content').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "visible";
-		var title = "Discord - Gamempire"
-		document.title = title
-		document.getElementById('title').textContent = title
-		$("#mySidenav>a.active").removeClass("active");
-		$( "#_Discord" ).addClass('active');
-	},
-
-	_Soundcloud(){
-		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "visible";
-		document.getElementById('discordFrame').style.visibility = "hidden";
-		document.getElementById('content').style.visibility = "hidden";
-		var title = "Soundcloud - Gamempire"
-		document.title = title
-		document.getElementById('title').textContent = title
-		$("#mySidenav>a.active").removeClass("active");
-		$( "#_Soundcloud" ).addClass('active');
-	},
-
-	_Spotify(){
-		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "visible";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "hidden";
-		document.getElementById('content').style.visibility = "hidden";
-		var title = "Spotify - Gamempire"
-		document.title = title
-		document.getElementById('title').textContent = title
-		$("#mySidenav>a.active").removeClass("active");
-		$( "#_Spotify" ).addClass('active');
-	},
-
 	_Playground(){
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "hidden";
 		document.getElementById('playgroundFrame').style.visibility = "visible";
 		var title = "Playground - Gamempire"
@@ -157,9 +95,6 @@ module.exports = global.Bar = React.createClass({
 				document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('spotifyFrame').style.visibility = "hidden";
-		document.getElementById('soundcloudFrame').style.visibility = "hidden";
-		document.getElementById('discordFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
 	},
 
