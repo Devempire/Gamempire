@@ -102,6 +102,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     i: res.widgets[i].widgetid,
                                     widgetname: res.widgets[i].widgetname,
                                     widgetid: res.widgets[i].widgetid,
+                                    selectgame: res.widgets[i].widgetid,
                                     x: x,
                                     y: row,
                                     w: width,
@@ -236,9 +237,10 @@ module.exports = global.Dashboardv2 = React.createClass({
 
                         this.setState({
                               games: this.state.games.concat({
+                                _id: this.state._id,
                                 i: this.state.selectgame,
                                 widgetname: this.state.selectwidgetname,
-                                widgetID: this.state.selectgame,
+                                widgetid: this.state.selectgame,
                                 x: x,
                                 y: row,
                                 w: width,
@@ -289,6 +291,8 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   onGame(el){
     var i = el.widgetid;
+    var id = this.state._id;
+    console.log(id);
     var widgetname = el.widgetname;
     var widgetID;
     var widgetTitle;
@@ -303,6 +307,7 @@ module.exports = global.Dashboardv2 = React.createClass({
         widgetTitle = widgetname;
         widgetID = i;
     };
+    console.log(widgetID);
 
 
     //not sure why we're hardcoding now. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
@@ -312,7 +317,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //if (widgetType=='music'){ }
     //etc.
 
-    if (widgetID === "58a7823a27b83be81d3008ce" || widgetID === "58a7a0dd27b83be81d3008e3" || widgetID === "58a7c5a227b83be81d3008fa"){
+    if (widgetID == "58a7823a27b83be81d3008ce" || widgetID === "58a7a0dd27b83be81d3008e3" || widgetID === "58a7c5a227b83be81d3008fa"){
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
             <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
@@ -364,7 +369,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
       return (
         <div key={el.i} data-grid={el} className="widgetFrame">
-          <p className="widgetTitle noselect">{el.widgetname} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+          <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
           {listWidgets.loadwid(el.i)}
         </div>
       );
