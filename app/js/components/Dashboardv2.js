@@ -291,8 +291,6 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   onGame(el){
     var i = el.widgetid;
-    var id = this.state._id;
-    console.log(id);
     var widgetname = el.widgetname;
     var widgetID;
     var widgetTitle;
@@ -307,14 +305,15 @@ module.exports = global.Dashboardv2 = React.createClass({
         widgetTitle = widgetname;
         widgetID = i;
     };
-    console.log(widgetID);
+    //console.log(widgetID);
 
 
-    //not sure why we're hardcoding now. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
+    //for it's hardcoded. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
     //This is where we should split up by Widget Type. Game related tool widgets will load differently from other widget types.
     //if (widgetType=='social'){ }
     //if (widgetType=='game'){ }
     //if (widgetType=='music'){ }
+    //TODO: get react gride min/max height/width from widgets database
     //etc.
 
     if (widgetID == "58a7823a27b83be81d3008ce" || widgetID === "58a7a0dd27b83be81d3008e3" || widgetID === "58a7c5a227b83be81d3008fa"){
