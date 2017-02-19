@@ -62,23 +62,6 @@ gulp.task('build-client-scss', (done) => {
   })
 })
 
-gulp.task('build-foundation-client-scss', (done) => {
-  glob('./node_modules/foundation-sites/scss/*.scss', (err, files) => {
-    if (err) done(err)
-
-    let tasks = files.map((entry) => {
-      return gulp.src(entry)
-        .pipe(sass())
-        .pipe(rename({
-          dirname: 'css'
-        }))
-        .pipe(gulp.dest('./build'))
-    })
-
-    es.merge(tasks).on('end', done)
-  })
-})
-
 gulp.task('build-client-html', (done) => {
   glob('./app/*.html', (err, files) => {
     if (err) done(err)
@@ -107,7 +90,7 @@ gulp.task('build-client-html-production', (done) => {
 })
 
 gulp.task('build-client-assets', (done) => {
-  glob('./app/img/**/*', (err, files) => {
+  glob('./app/img/*', (err, files) => {
     if (err) done(err)
 
     let tasks = files.map((entry) => {
@@ -123,9 +106,26 @@ gulp.task('build-client-assets', (done) => {
   })
 })
 
-gulp.task('build-client', ['build-client-bundles', 'build-client-scss', 'build-client-html', 'build-client-assets'])
+gulp.task('build-client-widget-pictures', (done) => {
+  glob('./app/img/widget_img/**', (err, files) => {
+    if (err) done(err)
 
-gulp.task('build-client-production', ['build-client-bundles', 'build-client-scss', 'build-client-html-production', 'build-client-assets'])
+    let tasks = files.map((entry) => {
+      console.log(entry)
+      return gulp.src(entry)
+        .pipe(rename({
+          dirname: 'widget_img'
+        }))
+        .pipe(gulp.dest('./build/img/'))
+    })
+
+    es.merge(tasks).on('end', done)
+  })
+})
+
+gulp.task('build-client', ['build-client-bundles', 'build-client-scss', 'build-client-html', 'build-client-assets', 'build-client-widget-pictures'])
+
+gulp.task('build-client-production', ['build-client-bundles', 'build-client-scss', 'build-client-html-production', 'build-client-assets', 'build-client-widget-pictures'])
 
 gulp.task('build-server', (done) => {
   glob('./src/*.js', (err, files) => {

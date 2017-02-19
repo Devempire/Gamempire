@@ -435,7 +435,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     if (this.state.response) {
       return (
         <div className="noselect">
-        <h3 onClick={this.goToProfileEdit}>{this.state.username}</h3>
+        <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
         <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={(event) => {localStorage.setItem("aboutme", this.state.aboutMe)}}/>
 
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}

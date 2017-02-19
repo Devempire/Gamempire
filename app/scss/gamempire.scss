@@ -157,6 +157,10 @@ hr {
   outline: 1px solid $primary-color;
 }
 
+.profilehover:hover {
+  color: $primary-color;
+}
+
 .react-grid-item h2 {
   color: #818181;
   text-align: center;
