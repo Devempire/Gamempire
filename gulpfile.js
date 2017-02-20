@@ -1,9 +1,14 @@
 'use strict'
 
 /*
-gulp serve - to launch server, watch and electron for dev
-gulp package-windows build-production - to package windows applicaion. Will be placed in ./release/windows.zip
-gulp package-osx build-production -- to package windows applicaion. Will be placed in ./release/
+Copyright 2017 Gamempire. All rights reserved.
+
+
+gulp serve 								to launch server, watch and electron for dev
+gulp package-windows build-production  	to package Windows applicaion. Will be packaged to ./release/windows.zip
+gulp package-osx build-production 		to package MacOSx applicaion. Will be packaged in ./release/??
+gulp package-linux build-production 	to package Linux application. Will be packaged to ./release/linux.zip
+
 */
 
 const gulp = require('gulp')
