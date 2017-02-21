@@ -168,6 +168,7 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   handleChange(event) {
+    $( "#add_widget_button" ).prop( "disabled", false );
     this.setState({selectgame: event.target.value, selectwidgetname: event.target.options[event.target.selectedIndex].text});
   },
 
@@ -458,7 +459,7 @@ module.exports = global.Dashboardv2 = React.createClass({
               <br></br>
               <input id="gameusername" type="text" placeholder="YourTag#0000 OR Yourname" onChange={(event) => {this.setState({gamename: event.target.value})}} value={this.state.gamename}/>
 */}
-              <button className="button" type="submit" value="Submit" >Add</button>
+              <button className="button" type="submit" id="add_widget_button" value="Submit" disabled>Add</button>
             </form>
             <center><div className="input-group-field" id="msg"></div></center><br/>
           </div>
