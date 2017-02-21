@@ -72,8 +72,7 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   loadProfile(){
-    if (typeof(Storage) !== "undefined") {
-      this.setState({aboutMe:localStorage.getItem("aboutme")});
+ 
       var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/login/load",{
           'token': token
@@ -84,7 +83,8 @@ module.exports = global.Dashboardv2 = React.createClass({
                   this.setState({response: res,
                                   username:res.username,
                                   firstname:res.firstname,
-                                  lastname:res.lastname});
+                                  lastname:res.lastname,
+                                  aboutMe:res.aboutme});
                   for (var i = 0; i < g; i++) {
                       if (i == 0) {
                             var x =0;
@@ -143,7 +143,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                   }
           });
       });
-    }
+    
   },
 
   componentWillMount: function(){
@@ -421,6 +421,29 @@ module.exports = global.Dashboardv2 = React.createClass({
     this.setState({aboutMe:event.target.value});
   },
 
+  updateAboutMe(event){
+    var token = electron.remote.getGlobal('sharedObject').token;
+    $.post(api_server+"/user/load",
+              {
+                 'token' :token
+              }).done((d)=> {
+                $.ajax({
+                         url:api_server+"/user/profile/updateaboutme",
+                         type:"PUT",
+                         contentType: 'application/json; charset=utf-8',
+                         data:JSON.stringify({
+                             _id:d._id,
+                             aboutme:this.state.aboutMe
+                         })
+                     }).done((res)=>{
+                      console.log("aboutme on server!");
+                    }).fail((err)=>{
+                      console.log("aboutme fail to update to server!")
+                    })
+              });
+
+  },
+
   render() {
     // Set Titles
     var title = "Dashboard v2 - Testing - Gamempire"
@@ -437,7 +460,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       return (
         <div className="noselect">
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
-        <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={(event) => {localStorage.setItem("aboutme", this.state.aboutMe)}}/>
+        <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
