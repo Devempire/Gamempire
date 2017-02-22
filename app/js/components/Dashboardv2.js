@@ -35,6 +35,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       selectgame:'',
       showStore:false,
       gamename:'',
+      selectwidgettype:'',
       img:null,
       level:null,
       avatar:null,
@@ -60,7 +61,8 @@ module.exports = global.Dashboardv2 = React.createClass({
          this.setState({
           widgets: this.state.widgets.concat({
             value:res[i]._id,
-            text:res[i].widgetname
+            text:res[i].widgetname,
+            widgettype:res[i].widgettype
           })
          });
 
@@ -103,6 +105,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     widgetname: res.widgets[i].widgetname,
                                     widgetid: res.widgets[i].widgetid,
                                     selectgame: res.widgets[i].widgetid,
+                                    widgettype: res.widgets[i].widgettype,
                                     x: x,
                                     y: row,
                                     w: width,
@@ -169,7 +172,8 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   handleChange(event) {
     $( "#add_widget_button" ).prop( "disabled", false );
-    this.setState({selectgame: event.target.value, selectwidgetname: event.target.options[event.target.selectedIndex].text});
+    var widtype = document.getElementById(event.target.options[event.target.selectedIndex].text).getAttribute('name');
+    this.setState({selectgame: event.target.value, selectwidgetname: event.target.options[event.target.selectedIndex].text, selectwidgettype: widtype});
   },
 
   show() {
@@ -178,7 +182,6 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
-
 {/*
     if(this.state.gamename == ''){
        $("#msg").html("username in game must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
@@ -218,6 +221,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                              _id:d._id,
                              widgetid:this.state.selectgame,
                              widgetname:this.state.selectwidgetname,
+                             widgettype:this.state.selectwidgettype,
                              username:$("#gameusername").val()
                          })
                      }).done((res)=>{
@@ -242,6 +246,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 i: this.state.selectgame,
                                 widgetname: this.state.selectwidgetname,
                                 widgetid: this.state.selectgame,
+                                widgettype: this.state.selectwidgettype,
                                 x: x,
                                 y: row,
                                 w: width,
@@ -257,6 +262,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                               showStore:false,
                               gamename:'',
                               selectgame:'',
+                              selectwidgettype:'',
 
                             });
 
@@ -293,6 +299,8 @@ module.exports = global.Dashboardv2 = React.createClass({
   onGame(el){
     var i = el.widgetid;
     var widgetname = el.widgetname;
+    var widgettype = el.widgettype;
+    var gameImage;
     var widgetID;
     var widgetTitle;
     var removeStyle = {
@@ -306,6 +314,11 @@ module.exports = global.Dashboardv2 = React.createClass({
         widgetTitle = widgetname;
         widgetID = i;
     };
+    if (widgetname == 'League of Legends') {
+      gameImage = 'lol'
+    } else {
+      gameImage = widgetname;
+    }
     //console.log(widgetID);
 
 
@@ -317,17 +330,17 @@ module.exports = global.Dashboardv2 = React.createClass({
     //TODO: get react gride min/max height/width from widgets database
     //etc.
 
-    if (widgetID == "58a7823a27b83be81d3008ce" || widgetID === "58a7a0dd27b83be81d3008e3" || widgetID === "58a7c5a227b83be81d3008fa"){
+    if (widgettype == 'game') {
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
             <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
             <div className="widget">
-            <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
+            <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+gameImage+'.png)'}}>
               <div className="row">
                 <div className="overlay">
               {
-                //overwatch = 58a7c5a227b83be81d3008fa
-              }      { widgetID =="58a7c5a227b83be81d3008fa" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
+
+              }      { widgetTitle == "Overwatch" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
                                          </p></div></div>
                                          <hr />
                     <div className="row heroes">
@@ -381,9 +394,8 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   onwidget(item){
     return (
-      <option key ={item.value} value={item.value}>{item.text}</option>
+      <option key={item.value} id={item.text} value={item.value} name={item.widgettype}>{item.text}</option>
     );
-
   },
 
   removeWidget(i) {
