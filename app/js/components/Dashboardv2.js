@@ -74,7 +74,7 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   loadProfile(){
- 
+
       var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/login/load",{
           'token': token
@@ -146,7 +146,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                   }
           });
       });
-    
+
   },
 
   componentWillMount: function(){
@@ -300,7 +300,6 @@ module.exports = global.Dashboardv2 = React.createClass({
     var i = el.widgetid;
     var widgetname = el.widgetname;
     var widgettype = el.widgettype;
-    var gameImage;
     var widgetID;
     var widgetTitle;
     var removeStyle = {
@@ -314,11 +313,7 @@ module.exports = global.Dashboardv2 = React.createClass({
         widgetTitle = widgetname;
         widgetID = i;
     };
-    if (widgetname == 'League of Legends') {
-      gameImage = 'lol'
-    } else {
-      gameImage = widgetname;
-    }
+
     //console.log(widgetID);
 
     //for it's hardcoded. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
@@ -334,12 +329,13 @@ module.exports = global.Dashboardv2 = React.createClass({
           <div key={widgetID} data-grid={el} className="widgetFrame">
             <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
             <div className="widget">
-            <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+gameImage+'.png)'}}>
+            <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
               <div className="row">
                 <div className="overlay">
               {
-
-              }      { widgetTitle == "Overwatch" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
+                    //overwatch is ID 58ad36e568ddfeac581167ad
+                    //I promise i didn't make that up, just copy pasted from Widgts DB
+              }      { widgetID == "58ad36e568ddfeac581167ad" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
                                          </p></div></div>
                                          <hr />
                     <div className="row heroes">
@@ -380,13 +376,13 @@ module.exports = global.Dashboardv2 = React.createClass({
     //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
     //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
       return (
-        <div key={el.i} data-grid={el} className="widgetFrame">
+        <div key={widgetID} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          {listWidgets.loadwid(widgetTitle)}
+          {listWidgets.loadwid(widgetID)}
         </div>
       );
     }
-    console.log(widgetTitle + ' Loaded.');
+    //console.log(widgetTitle + ' Loaded.');
 
 
   },
