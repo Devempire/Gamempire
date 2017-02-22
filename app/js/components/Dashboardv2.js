@@ -321,7 +321,6 @@ module.exports = global.Dashboardv2 = React.createClass({
     }
     //console.log(widgetID);
 
-
     //for it's hardcoded. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
     //This is where we should split up by Widget Type. Game related tool widgets will load differently from other widget types.
     //if (widgetType=='social'){ }
@@ -383,7 +382,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       return (
         <div key={el.i} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          {listWidgets.loadwid(el.i)}
+          {listWidgets.loadwid(widgetTitle)}
         </div>
       );
     }
