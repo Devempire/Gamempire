@@ -67,6 +67,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   firstname:res.firstname,
                                   lastname:res.lastname,
                                   aboutMe:res.aboutme,
+                                  layout:res.layout[0],
                                   });
                   for (var i = 0; i < g; i++) {
                       if (i == 0) {
