@@ -2,13 +2,9 @@ var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
-const originalLayouts = getFromLS('layouts') || {};
-
-
 const listWidgets = require('./listWidgets.js');
 
 module.exports = global.Dashboardv2 = React.createClass({
-  mixins: [PureRenderMixin],
 
   getDefaultProps() {
     return {
@@ -22,32 +18,16 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   getInitialState() {
     return {
-      layouts: JSON.parse(JSON.stringify(originalLayouts)),
-      profile:{i:"profile",x: 100, y: 100, w: 0, h: 0, static: true},
-      addgame:{i:"add",x: 100, y:100 , w: 0, h: 0, static: false},
+      layouts: {},
       games:[],
       widgets:[],
       response:undefined,
       username:null,
       lastname:null,
       firstname:null,
-      selectinterest:[],
       selectgame:'',
       showStore:false,
-      gamename:'',
       selectwidgettype:'',
-      img:null,
-      level:null,
-      avatar:null,
-      hero:null,
-      image:null,
-      time:null,
-      hero1:null,
-      image1:null,
-      time1:null,
-      hero2:null,
-      image2:null,
-      time2:null,
       aboutMe:"about me",
 
     };
@@ -86,7 +66,9 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   username:res.username,
                                   firstname:res.firstname,
                                   lastname:res.lastname,
-                                  aboutMe:res.aboutme});
+                                  aboutMe:res.aboutme,
+                                  layout:res.layout[0],
+                                  });
                   for (var i = 0; i < g; i++) {
                       if (i == 0) {
                             var x =0;
@@ -117,32 +99,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   })
                       });
 
-                      if(res.widgets[i].widgetname =="Overwatch"){
-                        var names =res.widgets[i].username;
-                        var list =names.split("#");
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
-                           this.setState({
-                            level:res.data.level,
-                            avatar:res.data.avatar,
-                          });
-                        });
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                           var H =JSON.parse(res);
-
-                           this.setState({
-                            hero:H[0].name,
-                            image:H[0].image,
-                            time:H[0].playtime,
-                            hero1:H[1].name,
-                            image1:H[1].image,
-                            time1:H[1].playtime,
-                            hero2:H[2].name,
-                            image2:H[2].image,
-                            time2:H[2].playtime,
-
-                        });
-                        });
-                      }
+                    
                   }
           });
       });
@@ -154,10 +111,6 @@ module.exports = global.Dashboardv2 = React.createClass({
     this.loadWidgets();
   },
 
-  resetLayout() {
-    this.setState({layouts: {}});
-  },
-
   onBreakpointChange(breakpoint, cols) {
     this.setState({
       breakpoint: breakpoint,
@@ -166,8 +119,28 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   onLayoutChange(layout, layouts) {
-    saveToLS('layouts', layouts);
     this.setState({layouts});
+    console.log(JSON.stringify(this.state.layouts));
+    var token = electron.remote.getGlobal('sharedObject').token;
+    $.post(api_server+"/user/load",
+              {
+                 'token' :token
+              }).done((d)=> {
+                $.ajax({
+                         url:api_server+"/user/profile/updatelayout",
+                         type:"PUT",
+                         contentType: 'application/json; charset=utf-8',
+                         data:JSON.stringify({
+                             _id:d._id,
+                             layout:this.state.layouts
+                         })
+                     }).done((res)=>{
+                      console.log("layout on server!");
+                    }).fail((err)=>{
+                      console.log("layout fail to update to server!")
+                    })
+              });
+
   },
 
   handleChange(event) {
@@ -182,18 +155,6 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
-{/*
-    if(this.state.gamename == ''){
-       $("#msg").html("username in game must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
-        $("#msg").addClass('label warning input-group-field');
-        $("#msg").addClass("shake");
-        $("#msg").show();
-        setTimeout(function () {
-          $("#msg").removeClass("shake");
-        },200);
-        return false;
-    }
-*/}
     var L = this.state.games.length;
     for (var i = 0; i < L; i++) {
       if(this.state.selectgame === this.state.games[i].i){
@@ -255,41 +216,16 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 maxH: 20,
                                 minW: 2,
                                 maxW: 18,
-                                int:this.state.selectinterest,
-                                username:$("#gameusername").val(),
+                                
 
                               }),
                               showStore:false,
-                              gamename:'',
                               selectgame:'',
                               selectwidgettype:'',
 
                             });
 
-                        //var list = $("#gameusername").val().split("#");
-                        if(this.state.selectgame=="Overwatch"){
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
-                            this.setState({
-                              level:res.data.level,
-                              avatar:res.data.avatar,
-                              });
-                          });
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                            var H = JSON.parse(res);
-                            this.setState({
-                              hero:H[0].name,
-                              image:H[0].image,
-                              time:H[0].playtime,
-                              hero1:H[1].name,
-                              image1:H[1].image,
-                              time1:H[1].playtime,
-                              hero2:H[2].name,
-                              image2:H[2].image,
-                              time2:H[2].playtime,
-
-                            });
-                          });
-                        }
+                        
                       }).fail((err)=>{
                              alert("opps!");
                          });
@@ -510,20 +446,3 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 });
 
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-    } catch(e) {/*Ignore*/}
-  }
-  return ls[key];
-}
-
-function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem('rgl-8', JSON.stringify({
-      key: value
-    }));
-  }
-}
