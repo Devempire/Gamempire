@@ -4,7 +4,6 @@ const messenger = '58ad389d68ddfeac581167b5';
 const steamchat = '58ad38a168ddfeac581167b6';
 const googleplaymusic = '58ad389668ddfeac581167b4';
 
-
 class listWidgets {
   loadwid(i) {
     var i;
