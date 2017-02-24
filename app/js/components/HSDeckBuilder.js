@@ -15,6 +15,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
       className: "layout",
       cols: {lg: 3, md: 3, sm: 3, xs: 3, xxs: 1},
       rowHeight: 50,
+      isDraggable: false,
       verticalCompact: true
     };
   },
@@ -328,71 +329,77 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
     return (
       <div>
-	      <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
-	          onBreakpointChange={this.onBreakpointChange} {...this.props}>
-	          {_.map(this.state.decks, this.deckBuilder)}
-	      </ResponsiveReactGridLayout>
+        <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+          onBreakpointChange={this.onBreakpointChange} {...this.props}>
+          <div key="0" data-grid={{x: 0, y: 0, w: 3, h: 12, static: true}} className="hearthstone_scroll">
+          
+            <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+                onBreakpointChange={this.onBreakpointChange} {...this.props}>
+                {_.map(this.state.decks, this.deckBuilder)}
+            </ResponsiveReactGridLayout>
 
-  		  <div className="row dropFade" style={{display: this.state.showStore ? 'block' : 'none'}}>
-	        <h5>Choose a Class: </h5>
-	        <select value={this.state.selectclass} onChange={this.showBuilder}>
-	            <option className="disabled" value="" disabled>Choose a Class</option>
-	            <option value="Druid">Druid</option>
-	            <option value="Hunter">Hunter</option>
-	            <option value="Mage">Mage</option>
-	            <option value="Paladin">Paladin</option>
-	            <option value="Priest">Priest</option>
-	            <option value="Rogue">Rogue</option>
-	            <option value="Shaman">Shaman</option>
-	            <option value="Warlock">Warlock</option>
-	            <option value="Warrior">Warrior</option>
-	        </select>
-	        <br/>
-	        <br></br>
-	      </div>
+            <div className="row dropFade" style={{display: this.state.showStore ? 'block' : 'none'}}>
+              <h5>Choose a Class: </h5>
+              <select value={this.state.selectclass} onChange={this.showBuilder}>
+                  <option className="disabled" value="" disabled>Choose a Class</option>
+                  <option value="Druid">Druid</option>
+                  <option value="Hunter">Hunter</option>
+                  <option value="Mage">Mage</option>
+                  <option value="Paladin">Paladin</option>
+                  <option value="Priest">Priest</option>
+                  <option value="Rogue">Rogue</option>
+                  <option value="Shaman">Shaman</option>
+                  <option value="Warlock">Warlock</option>
+                  <option value="Warrior">Warrior</option>
+              </select>
+              <br/>
+              <br></br>
+            </div>
 
-        <div className="row dropFade" style={{display: this.state.showDeckBuilder ? 'block' : 'none'}}>
-          <h5>Create a Deck: </h5>
-          <h6>Title: </h6>
-          <input type="text" name="title" id="deck_title" onChange={(event) => {this.setState({title: event.target.value})}} value={this.state.title}></input>
-          <h6>Description: </h6>
-          <input type="text" name="description" id="deck_desc" onChange={(event) => {this.setState({description
-            : event.target.value})}} value={this.state.description}></input>
+            <div className="row dropFade" style={{display: this.state.showDeckBuilder ? 'block' : 'none'}}>
+              <h5>Create a Deck: </h5>
+              <h6>Title: </h6>
+              <input type="text" name="title" id="deck_title" onChange={(event) => {this.setState({title: event.target.value})}} value={this.state.title}></input>
+              <h6>Description: </h6>
+              <input type="text" name="description" id="deck_desc" onChange={(event) => {this.setState({
+                description: event.target.value})}} value={this.state.description}></input>
 
-          <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
-              onBreakpointChange={this.onBreakpointChange} {...this.props}>
-              <div key="1" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
-                <h4>{this.state.selectclass} Cards</h4>
-                <input type="text" id="class_card" onKeyUp={this.searchClassCards} placeholder="Search a Card"></input>
-                <ul id="class_card_list">
-                  {this.state.classCards}
-                </ul>
-              </div>
-              <div key="2" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
-                <h4>Neutral Cards</h4>
-                <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
-                <ul id="neutral_card_list">
-                  {this.state.neutral}
-                </ul>
-              </div>
-              <div key="3" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
-                <h4>Deck</h4>
-                <ul id="deck_list">
-                  {this.state.myDeck}
-                </ul>
-              </div>
-          </ResponsiveReactGridLayout>
+              <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+                  onBreakpointChange={this.onBreakpointChange} {...this.props}>
+                  <div key="1" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+                    <h4>{this.state.selectclass} Cards</h4>
+                    <input type="text" id="class_card" onKeyUp={this.searchClassCards} placeholder="Search a Card"></input>
+                    <ul id="class_card_list">
+                      {this.state.classCards}
+                    </ul>
+                  </div>
+                  <div key="2" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+                    <h4>Neutral Cards</h4>
+                    <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
+                    <ul id="neutral_card_list">
+                      {this.state.neutral}
+                    </ul>
+                  </div>
+                  <div key="3" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+                    <h4>Deck</h4>
+                    <ul id="deck_list">
+                      {this.state.myDeck}
+                    </ul>
+                  </div>
+              </ResponsiveReactGridLayout>
 
-          <br/>
-          <br></br>
+              <br/>
+              <br></br>
 
-          <form onSubmit={this.handleSubmit}>
-            <button className="button" type="submit" value="Submit">Submit</button>
-          </form>
-        </div>
-	      <div className="row">
-        	<button style={{display: this.state.showAddDeck ? 'block':'none' }} className="button secondary 0e1519" id="show" onClick={this.show}>Add Hearthstone Deck</button>
-        </div>
+              <form onSubmit={this.handleSubmit}>
+                <button className="button" type="submit" value="Submit">Submit</button>
+              </form>
+            </div>
+            <div className="row">
+              <button style={{display: this.state.showAddDeck ? 'block':'none' }} className="button secondary 0e1519" id="show" onClick={this.show}>Add Hearthstone Deck</button>
+            </div>
+          </div>
+        </ResponsiveReactGridLayout>
       </div>
 	  )
   }
