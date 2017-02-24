@@ -7,7 +7,6 @@ const googleplaymusic = '58ad389668ddfeac581167b4';
 
 class listWidgets {
   loadwid(i) {
-    var i;
 
     if ( i == soundcloud) { return ( <webview className='widget' src='https://soundcloud.com/charts/top'></webview> ); }
     if ( i == discord) { return ( <webview className='widget' src='https://discordapp.com/login'></webview> ); }
