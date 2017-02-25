@@ -267,8 +267,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
     event.preventDefault();
     var i = this.state.decks.length;
     var width = 1;
-    var height = 14;
-    var row = 14;
+    var height = 8;
+    var row = 0;
 
     this.setState({
       decks: this.state.decks.concat({
@@ -277,10 +277,11 @@ module.exports = global.HSDeckBuilder = React.createClass({
         y: row,
         w: width,
         h: height,
-        minH: 14,
-        maxH: 14,
+        minH: 8,
+        maxH: 8,
         minW: 1,
-        maxW: 3,
+        maxW: 1,
+        static: true,
         hero:this.state.selectclass,
         title:this.state.title,
         description:this.state.description,
@@ -298,14 +299,13 @@ module.exports = global.HSDeckBuilder = React.createClass({
   },
 
   deckBuilder(el) {
-    console.log(el);
     var i = el.i;
     var hero = el.hero;
     var title = el.title;
     var description = el.description;
 
     return (
-      <div key={i} data-grid={el}>
+      <div key={i} data-grid={el} className="hearthstone_scroll">
         <h3>{hero}</h3>
         <h4>{title}</h4>
         <h6>{description}</h6>
@@ -331,12 +331,11 @@ module.exports = global.HSDeckBuilder = React.createClass({
       <div>
         <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
           onBreakpointChange={this.onBreakpointChange} {...this.props}>
-          <div key="0" data-grid={{x: 0, y: 0, w: 3, h: 12, static: true}} className="hearthstone_scroll">
+          <div key="a" data-grid={{x: 0, y: 0, w: 3, h: 12, static: true}} className="hearthstone_scroll">
           
-            <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
-                onBreakpointChange={this.onBreakpointChange} {...this.props}>
-                {_.map(this.state.decks, this.deckBuilder)}
-            </ResponsiveReactGridLayout>
+            <div className="row">
+              <button style={{display: this.state.showAddDeck ? 'block':'none' }} className="button secondary 0e1519" id="show" onClick={this.show}>Add Hearthstone Deck</button>
+            </div>
 
             <div className="row dropFade" style={{display: this.state.showStore ? 'block' : 'none'}}>
               <h5>Choose a Class: </h5>
@@ -366,21 +365,21 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
               <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
                   onBreakpointChange={this.onBreakpointChange} {...this.props}>
-                  <div key="1" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+                  <div key="b" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
                     <h4>{this.state.selectclass} Cards</h4>
                     <input type="text" id="class_card" onKeyUp={this.searchClassCards} placeholder="Search a Card"></input>
                     <ul id="class_card_list">
                       {this.state.classCards}
                     </ul>
                   </div>
-                  <div key="2" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+                  <div key="c" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
                     <h4>Neutral Cards</h4>
                     <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
                     <ul id="neutral_card_list">
                       {this.state.neutral}
                     </ul>
                   </div>
-                  <div key="3" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+                  <div key="d" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
                     <h4>Deck</h4>
                     <ul id="deck_list">
                       {this.state.myDeck}
@@ -395,9 +394,12 @@ module.exports = global.HSDeckBuilder = React.createClass({
                 <button className="button" type="submit" value="Submit">Submit</button>
               </form>
             </div>
-            <div className="row">
-              <button style={{display: this.state.showAddDeck ? 'block':'none' }} className="button secondary 0e1519" id="show" onClick={this.show}>Add Hearthstone Deck</button>
-            </div>
+
+            <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+                onBreakpointChange={this.onBreakpointChange} {...this.props}>
+                {_.map(this.state.decks, this.deckBuilder)}
+            </ResponsiveReactGridLayout>
+            
           </div>
         </ResponsiveReactGridLayout>
       </div>
