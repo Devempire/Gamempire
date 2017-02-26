@@ -78,7 +78,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 W=res2.w;
                                 H=res2.h;
                               }
-                            
+
                           }
                           this.setState({
                                   games: this.state.games.concat({
@@ -95,11 +95,11 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     maxW: res2.minW,
                                   })
                             });
-                        
-                      });  
+
+                      });
                   }
-                  
-                  
+
+
           });
       });
 
@@ -142,12 +142,12 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   },
 
-  
+
   handleChange(event) {
     $( "#add_widget_button" ).prop( "disabled", false );
-    
+
     this.setState({
-          selectwidget: event.target.value, 
+          selectwidget: event.target.value,
          });
   },
 
@@ -155,7 +155,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     this.setState({showStore: true});
   },
 
-  
+
   handleSubmit(event) {
     event.preventDefault();
     var L = this.state.games.length;
@@ -224,7 +224,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                      });
   },
 
-  
+
   onGame(el){
     var i =el.i;
     var widgettype = el.widgettype;
@@ -267,9 +267,7 @@ module.exports = global.Dashboardv2 = React.createClass({
             </div>
           </div>
         );
-    } else {
-
-
+    } else if (widgettype == 'social' || widgettype == 'music') {
     //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
     //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
       return (
@@ -278,6 +276,13 @@ module.exports = global.Dashboardv2 = React.createClass({
           {listWidgets.loadwid(widgetID)}
         </div>
       );
+    } else if (widgettype == 'other') {
+      return (
+      <div key={widgetID} data-grid={el} className="widgetFrame">
+        <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+        {listWidgets.loadjsx(widgetID)}
+      </div>
+    );
     }
     //console.log(widgetTitle + ' Loaded.');
 
@@ -401,4 +406,3 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
 });
-
