@@ -17,7 +17,7 @@ class listWidgets {
   }
 
   loadjsx(i) {
-    if ( i == heathstonebuilder) { return ( <HSDeckBuilder /> ); }
+    if ( i == heathstonebuilder) { return ( <div className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
   }
 }
 

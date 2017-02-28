@@ -13,8 +13,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 3, md: 3, sm: 3, xs: 3, xxs: 1},
-      rowHeight: 50,
+      cols: {lg: 3, md: 3, sm: 3, xs: 3, xxs: 3},
       isDraggable: false,
       verticalCompact: true
     };
@@ -170,6 +169,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         <a href="#" name={deck[i].name} value={deck[i].rarity}
         onClick={this.putCardToDeck}>{deck[i].name}</a></li>)});
       i++;
+
     };
   },
 
@@ -328,7 +328,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     $( "#_HSDeckBuilder" ).addClass('active');
 
     return (
-      <div>
+      <div className="hearthstone_scroll">
 
         <br/>
 
@@ -362,7 +362,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
             description: event.target.value})}} value={this.state.description}></input>
         </div>
 
-        <ResponsiveReactGridLayout style={{display: this.state.showDeckBuilder ? 'block' : 'none'}} 
+        <ResponsiveReactGridLayout style={{display: this.state.showDeckBuilder ? 'block' : 'none'}}
             layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
             onBreakpointChange={this.onBreakpointChange} {...this.props}>
             <div key="a" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
@@ -372,14 +372,14 @@ module.exports = global.HSDeckBuilder = React.createClass({
                 {this.state.classCards}
               </ul>
             </div>
-            <div key="b" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+            <div key="b" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll" style={{left: '33.33%'}}>
               <h4>Neutral Cards</h4>
               <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
               <ul id="neutral_card_list">
                 {this.state.neutral}
               </ul>
             </div>
-            <div key="c" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
+            <div key="c" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll" style={{left: '66.66%'}}>
               <h4>Deck</h4>
               <ul id="deck_list">
                 {this.state.myDeck}

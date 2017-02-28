@@ -278,7 +278,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       );
     } else if (widgettype == 'other') {
       return (
-      <div key={widgetID} data-grid={el} className="widgetFrame hearthstone_scroll">
+      <div key={widgetID} data-grid={el} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
         {listWidgets.loadjsx(widgetID)}
       </div>
