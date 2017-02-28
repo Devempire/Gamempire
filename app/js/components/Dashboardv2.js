@@ -190,13 +190,10 @@ module.exports = global.Dashboardv2 = React.createClass({
                         $.get(api_server+'/widget/find/'+ this.state.selectwidget + '/info').done((res2)=>{
                         var i=this.state.games.length;
 
-                        if (i == 0) {
-                          var x=0;
-                          var row = 0;
-                        } else {
-                          var row = 14*(1+((i-1)/3));
-                          var x = (i-1)%3 *4;
-                        }
+                        
+                        var row = 14*(i/3);
+                        var x = (i%3) *4;
+                        
 
                         this.setState({
                               games: this.state.games.concat({
