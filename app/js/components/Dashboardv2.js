@@ -92,7 +92,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     minH: res2.minH,
                                     maxH: res2.maxH,
                                     minW: res2.minW,
-                                    maxW: res2.minW,
+                                    maxW: res2.maxW,
                                   })
                             });
 
@@ -210,7 +210,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 minH: res2.minH,
                                 maxH: res2.maxH,
                                 minW: res2.minW,
-                                maxW: res2.minW,
+                                maxW: res2.maxW,
                               }),
                               showStore:false,
                               selectwidget:'',
@@ -278,7 +278,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       );
     } else if (widgettype == 'other') {
       return (
-      <div key={widgetID} data-grid={el} className="widgetFrame">
+      <div key={widgetID} data-grid={el} className="widgetFrame hearthstone_scroll">
         <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
         {listWidgets.loadjsx(widgetID)}
       </div>
