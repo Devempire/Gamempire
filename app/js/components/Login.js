@@ -38,7 +38,6 @@ module.exports = class Login extends React.Component {
     }
 
     rememberMe() {
-      console.log('one');
       if ($('#remember_me').is(':checked')) {
           localStorage.usrname = $('#username').val();
           localStorage.pass = $('#passsword').val();
@@ -51,7 +50,6 @@ module.exports = class Login extends React.Component {
     }
 
     loadCheck() {
-      console.log('two');
       if (localStorage.chkbx && localStorage.chkbx != '') {
           $('#remember_me').attr('checked', 'checked');
       } else {
@@ -60,7 +58,6 @@ module.exports = class Login extends React.Component {
     }
 
     loadUsername() {
-      console.log('three');
       if (localStorage.chkbx && localStorage.chkbx != '') {
           $('#username').val(localStorage.usrname);
           this.setState({userName: localStorage.usrname})
@@ -70,7 +67,6 @@ module.exports = class Login extends React.Component {
     }
 
     loadPassword() {
-      console.log('four');
       if (localStorage.chkbx && localStorage.chkbx != '') {
           $('#passsword').val(localStorage.pass);
           this.setState({password: localStorage.pass})
