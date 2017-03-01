@@ -138,6 +138,7 @@ onLayoutChange(layout, layouts) {
 
           });
       });
+      global.loading="no";
   },
 
   componentWillMount: function(){
