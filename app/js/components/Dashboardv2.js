@@ -117,7 +117,6 @@ if(global.loading=="no"){
                               console.log('y: '+yy);
                               console.log('w: '+ww);
                               console.log('h: '+hh);
-if(h==g+1){global.loading="no"}
                           }
 
                           this.setState({
@@ -143,6 +142,7 @@ if(h==g+1){global.loading="no"}
 
           });
       });
+      global.loading="no";
   },
 
   componentWillMount: function(){
