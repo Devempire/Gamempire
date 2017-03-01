@@ -8,11 +8,11 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   getDefaultProps() {
     return {
+      breakpoint: "md",
       className: "layout",
       cols: {lg: 18, md: 12, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
       verticalCompact: true,
-      breakpoint: "md"
     };
   },
 
@@ -27,6 +27,38 @@ module.exports = global.Dashboardv2 = React.createClass({
       selectwidget:'',
     };
   },
+
+
+    onLayoutChange(layout, layouts) {
+      this.setState({layouts});
+
+      if(JSON.stringify(layouts.md)=="[]") {
+        console.log('LAYOUTS CURENTLY NONE');
+      }else{
+
+
+      console.log(JSON.stringify(this.state.layouts.md));
+      var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+                {
+                   'token' :token
+                }).done((d)=> {
+                  $.ajax({
+                           url:api_server+"/user/profile/updatelayout",
+                           type:"PUT",
+                           contentType: 'application/json; charset=utf-8',
+                           data:JSON.stringify({
+                               _id:d._id,
+                               layout:this.state.layouts
+                           })
+                       }).done((res)=>{
+                        console.log("layout on server!");
+                      }).fail((err)=>{
+                        console.log("layout fail to update to server!")
+                      })
+                });
+        }
+    },
 
   loadWidgets(){
 
@@ -73,18 +105,26 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 Y=this.state.layouts.md[j].y;
                                 W=this.state.layouts.md[j].w;
                                 H=this.state.layouts.md[j].h;
+                                console.log(X);
+                                console.log(Y);
+                                console.log(W);
+                                console.log(H);
                               }else{
                                 X=res2.x;
                                 Y=res2.y;
                                 W=res2.w;
                                 H=res2.h;
+                                console.log(X);
+                                console.log(Y);
+                                console.log(W);
+                                console.log(H);
                               }
 
+                          }
 
                           this.setState({
                                   games: this.state.games.concat({
-                                    widgetid:res.widgets[h].widgetid,
-                                    i: res.widgets[h].widgetid,
+                                    i: res2._id,
                                     widgettype:res2.widgettype,
                                     widgetname:res2.widgetname,
                                     x:X,
@@ -97,7 +137,6 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     maxW: res2.maxW,
                                   })
                             });
-                            }
 
                       });
                   }
@@ -118,37 +157,6 @@ module.exports = global.Dashboardv2 = React.createClass({
       breakpoint: breakpoint,
       cols: cols
     });
-  },
-
-  onLayoutChange(layout, layouts) {
-          this.setState({layouts});
-    if(JSON.stringify(layouts.md)=="[]") {
-      console.log('LAYOUTS CURENTLY NONE');
-    }else{
-
-
-    console.log(JSON.stringify(this.state.layouts.md));
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
-                $.ajax({
-                         url:api_server+"/user/profile/updatelayout",
-                         type:"PUT",
-                         contentType: 'application/json; charset=utf-8',
-                         data:JSON.stringify({
-                             _id:d._id,
-                             layout:this.state.layouts
-                         })
-                     }).done((res)=>{
-                      console.log("layout on server!");
-                    }).fail((err)=>{
-                      console.log("layout fail to update to server!")
-                    })
-              });
-      }
-
   },
 
 
