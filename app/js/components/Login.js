@@ -35,7 +35,7 @@ module.exports = class Login extends React.Component {
       console.log('one');
       if ($('#remember_me').is(':checked')) {
           localStorage.usrname = $('#username').val();
-          localStorage.pass = $('#password').val();
+          localStorage.pass = $('#passsword').val();
           localStorage.chkbx = $('#remember_me').val();
       } else {
           localStorage.usrname = '';
@@ -65,9 +65,9 @@ module.exports = class Login extends React.Component {
     loadPassword() {
       console.log('four');
       if (localStorage.chkbx && localStorage.chkbx != '') {
-          $('#password').val(localStorage.pass);
+          $('#passsword').val(localStorage.pass);
       } else {
-          $('#password').val('');
+          $('#passsword').val('');
       }
     }
 
@@ -138,7 +138,6 @@ module.exports = class Login extends React.Component {
               //Always alive content loads, and needs to be imediatley set to invisible.
               //currently displays white screen for split second when rendering the elements in sidebar.js
               //TODO: find faster way to way.
-              document.getElementById('playgroundFrame').style.visibility = "hidden";
 
 
               ReactDOM.render(
