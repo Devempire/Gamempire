@@ -81,16 +81,16 @@ module.exports = class Login extends React.Component {
               <div className="medium-6 large-6 column">
               <img className="gamEmpireLogo" src="../app/img/GamEmpireLogo.png" />
                   <div className="input-group required">
-                      <input className="input-group-field noselect" type="text" id="username" placeholder="Username" onLoad={this.loadUsername} onKeyPress={this.userSubmit.bind(this)} value={this.state.userName|| ''} onChange={(event)=> {this.setState({userName: event.target.value})}}/>
+                      <input className="input-group-field noselect" type="text" id="username" placeholder="Username" onKeyPress={this.userSubmit.bind(this)} value={this.state.userName|| ''} onChange={(event)=> {this.setState({userName: event.target.value})}} onLoad={this.loadUsername()}/>
                       <span className="input-group-label">*</span>
                   </div>
                   <div className="input-group required">
-                      <input className="input-group-field noselect" type="password" id="passsword" placeholder="Password" onLoad={this.loadPassword} onKeyPress={this.passSubmit.bind(this)} value={this.state.password|| ''} onChange={(event)=> {this.setState({password: event.target.value})}}/>
+                      <input className="input-group-field noselect" type="password" id="passsword" placeholder="Password" onLoad={this.loadPassword()} onKeyPress={this.passSubmit.bind(this)} value={this.state.password|| ''} onChange={(event)=> {this.setState({password: event.target.value})}}/>
                       <span className="input-group-label">*</span>
                   </div>
                   <center><div className="input-group-field" id="loginmsg"></div></center>
                   <hr/>
-                  <input type="checkbox" onClick={this.rememberMe} onLoad={this.loadCheck} value="remember-me" id="remember_me"/> Remember Me
+                  <input type="checkbox" onClick={this.rememberMe} value="remember-me" id="remember_me" onLoad={this.loadCheck()}/> Remember Me
                   <button className="button" id="login" onClick={this._handleLogin.bind(this)}>Login</button>
                   <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign Up</button>
               </div>
