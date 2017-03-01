@@ -10,6 +10,13 @@ module.exports = class Login extends React.Component {
         };
     }
 
+
+    componentDidMount(){
+      this.loadCheck();
+      this.loadUsername();
+      this.loadPassword();
+    }
+
     userSubmit(e) {
        if (e.key == 'Enter') {
          var psw = $("#passsword").val();
@@ -101,7 +108,6 @@ module.exports = class Login extends React.Component {
               //currently displays white screen for split second when rendering the elements in sidebar.js
               //TODO: find faster way to way.
               document.getElementById('playgroundFrame').style.visibility = "hidden";
-
 
               ReactDOM.render(
                 <Dashboardv2 />,
