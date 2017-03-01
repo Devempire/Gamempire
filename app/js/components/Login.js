@@ -9,11 +9,11 @@ module.exports = class Login extends React.Component {
             password: null
         };
     }
+
     componentDidMount(){
       this.loadCheck();
       this.loadUsername();
       this.loadPassword();
-
     }
 
     userSubmit(e) {
@@ -142,11 +142,11 @@ module.exports = class Login extends React.Component {
               //Always alive content loads, and needs to be imediatley set to invisible.
               //currently displays white screen for split second when rendering the elements in sidebar.js
               //TODO: find faster way to way.
-
+              document.getElementById('playgroundFrame').style.visibility = "hidden";
 
               ReactDOM.render(
-              	<Dashboardv2 />,
-              	document.getElementById('content')
+                <Dashboardv2 />,
+                document.getElementById('content')
               )
 
             })
