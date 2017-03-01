@@ -10,9 +10,8 @@ module.exports = global.Dashboardv2 = React.createClass({
     return {
       breakpoint: "md",
       className: "layout",
-      cols: {lg: 18, md: 12, sm: 12, xs: 4, xxs: 4},
+      cols: {lg: 18, md: 24, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
-      verticalCompact: true,
     };
   },
 
@@ -30,11 +29,12 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
     onLayoutChange(layout, layouts) {
-      this.setState({layouts});
+if(global.loading=="no"){
 
       if(JSON.stringify(layouts.md)=="[]") {
         console.log('LAYOUTS CURENTLY NONE');
       }else{
+        this.setState({layouts});
 
 
       console.log(JSON.stringify(this.state.layouts.md));
@@ -58,6 +58,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                       })
                 });
         }
+      }
     },
 
   loadWidgets(){
@@ -98,28 +99,25 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   });
                   for (var h = 0; h < g; h++) {
                         $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
-                            for(var j=0; j<this.state.layouts.md.length ; j++){
-                              var X,Y,H,W;
+                            for(var j=0; j<this.state.layouts.md.length; j++){
+                              console.log(j);
+                              //console.log(h);
                               if(this.state.layouts.md[j].i == res2._id){
-                                X=this.state.layouts.md[j].x;
-                                Y=this.state.layouts.md[j].y;
-                                W=this.state.layouts.md[j].w;
-                                H=this.state.layouts.md[j].h;
-                                console.log(X);
-                                console.log(Y);
-                                console.log(W);
-                                console.log(H);
+                                var xx=this.state.layouts.md[j].x;
+                                var yy=this.state.layouts.md[j].y;
+                                var ww=this.state.layouts.md[j].w;
+                                var hh=this.state.layouts.md[j].h;
                               }else{
-                                X=res2.x;
-                                Y=res2.y;
-                                W=res2.w;
-                                H=res2.h;
-                                console.log(X);
-                                console.log(Y);
-                                console.log(W);
-                                console.log(H);
+                                var xx=res2.x;
+                                var yy=res2.y;
+                                var ww=res2.w;
+                                var hh=res2.h;
                               }
-
+                              console.log('x: '+ xx);
+                              console.log('y: '+yy);
+                              console.log('w: '+ww);
+                              console.log('h: '+hh);
+if(h==g+1){global.loading="no"}
                           }
 
                           this.setState({
@@ -127,10 +125,10 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     i: res2._id,
                                     widgettype:res2.widgettype,
                                     widgetname:res2.widgetname,
-                                    x:X,
-                                    y:Y,
-                                    h:H,
-                                    w:W,
+                                    x:xx,
+                                    y:yy,
+                                    h:hh,
+                                    w:ww,
                                     minH: res2.minH,
                                     maxH: res2.maxH,
                                     minW: res2.minW,
@@ -139,18 +137,20 @@ module.exports = global.Dashboardv2 = React.createClass({
                             });
 
                       });
+
                   }
 
 
           });
       });
-
   },
 
   componentWillMount: function(){
     this.loadProfile();
     this.loadWidgets();
   },
+
+
 
   onBreakpointChange(breakpoint, cols) {
     this.setState({
@@ -388,7 +388,7 @@ module.exports = global.Dashboardv2 = React.createClass({
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
         <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 
-          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts.md} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
               {_.map(this.state.games, this.onGame)}
