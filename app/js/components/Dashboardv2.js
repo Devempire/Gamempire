@@ -9,9 +9,10 @@ module.exports = global.Dashboardv2 = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 18, md: 12, sm: 8, xs: 6, xxs: 4},
+      cols: {lg: 18, md: 12, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
-      verticalCompact: true
+      verticalCompact: true,
+      breakpoint: "md"
     };
   },
 
@@ -79,10 +80,11 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 H=res2.h;
                               }
 
-                          }
+
                           this.setState({
                                   games: this.state.games.concat({
-                                    i: res2._id,
+                                    widgetid:res.widgets[h].widgetid,
+                                    i: res.widgets[h].widgetid,
                                     widgettype:res2.widgettype,
                                     widgetname:res2.widgetname,
                                     x:X,
@@ -95,6 +97,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                     maxW: res2.maxW,
                                   })
                             });
+                            }
 
                       });
                   }
@@ -118,7 +121,12 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   onLayoutChange(layout, layouts) {
-    this.setState({layouts});
+          this.setState({layouts});
+    if(JSON.stringify(layouts.md)=="[]") {
+      console.log('LAYOUTS CURENTLY NONE');
+    }else{
+
+
     console.log(JSON.stringify(this.state.layouts.md));
     var token = electron.remote.getGlobal('sharedObject').token;
     $.post(api_server+"/user/load",
@@ -139,6 +147,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                       console.log("layout fail to update to server!")
                     })
               });
+      }
 
   },
 
@@ -190,10 +199,13 @@ module.exports = global.Dashboardv2 = React.createClass({
                         $.get(api_server+'/widget/find/'+ this.state.selectwidget + '/info').done((res2)=>{
                         var i=this.state.games.length;
 
-                        
-                        var row = 14*(i/3);
-                        var x = (i%3) *4;
-                        
+                        if (i == 0) {
+                          var x=0;
+                          var row = 0;
+                        } else {
+                          var row = 14*(1+((i-1)/3));
+                          var x = (i-1)%3 *4;
+                        }
 
                         this.setState({
                               games: this.state.games.concat({
