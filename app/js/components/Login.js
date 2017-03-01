@@ -63,6 +63,7 @@ module.exports = class Login extends React.Component {
       console.log('three');
       if (localStorage.chkbx && localStorage.chkbx != '') {
           $('#username').val(localStorage.usrname);
+          this.setState({userName: localStorage.usrname})
       } else {
           $('#username').val('');
       }
@@ -72,6 +73,7 @@ module.exports = class Login extends React.Component {
       console.log('four');
       if (localStorage.chkbx && localStorage.chkbx != '') {
           $('#passsword').val(localStorage.pass);
+          this.setState({password: localStorage.pass})
       } else {
           $('#passsword').val('');
       }
