@@ -28,12 +28,16 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
 
-onLayoutChange(layout, layouts) {
-      
+    onLayoutChange(layout, layouts) {
+if(global.loading=="no"){
+
+      if(JSON.stringify(layouts.md)=="[]") {
+        console.log('LAYOUTS CURENTLY NONE');
+      }else{
         this.setState({layouts});
 
 
-      console.log(JSON.stringify(this.state.layouts.md));
+      console.log(JSON.stringify(this.state.layouts));
       var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/user/load",
                 {
@@ -53,8 +57,8 @@ onLayoutChange(layout, layouts) {
                         console.log("layout fail to update to server!")
                       })
                 });
-        
-      
+        }
+      }
     },
 
   loadWidgets(){
@@ -94,20 +98,18 @@ onLayoutChange(layout, layouts) {
                                   layouts:res.layout[0],
                                   });
                   for (var h = 0; h < g; h++) {
+
                         $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
+                            var xx=res2.x;
+                            var yy=res2.y;
+                            var ww=res2.w;
+                            var hh=res2.h;
                             for(var j=0; j<this.state.layouts.md.length; j++){
-                              console.log(j);
-                              //console.log(h);
                               if(this.state.layouts.md[j].i == res2._id){
                                 var xx=this.state.layouts.md[j].x;
                                 var yy=this.state.layouts.md[j].y;
                                 var ww=this.state.layouts.md[j].w;
                                 var hh=this.state.layouts.md[j].h;
-                              }else{
-                                var xx=res2.x;
-                                var yy=res2.y;
-                                var ww=res2.w;
-                                var hh=res2.h;
                               }
                               console.log('x: '+ xx);
                               console.log('y: '+yy);
