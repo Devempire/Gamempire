@@ -28,12 +28,8 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
 
-    onLayoutChange(layout, layouts) {
-if(global.loading=="no"){
-
-      if(JSON.stringify(layouts.md)=="[]") {
-        console.log('LAYOUTS CURENTLY NONE');
-      }else{
+onLayoutChange(layout, layouts) {
+      
         this.setState({layouts});
 
 
@@ -57,8 +53,8 @@ if(global.loading=="no"){
                         console.log("layout fail to update to server!")
                       })
                 });
-        }
-      }
+        
+      
     },
 
   loadWidgets(){
@@ -117,7 +113,6 @@ if(global.loading=="no"){
                               console.log('y: '+yy);
                               console.log('w: '+ww);
                               console.log('h: '+hh);
-if(h==g+1){global.loading="no"}
                           }
 
                           this.setState({
@@ -388,7 +383,7 @@ if(h==g+1){global.loading="no"}
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
         <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 
-          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts.md} onLayoutChange={this.onLayoutChange}
+          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
               {_.map(this.state.games, this.onGame)}
