@@ -37,62 +37,99 @@ module.exports = class Login extends React.Component {
           $('#login').click();
        }
     }
+    
+    rememberMe() {
+       if ($('#remember_me').is(':checked')) {
+           localStorage.usrname = $('#username').val();
+           localStorage.pass = $('#passsword').val();
+           localStorage.chkbx = $('#remember_me').val();
+       } else {
+           localStorage.usrname = '';
+           localStorage.pass = '';
+           localStorage.chkbx = '';
+       }
+     }
+ 
+     loadCheck() {
+       if (localStorage.chkbx && localStorage.chkbx != '') {
+           $('#remember_me').attr('checked', 'checked');
+       } else {
+           $('#remember_me').removeAttr('checked');
+       }
+     }
+ 
+     loadUsername() {
+       if (localStorage.chkbx && localStorage.chkbx != '') {
+           $('#username').val(localStorage.usrname);
+           this.setState({userName: localStorage.usrname})
+       } else {
+           $('#username').val('');
+       }
+     }
+ 
+     loadPassword() {
+       if (localStorage.chkbx && localStorage.chkbx != '') {
+           $('#passsword').val(localStorage.pass);
+           this.setState({password: localStorage.pass})
+       } else {
+           $('#passsword').val('');
+       }
+     }
+ 
 
     render() {
-      var title = "Login - Gamempire"
-      document.title = title
-      document.getElementById('title').textContent = title
-        return (
-
-
-        <div id="loginContainer" className="row align-center align-middle noselect">
-        <div className="content-loading"></div>
-            <div className="medium-6 large-6 column">
-            <img className="gamEmpireLogo" src="../app/img/GamEmpireLogo.png" />
-                <div className="input-group required">
-                    <input className="input-group-field noselect" type="text" id="username" placeholder="Username" onKeyPress={this.userSubmit.bind(this)} value={this.state.userName|| ''} onChange={(event)=> {this.setState({userName: event.target.value})}}/>
-                    <span className="input-group-label">*</span>
-                </div>
-                <div className="input-group required">
-                    <input className="input-group-field noselect" type="password" id="passsword" placeholder="Password" onKeyPress={this.passSubmit.bind(this)} value={this.state.password|| ''} onChange={(event)=> {this.setState({password: event.target.value})}}/>
-                    <span className="input-group-label">*</span>
-                </div>
-                <center><div className="input-group-field" id="loginmsg"></div></center>
-                <hr/>
-                <button className="button" id="login" onClick={this._handleLogin.bind(this)}>Login</button>
-                <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign up</button>
-            </div>
-            <script type="text/javascript">
-
-            </script>
-        </div>
-
-        );
-    }
-
-    _handleLogin() {
-
-    var user_id = this.state.userName;
-    var pwrd = this.state.password;
-    if (user_id==null || user_id=="" || pwrd==null || pwrd=="")
-      {
-        $("#loginmsg").html("All fields must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
-        $("#loginmsg").addClass('label warning input-group-field');
-        $("#loginmsg").addClass("shake");
-        $("#loginmsg").show();
-        setTimeout(function () {
-          $("#loginmsg").removeClass("shake");
-        },200);
-        return false;
-      }
-      $( ".content-loading" ).css("display:block;");
-        $( ".content-loading" ).show();
-
-        $.post(api_server+'/user/find',
-        {
-            username:this.state.userName,
-            password:this.state.password
-        })
+       var title = "Login - Gamempire"
+       document.title = title
+       document.getElementById('title').textContent = title
+         return (
+           <div id="loginContainer" className="row align-center align-middle noselect">
+           <div className="content-loading"></div>
+               <div className="medium-6 large-6 column">
+               <img className="gamEmpireLogo" src="../app/img/GamEmpireLogo.png" />
+                   <div className="input-group required">
+                       <input className="input-group-field noselect" type="text" id="username" placeholder="Username" onKeyPress={this.userSubmit.bind(this)} value={this.state.userName|| ''} onChange={(event)=> {this.setState({userName: event.target.value})}}/>
+                       <span className="input-group-label">*</span>
+                   </div>
+                   <div className="input-group required">
+                       <input className="input-group-field noselect" type="password" id="passsword" placeholder="Password" onKeyPress={this.passSubmit.bind(this)} value={this.state.password|| ''} onChange={(event)=> {this.setState({password: event.target.value})}}/>
+                       <span className="input-group-label">*</span>
+                   </div>
+                   <center><div className="input-group-field" id="loginmsg"></div></center>
+                   <hr/>
+                   <input type="checkbox" onClick={this.rememberMe} value="remember-me" id="remember_me" /> Remember Me
+                   <button className="button" id="login" onClick={this._handleLogin.bind(this)}>Login</button>
+                   <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign Up</button>
+               </div>
+               <script type="text/javascript">
+ 
+               </script>
+           </div>
+         );
+     }
+ 
+     _handleLogin() {
+ 
+     var user_id = this.state.userName;
+     var pwrd = this.state.password;
+     if (user_id==null || user_id=="" || pwrd==null || pwrd=="")
+       {
+         $("#loginmsg").html("All fields must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
+         $("#loginmsg").addClass('label warning input-group-field');
+         $("#loginmsg").addClass("shake");
+         $("#loginmsg").show();
+         setTimeout(function () {
+           $("#loginmsg").removeClass("shake");
+         },200);
+         return false;
+       }
+       $( ".content-loading" ).css("display:block;");
+         $( ".content-loading" ).show();
+ 
+         $.post(api_server+'/user/find',
+         {
+             username:this.state.userName,
+             password:this.state.password
+         })
 
             .done((res) =>{
               $( ".content-loading" ).fadeOut( "slow" );
