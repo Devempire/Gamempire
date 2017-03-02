@@ -86,7 +86,11 @@ module.exports = global.Dashboardv2 = React.createClass({
       $.post(api_server+"/user/load",{
           'token': token
           }).done((d)=> {
-              $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
+              $.ajax({
+                         url:api_server+'/user/profile/'+ d._id + '/info',
+                         type:"GET",
+                          async: false
+                        }).done((res)=>{
                   console.log(res);
                   var g=res.widgets.length;
                   this.setState({response: res,
@@ -97,6 +101,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   layouts:res.layout,
                                   });
                   console.log(this);
+                  console.log(this.state.layouts);
                   for (var h = 0; h < g; h++) {
                         $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
                             var xx=res2.x;
