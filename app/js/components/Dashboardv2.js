@@ -29,15 +29,10 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
     onLayoutChange(layout, layouts) {
-if(global.loading=="no"){
 
-      if(JSON.stringify(layouts.md)=="[]") {
-        console.log('LAYOUTS CURENTLY NONE');
-      }else{
         this.setState({layouts});
 
 
-      console.log(JSON.stringify(this.state.layouts));
       var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/user/load",
                 {
@@ -57,8 +52,7 @@ if(global.loading=="no"){
                         console.log("layout fail to update to server!")
                       })
                 });
-        }
-      }
+      
     },
 
   loadWidgets(){
@@ -95,8 +89,9 @@ if(global.loading=="no"){
                                   firstname:res.firstname,
                                   lastname:res.lastname,
                                   aboutMe:res.aboutme,
-                                  layouts:res.layout[0],
+                                  layouts:res.layout,
                                   });
+                  console.log(res);
                   for (var h = 0; h < g; h++) {
 
                         $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
@@ -140,7 +135,6 @@ if(global.loading=="no"){
 
           });
       });
-      global.loading="no";
   },
 
   componentWillMount: function(){
