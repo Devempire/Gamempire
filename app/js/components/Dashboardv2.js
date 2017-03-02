@@ -30,10 +30,10 @@ module.exports = global.Dashboardv2 = React.createClass({
 
     onLayoutChange(layout, layouts) {
       if(global.loading=="no"){
-  
-       if(JSON.stringify(layouts.md)=="[]") {
-         console.log('LAYOUTS CURENTLY NONE');
-       }else{
+   
+        if(JSON.stringify(layouts.md)=="[]") {
+          console.log('LAYOUTS CURENTLY NONE');
+        }else{
         this.setState({layouts});
 
 
@@ -56,8 +56,8 @@ module.exports = global.Dashboardv2 = React.createClass({
                         console.log("layout fail to update to server!")
                       })
                 });
-      }
-      }
+              }
+            }
     },
 
   loadWidgets(){
@@ -87,7 +87,7 @@ module.exports = global.Dashboardv2 = React.createClass({
           'token': token
           }).done((d)=> {
               $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
-
+                  console.log(res);
                   var g=res.widgets.length;
                   this.setState({response: res,
                                   username:res.username,
@@ -96,20 +96,23 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   aboutMe:res.aboutme,
                                   layouts:res.layout,
                                   });
-                  console.log(res.layout.md);
+                  console.log(this);
                   for (var h = 0; h < g; h++) {
-
                         $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
                             var xx=res2.x;
                             var yy=res2.y;
                             var ww=res2.w;
                             var hh=res2.h;
-                            for(var j=0; j<this.state.layouts.md.length; j++){
-                              if(this.state.layouts.md[j].i == res2._id){
-                                var xx=this.state.layouts.md[j].x;
-                                var yy=this.state.layouts.md[j].y;
-                                var ww=this.state.layouts.md[j].w;
-                                var hh=this.state.layouts.md[j].h;
+                            var mdl =this.state.layouts.md;
+                            console.log(this.state.layouts);
+                            console.log("help me i dont know why this.state.layouts ending nothing,but this works")
+                            for(var j=0; j<mdl.length; j++){
+                              if(mdl[j].i == res2._id){
+                                console.log(mdl[j]);
+                                var xx=mdl[j].x;
+                                var yy=mdl[j].y;
+                                var ww=mdl[j].w;
+                                var hh=mdl[j].h;
                               }
                               console.log('x: '+ xx);
                               console.log('y: '+yy);
@@ -140,7 +143,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
           });
       });
-        global.loading="no";
+        
   },
 
   componentWillMount: function(){
