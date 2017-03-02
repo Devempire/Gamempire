@@ -29,7 +29,11 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
     onLayoutChange(layout, layouts) {
-
+      if(global.loading=="no"){
+  
+       if(JSON.stringify(layouts.md)=="[]") {
+         console.log('LAYOUTS CURENTLY NONE');
+       }else{
         this.setState({layouts});
 
 
@@ -52,7 +56,8 @@ module.exports = global.Dashboardv2 = React.createClass({
                         console.log("layout fail to update to server!")
                       })
                 });
-      
+      }
+      }
     },
 
   loadWidgets(){
@@ -91,7 +96,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                   aboutMe:res.aboutme,
                                   layouts:res.layout,
                                   });
-                  console.log(res);
+                  console.log(res.layout.md);
                   for (var h = 0; h < g; h++) {
 
                         $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
@@ -135,6 +140,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
           });
       });
+        global.loading="no";
   },
 
   componentWillMount: function(){
