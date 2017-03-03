@@ -89,14 +89,14 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   avatarCancel(){
-    document.getElementById('save_cancel').style.visibility = "hidden";
+    document.getElementById('save_cancel').style.display = "none";
     document.getElementById('avatarEditor').innerHTML = "";
     document.getElementById('profilepic').value = "";
     global.avatar_scale = 1.2;
     this.setState({
        scale: global.avatar_scale
      })
-    document.getElementById('upload').style.visibility = "visible";
+    document.getElementById('upload').style.display = "block";
 
   },
 
@@ -165,8 +165,8 @@ module.exports = global.ProfileEdit = React.createClass({
 
 
   uploadPic() {
-    document.getElementById('save_cancel').style.visibility = "visible";
-    document.getElementById('upload').style.visibility = "hidden";
+    document.getElementById('save_cancel').style.display = "block";
+    document.getElementById('upload').style.display = "none";
     var pic = document.getElementById("profilepic").files;
     const element = (
       <div>
