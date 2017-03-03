@@ -1,8 +1,10 @@
 var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
+import AvatarEditor from 'react-avatar-editor'
 
 const originalLayouts = getFromLS('layouts') || {};
+const fs = require('fs');
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
@@ -80,10 +82,21 @@ module.exports = global.ProfileEdit = React.createClass({
     var i = el.i;
     return (
       <div key={i} data-grid={el} className="noselect">
-        <h3> Edit Your personal Info</h3>
+        <h3>Edit Profile</h3>
         <hr/>
-        <input className='profilepic' id='profilepic' type='image' onClick={this.openFileExp} src={'./../app/img/GamEmpireLogo.png'} draggable="false"/>
-        <input className='uploadedpic' onChange={this.uploadPic} id='uploadedpic' type='file' accept="image/*"/>
+        <div onClick={this.openFileExp}>
+          <input hidden id='profilepic' onChange={this.uploadPic} type='file' accept="image/*"/>
+          <AvatarEditor 
+              id={'avatarpic'}
+              image={'./../app/img/GamEmpireLogo.png'}
+              width={180}
+              height={180}
+              border={30}
+              color={[255, 255, 255, 0.6]} // RGBA
+              scale={1.1}
+              rotate={0}/>
+        </div>
+        
         <br></br>
         <font id='uploadmsg' color='red'></font>
 
@@ -116,15 +129,18 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   openFileExp() {
-    $("input[id='uploadedpic']").click();
+    $("input[id='profilepic']").click();
   },
 
   uploadPic() {
-
-
-    var pic = document.getElementById("uploadedpic").files;
+    var avatar = document.getElementById("avatarpic");
+    var pic = document.getElementById("profilepic").files;
+    console.log(avatar);
+    console.log(pic);
+    console.log(pic[0].path);
     if (pic.length != 0) {
-      document.getElementById("profilepic").src = pic[0].path;
+      //document.getElementById("profilepic").src = pic[0].path;
+      avatar.image = pic[0].path;
     }
 
     // var pic = document.getElementById("uploadedpic").files;
@@ -133,12 +149,12 @@ module.exports = global.ProfileEdit = React.createClass({
     //   document.getElementById("profilepic").src = pic[0].path;
     //   var image = fs.readFileSync(pic[0].path);
     //   var token = electron.remote.getGlobal('sharedObject').token;
-    //        $.post( "http://localhost:8080/user/load",
+    //        $.post(api_server+"/user/load",
     //           {
     //               'token' :token
     //           }).done((d)=> {
     //               $.ajax({
-    //                       url:"http://localhost:8080/user/profile/updatePic",
+    //                       url:api_server+"/user/profile/updatePic",
     //                       type:"PUT",
     //                       data:{
     //                           _id:d._id,
