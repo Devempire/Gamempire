@@ -18,9 +18,9 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   getInitialState() {
     return {
-      layouts: {},
       games:[],
       widgets:[],
+      layouts:{},
       response:undefined,
       showStore:false,
       selectwidget:'',
@@ -29,11 +29,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
     onLayoutChange(layout, layouts) {
-      if(global.loading=="no"){
-   
-        if(JSON.stringify(layouts.md)=="[]") {
-          console.log('LAYOUTS CURENTLY NONE');
-        }else{
+      
         this.setState({layouts});
 
 
@@ -56,8 +52,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                         console.log("layout fail to update to server!")
                       })
                 });
-              }
-            }
+            
     },
 
   loadWidgets(){
@@ -80,6 +75,8 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   },
 
+  
+
   loadProfile(){
 
       var token = electron.remote.getGlobal('sharedObject').token;
@@ -88,72 +85,85 @@ module.exports = global.Dashboardv2 = React.createClass({
           }).done((d)=> {
               $.ajax({
                          url:api_server+'/user/profile/'+ d._id + '/info',
-                         type:"GET",
-                          async: false
+                         type:"GET"
                         }).done((res)=>{
                   console.log(res);
-                  var g=res.widgets.length;
-                  this.setState({response: res,
-                                  username:res.username,
-                                  firstname:res.firstname,
-                                  lastname:res.lastname,
-                                  aboutMe:res.aboutme,
-                                  layouts:res.layout,
-                                  });
-                  console.log(this);
-                  console.log(this.state.layouts);
-                  for (var h = 0; h < g; h++) {
-                        $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
-                            var xx=res2.x;
-                            var yy=res2.y;
-                            var ww=res2.w;
-                            var hh=res2.h;
-                            var mdl =this.state.layouts.md;
-                            console.log(this.state.layouts);
-                            console.log("help me i dont know why this.state.layouts ending nothing,but this works")
-                            for(var j=0; j<mdl.length; j++){
-                              if(mdl[j].i == res2._id){
-                                console.log(mdl[j]);
-                                var xx=mdl[j].x;
-                                var yy=mdl[j].y;
-                                var ww=mdl[j].w;
-                                var hh=mdl[j].h;
-                              }
-                              console.log('x: '+ xx);
-                              console.log('y: '+yy);
-                              console.log('w: '+ww);
-                              console.log('h: '+hh);
-                          }
+                  this.setState({layouts:res.layout,
+                                  response:true});
 
-                          this.setState({
-                                  games: this.state.games.concat({
-                                    i: res2._id,
-                                    widgettype:res2.widgettype,
-                                    widgetname:res2.widgetname,
-                                    x:xx,
-                                    y:yy,
-                                    h:hh,
-                                    w:ww,
-                                    minH: res2.minH,
-                                    maxH: res2.maxH,
-                                    minW: res2.minW,
-                                    maxW: res2.maxW,
-                                  })
-                            });
-
+                });
                       });
+        },
 
-                  }
+  loadProfile2(){
 
+      var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",{
+          'token': token
+          }).done((d)=> {
+              $.ajax({
+                         url:api_server+'/user/profile/'+ d._id + '/info',
+                         type:"GET"
+                        }).done((res)=>{
+                  console.log(res);
+                  this.setState({username:res.username,
+                                  aboutMe:res.aboutme,
+                                  widget:res.widgets,
+                                  });
+                });
+                      });
+        },
 
-          });
-      });
-        
+  loadLayout(){
+    console.log(this.state.layouts);
+    console.log(this.state);
+    var g =this.state.widget.length;
+    for (var h = 0; h < g; h++) {
+        $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+            var xx=res2.x;
+            var yy=res2.y;
+            var ww=res2.w;
+            var hh=res2.h;
+            var mdl =this.state.layouts.md;
+            console.log(mdl);
+            for(var j=0; j<mdl.length; j++){
+              if(mdl[j].i == res2._id){
+                xx=mdl[j].x;
+                yy=mdl[j].y;
+                ww=mdl[j].w;
+                hh=mdl[j].h;
+                }
+                console.log('x: '+ xx);
+                console.log('y: '+yy);
+                console.log('w: '+ww);
+                console.log('h: '+hh);
+            }
+
+            this.setState({
+                games: this.state.games.concat({
+                    i: res2._id,
+                    widgettype:res2.widgettype,
+                    widgetname:res2.widgetname,
+                    x:xx,
+                    y:yy,
+                    h:hh,
+                    w:ww,
+                    minH: res2.minH,
+                    maxH: res2.maxH,
+                    minW: res2.minW,
+                    maxW: res2.maxW,
+                    })
+                });
+
+              });
+
+        }
   },
 
   componentWillMount: function(){
-    this.loadProfile();
     this.loadWidgets();
+    this.loadProfile();
+    this.loadProfile2();
   },
 
 
@@ -388,7 +398,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
-    if (this.state.response) {
+      
       return (
         <div className="noselect">
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
@@ -419,12 +429,6 @@ module.exports = global.Dashboardv2 = React.createClass({
           </div>
         </div>
       );
-
-    } else {
-      return (
-        <div className="content-loading"></div>
-        );
-    }
   }
 
 
