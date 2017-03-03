@@ -17,17 +17,15 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
   getInitialState() {
-    var profile = electron.remote.getGlobal('sharedObject').profile;
+    var widget = electron.remote.getGlobal('sharedObject').widget;
     var layout = electron.remote.getGlobal('sharedObject').layout;
     var id =electron.remote.getGlobal('sharedObject').id;
     return {
       games:[],
       widgets:[],
       id:id,
-      username:profile.username,
-      aboutMe:profile.aboutme,
       layouts:layout,
-      widget:profile.widgets,
+      widget:widget,
       showStore:false,
       selectwidget:'',
     };
@@ -47,6 +45,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                layout:this.state.layouts
                            })
                        }).done((res)=>{
+                        electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
                         console.log("layout on server!");
                       }).fail((err)=>{
                         console.log("layout fail to update to server!")
@@ -180,19 +179,19 @@ module.exports = global.Dashboardv2 = React.createClass({
 
                         if (i == 0) {
                           var x=0;
-                          var row = 0;
+                          var y = 0;
                         } else {
-                          var row = 14*(1+((i-1)/3));
-                          var x = (i-1)%3 *4;
+                          var y = 4*(i/2);
+                          var x = (i%2) *12;
                         }
-
+                        
                         this.setState({
                               games: this.state.games.concat({
                                 i: this.state.selectwidget,
                                 widgettype:res2.widgettype,
                                 widgetname:res2.widgetname,
                                 x: x,
-                                y: row,
+                                y: y,
                                 w: res2.w,
                                 h: res2.h,
                                 minH: res2.minH,
@@ -200,15 +199,28 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 minW: res2.minW,
                                 maxW: res2.maxW,
                               }),
+                              widget:this.state.widget.concat({
+                              "widgetid": this.selectwidget}),
                               showStore:false,
                               selectwidget:'',
 
                             });
+                        $.ajax({
+                              url:api_server+'/user/profile/'+ this.state.id + '/info',
+                              type:"GET"
+                             }).done((res3)=>{
+                            electron.remote.getGlobal('sharedObject').widget=res3.widgets;
+                          });
+                          
+
+                            
+                            
 
                         });
                       }).fail((err)=>{
                              alert("opps!");
                           });
+
 
   },
 
@@ -296,6 +308,14 @@ module.exports = global.Dashboardv2 = React.createClass({
                          })
                      }).done((res)=>{
                       console.log("remvoed!");
+                      $.ajax({
+                              url:api_server+'/user/profile/'+ this.state.id + '/info',
+                              type:"GET"
+                             }).done((res3)=>{
+                            electron.remote.getGlobal('sharedObject').widget=res3.widgets;
+                            
+                          });
+                      
                      }).fail((res)=>{
                       console.log("fail to remove");
                      });

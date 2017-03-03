@@ -16,7 +16,9 @@ const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
 global.sharedObject = {
   token: null,
-  profile:null,
+  username:null,
+  aboutme:null,
+  widget:null,
   id:null,
   layout:null,
 }

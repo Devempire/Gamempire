@@ -146,8 +146,9 @@ module.exports = class Login extends React.Component {
                         }).done((res2)=>{
 
                   electron.remote.getGlobal('sharedObject').layout=res2.layout;
-                  electron.remote.getGlobal('sharedObject').profile=res2;
-               
+                  electron.remote.getGlobal('sharedObject').username=res2.username;
+                  electron.remote.getGlobal('sharedObject').aboutme=res2.aboutme;
+                  electron.remote.getGlobal('sharedObject').widget=res2.widgets;
                    ipc.sendSync('loggedIn')
               ReactDOM.render(
                 <SideBar />,
