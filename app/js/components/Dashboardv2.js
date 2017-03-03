@@ -85,8 +85,8 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
                     });
-      console.log(profile);
-      console.log(this);
+      console.log(this.state.profile);
+
         },
 
   loadLayout(){
@@ -135,7 +135,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   componentWillMount: function(){
     this.loadProfile();
-    //this.loadLayout();
+    this.loadLayout();
     this.loadWidgets();
 
   },
