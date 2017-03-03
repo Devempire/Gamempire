@@ -1,9 +1,9 @@
-const soundcloud = '58ad388f68ddfeac581167b3';
-const discord = '58ad38ab68ddfeac581167b7';
-const messenger = '58ad389d68ddfeac581167b5';
-const steamchat = '58ad38a168ddfeac581167b6';
-const googleplaymusic = '58ad389668ddfeac581167b4';
-const heathstonebuilder = '58ae27d168ddfeac581167e9';
+const soundcloud = '58b8e5bf3d5b91307a68ee0f';
+const discord = '58b8e5d43d5b91307a68ee12';
+const messenger = '58b8e5cf3d5b91307a68ee11';
+const steamchat = '58b8e5d93d5b91307a68ee13';
+const googleplaymusic = '58b8e5c93d5b91307a68ee10';
+const heathstonebuilder = '58b8e5f33d5b91307a68ee14';
 
 class listWidgets {
   loadwid(i) {
