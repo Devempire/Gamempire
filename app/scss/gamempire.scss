@@ -874,6 +874,10 @@ label {
   width: 250px;
 }
 
+#profilepic {
+  width: 190px;
+}
+
 .uploadedpic {
   display: none;
 }
@@ -1054,52 +1058,40 @@ user-drag: none;
   position: inherit;
 }
 
-
-/* Toggled buttons used in Playground */
-
-.onoffswitch {
-    position: relative; width: 90px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+.jsx {
+  padding: 10px;
 }
-.onoffswitch-checkbox {
+
+input[type="file"] {
     display: none;
 }
-.onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 20px;
+
+.custom-file-upload {
+
+    display: inline-block;
+    text-align: center;
+    line-height: 1;
+    -webkit-appearance: none;
+    transition: all.25s ease-in-out;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius: 1px;
+    padding: .85em 1em;
+    margin: 0 0 1rem;
+    font-size: .9rem;
+    background-color: $primary-color;
+    color: #fefefe;
+    outline: none;
+    width: 220px;
+    cursor: default;
 }
-.onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
-    transition: margin 0.3s ease-in 0s;
+
+#scale_value {
+  width: 90px;
+  display: inline-block;
 }
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
-    box-sizing: border-box;
+
+#save_cancel {
+  display: none;
+
 }
-.onoffswitch-inner:before {
-    content: "ON";
-    padding-left: 10px;
-    background-color: #E65768; color: #FFFFFF;
-}
-.onoffswitch-inner:after {
-    content: "OFF";
-    padding-right: 6px;
-    background-color: #EEEEEE; color: #999999;
-    text-align: right;
-}
-.onoffswitch-switch {
-    display: block; width: 18px; margin: 3px;
-    background: #FFFFFF;
-    position: absolute; top: -3px; bottom: 4px;
-    right: 52px;
-    border: 2px solid #999999; border-radius: 20px;
-    transition: all 0.3s ease-in 0s;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
-    margin-left: 0;
-}
-.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
-    right: 19px;
-}
-/* End Playground CSS*/

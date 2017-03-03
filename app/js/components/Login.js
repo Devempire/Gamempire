@@ -10,6 +10,7 @@ module.exports = class Login extends React.Component {
         };
     }
 
+
      componentDidMount(){
       this.loadCheck();
       this.loadUsername();
@@ -31,11 +32,6 @@ module.exports = class Login extends React.Component {
        }
     }
 
-    passSubmit(e) {
-       if (e.key == 'Enter') {
-          $('#login').click();
-       }
-    }
     passSubmit(e) {
        if (e.key == 'Enter') {
           $('#login').click();
@@ -111,6 +107,7 @@ module.exports = class Login extends React.Component {
          );
      }
 
+
     _handleLogin() {
 
     var user_id = this.state.userName;
@@ -163,10 +160,9 @@ module.exports = class Login extends React.Component {
               //TODO: find faster way to way.
               document.getElementById('playgroundFrame').style.visibility = "hidden";
 
-
               ReactDOM.render(
-              	<Dashboardv2 />,
-              	document.getElementById('content')
+                <Dashboardv2 />,
+                document.getElementById('content')
               )
 
               });

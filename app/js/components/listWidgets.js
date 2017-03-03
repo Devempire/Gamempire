@@ -1,9 +1,11 @@
-const soundcloud = '58ad388f68ddfeac581167b3';
-const discord = '58ad38ab68ddfeac581167b7';
-const messenger = '58ad389d68ddfeac581167b5';
-const steamchat = '58ad38a168ddfeac581167b6';
-const googleplaymusic = '58ad389668ddfeac581167b4';
+const discord = '58b93e79a7c98c3001ad48a4';
+const messenger = '58b93e8ca7c98c3001ad48a5';
+const steamchat = '58b93e97a7c98c3001ad48a6';
 
+const soundcloud = '58b93eafa7c98c3001ad48a7';
+const googleplaymusic = '58b93ee3a7c98c3001ad48a8';
+
+const heathstonebuilder = '58b93f03a7c98c3001ad48a9';
 
 class listWidgets {
   loadwid(i) {
@@ -14,6 +16,10 @@ class listWidgets {
     if ( i == steamchat) { return ( <webview className='widget' src='https://steamcommunity.com/chat'></webview> ); }
     if ( i == googleplaymusic) { return ( <webview className='widget' src='https://play.google.com/music/listen?authuser#/home'></webview> ); }
     return false;
+  }
+
+  loadjsx(i) {
+    if ( i == heathstonebuilder) { return ( <div className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
   }
 }
 

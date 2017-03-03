@@ -53,6 +53,7 @@
     "react-dom": "^15.1.0",
     "react-tap-event-plugin": "^2.0.1",
     "request": "^2.69.0",
-    "unirest": "^0.5.1"
+    "unirest": "^0.5.1",
+    "react-avatar-editor": "^8.0.1"
   }
 }
