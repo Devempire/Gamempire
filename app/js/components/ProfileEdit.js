@@ -30,7 +30,8 @@ module.exports = global.ProfileEdit = React.createClass({
       username:null,
       lastname:null,
       firstname:null,
-      birthday:null
+      birthday:null,
+      scale: 1.2
 
     };
   },
@@ -76,6 +77,27 @@ module.exports = global.ProfileEdit = React.createClass({
 
   componentWillMount: function(){
     this.loadProfile();
+    global.avatar_scale = this.state.scale;
+
+  },
+
+  avatarSave(){
+
+
+
+    this.avatarCancel //in the end reset back to new pp.
+  },
+
+  avatarCancel(){
+    document.getElementById('save_cancel').style.visibility = "hidden";
+    document.getElementById('avatarEditor').innerHTML = "";
+    document.getElementById('profilepic').value = "";
+    global.avatar_scale = 1.2;
+    this.setState({
+       scale: global.avatar_scale
+     })
+    document.getElementById('upload').style.visibility = "visible";
+
   },
 
   createProfile(el) {
@@ -87,9 +109,17 @@ module.exports = global.ProfileEdit = React.createClass({
         <hr/>
           <div id='avatarEditor'></div>
 
-          <label htmlFor="profilepic" className="custom-file-upload" >Upload new avatar</label>
-          <input id="profilepic" onChange={this.uploadPic} type='file' accept="image/*" />
+          <div id='upload'>
+            <label htmlFor='profilepic' className='custom-file-upload' >Upload new avatar</label>
+            <input id='profilepic' onChange={this.uploadPic} type='file' accept='image/*' />
+          </div>
 
+          <div id='save_cancel'>
+            <div className="row expanded button-group">
+              <button onClick={this.avatarSave} className="button" id="Save">Save</button>
+              <button onClick={this.avatarCancel} className="button" id="Cancel">Cancel</button>
+            </div>
+          </div>
         <br></br>
         <font id='uploadmsg' color='red'></font>
         <br/>
@@ -126,20 +156,18 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   handleScale(){
-    var avatar_scale = parseFloat(document.getElementById("avatar_scale").value);
-    console.log(avatar_scale);
-  //  _props.scale = avatar_scale;
-    AvatarEditor.scale = avatar_scale;
-    //this.setState({scale: avatar_scale});
+    global.avatar_scale = parseFloat(document.getElementById("avatar_scale").value);
+    this.setState({
+       scale: global.avatar_scale
+     })
+     this.uploadPic();
   },
 
 
   uploadPic() {
-    //var avatar = document.getElementById("avatarpic");
+    document.getElementById('save_cancel').style.visibility = "visible";
+    document.getElementById('upload').style.visibility = "hidden";
     var pic = document.getElementById("profilepic").files;
-  //  console.log(avatar);
-    console.log(pic);
-    console.log(pic[0].path);
     const element = (
       <div>
       <AvatarEditor
@@ -147,20 +175,19 @@ module.exports = global.ProfileEdit = React.createClass({
           image={pic[0].path}
           width={180}
           height={180}
-          border={10}
-          color={[255, 255, 255, 0.7]}
-          scale={AvatarEditor.scale}
+          border={20}
+          color={[255, 255, 255, 0.8]}
+          scale={global.avatar_scale}
           rotate={0} />
           <br/>
-          <input type="range" step="0.01" min="1" max="2" id="avatar_scale" defaultValue={AvatarEditor.scale || '1'}  onChange={this.handleScale} />
+          <label id="scale_value" htmlFor="avatar_scale">Zoom: {global.avatar_scale}</label>
+          <input type="range" step="0.10" min="1" max="4" id="avatar_scale" defaultValue={this.state.scale}  onInput={this.handleScale} />
           </div>
-);
+    );
     ReactDOM.render(
       element,
       document.getElementById('avatarEditor')
     );
-
-
 
     //if (pic.length != 0) {
       //document.getElementById("profilepic").src = pic[0].path;

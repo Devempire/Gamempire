@@ -1082,6 +1082,15 @@ input[type="file"] {
     background-color: $primary-color;
     color: #fefefe;
     outline: none;
-    width: 200px;
+    width: 220px;
     cursor: default;
+}
+
+#scale_value {
+  width: 90px;
+  display: inline-block;
+}
+
+#save_cancel {
+  visibility: hidden;
 }
