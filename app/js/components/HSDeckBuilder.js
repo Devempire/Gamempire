@@ -317,15 +317,6 @@ module.exports = global.HSDeckBuilder = React.createClass({
   },
 
   render() {
-    var title = "Hearthstone Deck Builder - Gamempire"
-    document.title = title
-    document.getElementById('title').textContent = title
-
-    //Removes all Active class from Menu
-    $("#mySidenav>a.active").removeClass("active");
-
-    //Set Dashbaord as active in menu
-    $( "#_HSDeckBuilder" ).addClass('active');
 
     return (
       <div className="hearthstone_scroll">

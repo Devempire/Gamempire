@@ -83,8 +83,14 @@ module.exports = global.ProfileEdit = React.createClass({
 
   avatarSave(){
 
+//TODO:
+//take output image and make sure it's 180x180.
+//make sure the image if formated to JPEG. Doesn't matter if user uploads bmp,gif etc, app should convert to 180x180 JPEG image.
+//rename the ouput image to users ID  (e.g. 58b93ee3a7c98c3001ad48a8.jpg)
+//Push this image to server inside ~/server/view/img/avatar/ i think is the directory. double check server.
+//Push the tile name to userDB e.g. "avatar": "58b93ee3a7c98c3001ad48a8.jpg"
 
-
+//after all that. reset clear the editor
     this.avatarCancel(); //in the end reset back to new pp.
   },
 
@@ -107,6 +113,7 @@ module.exports = global.ProfileEdit = React.createClass({
       <div key={i} data-grid={el} className="noselect">
         <h3>Edit Profile</h3>
         <hr/>
+
           <div id='avatarEditor'></div>
 
           <div id='upload'>
