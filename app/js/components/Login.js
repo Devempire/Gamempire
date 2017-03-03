@@ -11,7 +11,7 @@ module.exports = class Login extends React.Component {
     }
 
 
-    componentDidMount(){
+     componentDidMount(){
       this.loadCheck();
       this.loadUsername();
       this.loadPassword();
@@ -106,35 +106,49 @@ module.exports = class Login extends React.Component {
            </div>
          );
      }
- 
-     _handleLogin() {
- 
-     var user_id = this.state.userName;
-     var pwrd = this.state.password;
-     if (user_id==null || user_id=="" || pwrd==null || pwrd=="")
-       {
-         $("#loginmsg").html("All fields must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
-         $("#loginmsg").addClass('label warning input-group-field');
-         $("#loginmsg").addClass("shake");
-         $("#loginmsg").show();
-         setTimeout(function () {
-           $("#loginmsg").removeClass("shake");
-         },200);
-         return false;
-       }
-       $( ".content-loading" ).css("display:block;");
-         $( ".content-loading" ).show();
- 
-         $.post(api_server+'/user/find',
-         {
-             username:this.state.userName,
-             password:this.state.password
-         })
+
+
+    _handleLogin() {
+
+    var user_id = this.state.userName;
+    var pwrd = this.state.password;
+    if (user_id==null || user_id=="" || pwrd==null || pwrd=="")
+      {
+        $("#loginmsg").html("All fields must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
+        $("#loginmsg").addClass('label warning input-group-field');
+        $("#loginmsg").addClass("shake");
+        $("#loginmsg").show();
+        setTimeout(function () {
+          $("#loginmsg").removeClass("shake");
+        },200);
+        return false;
+      }
+      $( ".content-loading" ).css("display:block;");
+        $( ".content-loading" ).show();
+
+        $.post(api_server+'/user/find',
+        {
+            username:this.state.userName,
+            password:this.state.password
+        })
 
             .done((res) =>{
+
               $( ".content-loading" ).fadeOut( "slow" );
-              electron.remote.getGlobal('sharedObject').token = res;
-              ipc.sendSync('loggedIn')
+              var token =electron.remote.getGlobal('sharedObject').token = res;
+              $.post(api_server+"/user/load",{
+                'token': token
+              }).done((d)=> {
+                electron.remote.getGlobal('sharedObject').id=d._id;
+                $.ajax({
+                  url:api_server+'/user/profile/'+ d._id + '/info',
+                  type:"GET"
+                        }).done((res2)=>{
+
+                  electron.remote.getGlobal('sharedObject').layout=res2.layout;
+                  electron.remote.getGlobal('sharedObject').profile=res2;
+               
+                   ipc.sendSync('loggedIn')
               ReactDOM.render(
                 <SideBar />,
                 document.getElementById('main-content')
@@ -151,6 +165,10 @@ module.exports = class Login extends React.Component {
                 document.getElementById('content')
               )
 
+              });
+
+
+            })
             })
 
             .fail((res)=>{

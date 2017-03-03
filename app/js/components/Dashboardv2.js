@@ -17,51 +17,45 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
   getInitialState() {
+    var profile = electron.remote.getGlobal('sharedObject').profile;
+    var layout = electron.remote.getGlobal('sharedObject').layout;
+    var id =electron.remote.getGlobal('sharedObject').id;
     return {
-      layouts: {},
       games:[],
       widgets:[],
-      response:undefined,
+      id:id,
+      username:profile.username,
+      aboutMe:profile.aboutme,
+      layouts:layout,
+      widget:profile.widgets,
       showStore:false,
       selectwidget:'',
     };
+    
   },
 
 
     onLayoutChange(layout, layouts) {
-      if(global.loading=="no"){
-   
-        if(JSON.stringify(layouts.md)=="[]") {
-          console.log('LAYOUTS CURENTLY NONE');
-        }else{
+        console.log(layouts);
         this.setState({layouts});
-
-
-      var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
-                {
-                   'token' :token
-                }).done((d)=> {
-                  $.ajax({
-                           url:api_server+"/user/profile/updatelayout",
-                           type:"PUT",
-                           contentType: 'application/json; charset=utf-8',
-                           data:JSON.stringify({
-                               _id:d._id,
+        $.ajax({
+          url:api_server+"/user/profile/updatelayout",
+          type:"PUT",
+          contentType: 'application/json; charset=utf-8',
+          data:JSON.stringify({
+                               _id:this.state.id,
                                layout:this.state.layouts
                            })
                        }).done((res)=>{
                         console.log("layout on server!");
                       }).fail((err)=>{
                         console.log("layout fail to update to server!")
-                      })
-                });
-              }
-            }
+                      });
+
+            
     },
 
   loadWidgets(){
-
     $.get(api_server+"/widget/show").done((res)=>{
 
       for (var i = 0; i < res.length; i++) {
@@ -80,80 +74,56 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   },
 
-  loadProfile(){
+  
 
-      var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",{
-          'token': token
-          }).done((d)=> {
-              $.ajax({
-                         url:api_server+'/user/profile/'+ d._id + '/info',
-                         type:"GET",
-                          async: false
-                        }).done((res)=>{
-                  console.log(res);
-                  var g=res.widgets.length;
-                  this.setState({response: res,
-                                  username:res.username,
-                                  firstname:res.firstname,
-                                  lastname:res.lastname,
-                                  aboutMe:res.aboutme,
-                                  layouts:res.layout,
-                                  });
-                  console.log(this);
-                  console.log(this.state.layouts);
-                  for (var h = 0; h < g; h++) {
-                        $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
-                            var xx=res2.x;
-                            var yy=res2.y;
-                            var ww=res2.w;
-                            var hh=res2.h;
-                            var mdl =this.state.layouts.md;
-                            console.log(this.state.layouts);
-                            console.log("help me i dont know why this.state.layouts ending nothing,but this works")
-                            for(var j=0; j<mdl.length; j++){
-                              if(mdl[j].i == res2._id){
-                                console.log(mdl[j]);
-                                var xx=mdl[j].x;
-                                var yy=mdl[j].y;
-                                var ww=mdl[j].w;
-                                var hh=mdl[j].h;
-                              }
-                              console.log('x: '+ xx);
-                              console.log('y: '+yy);
-                              console.log('w: '+ww);
-                              console.log('h: '+hh);
-                          }
+  loadLayout(){
+    var mdl =this.state.layouts.md;
+    var g =this.state.widget.length;
+    for (var h = 0; h < g; h++) {
+        $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+            var xx=res2.x;
+            var yy=res2.y;
+            var ww=res2.w;
+            var hh=res2.h;
+            
+            for(var j=0; j<mdl.length; j++){
+              if(mdl[j].i == res2._id){
+                xx=mdl[j].x;
+                yy=mdl[j].y;
+                ww=mdl[j].w;
+                hh=mdl[j].h;
+                }
+                console.log('x: '+ xx);
+                console.log('y: '+yy);
+                console.log('w: '+ww);
+                console.log('h: '+hh);
+            }
 
-                          this.setState({
-                                  games: this.state.games.concat({
-                                    i: res2._id,
-                                    widgettype:res2.widgettype,
-                                    widgetname:res2.widgetname,
-                                    x:xx,
-                                    y:yy,
-                                    h:hh,
-                                    w:ww,
-                                    minH: res2.minH,
-                                    maxH: res2.maxH,
-                                    minW: res2.minW,
-                                    maxW: res2.maxW,
-                                  })
-                            });
+            this.setState({
+                games: this.state.games.concat({
+                    i: res2._id,
+                    widgettype:res2.widgettype,
+                    widgetname:res2.widgetname,
+                    x:xx,
+                    y:yy,
+                    h:hh,
+                    w:ww,
+                    minH: res2.minH,
+                    maxH: res2.maxH,
+                    minW: res2.minW,
+                    maxW: res2.maxW,
+                    })
+                });
 
-                      });
+              });
 
-                  }
-
-
-          });
-      });
-        
+        }
   },
 
   componentWillMount: function(){
-    this.loadProfile();
+    this.loadLayout();
     this.loadWidgets();
+
   },
 
 
@@ -195,17 +165,13 @@ module.exports = global.Dashboardv2 = React.createClass({
       }
     }
 
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
+    
                  $.ajax({
                          url:api_server+"/user/profile/addwidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.id,
                              widgetid:this.state.selectwidget,
                          })
                      }).done((res)=>{
@@ -244,7 +210,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                       }).fail((err)=>{
                              alert("opps!");
                           });
-                     });
+
   },
 
 
@@ -320,17 +286,13 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
+    
                  $.ajax({
                          url:api_server+"/user/profile/removewidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.id,
                              widgetid:i
                          })
                      }).done((res)=>{
@@ -338,7 +300,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                      }).fail((res)=>{
                       console.log("fail to remove");
                      });
-                   });
+
 
   },
 
@@ -354,25 +316,20 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   updateAboutMe(event){
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
                 $.ajax({
                          url:api_server+"/user/profile/updateaboutme",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.id,
                              aboutme:this.state.aboutMe
                          })
                      }).done((res)=>{
                       console.log("aboutme on server!");
                     }).fail((err)=>{
                       console.log("aboutme fail to update to server!")
-                    })
-              });
+                    });
+
 
   },
 
@@ -388,12 +345,10 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
-    if (this.state.response) {
       return (
         <div className="noselect">
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
         <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
-
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
@@ -420,11 +375,6 @@ module.exports = global.Dashboardv2 = React.createClass({
         </div>
       );
 
-    } else {
-      return (
-        <div className="content-loading"></div>
-        );
-    }
   }
 
 

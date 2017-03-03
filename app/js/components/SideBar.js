@@ -99,6 +99,12 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Logout(){
+		electron.remote.getGlobal('sharedObject').profile=null;
+		electron.remote.getGlobal('sharedObject').token=null;
+		electron.remote.getGlobal('sharedObject').id=null;
+		electron.remote.getGlobal('sharedObject').layout=null;
+		console.log(electron.remote.getGlobal('sharedObject'));
+
 		ipc.sendSync('loggedOut')
 		ReactDOM.render(
 		  <Login />,
