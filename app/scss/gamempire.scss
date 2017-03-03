@@ -874,6 +874,10 @@ label {
   width: 250px;
 }
 
+#profilepic {
+  width: 190px;
+}
+
 .uploadedpic {
   display: none;
 }
@@ -1056,4 +1060,38 @@ user-drag: none;
 
 .jsx {
   padding: 10px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+
+    display: inline-block;
+    text-align: center;
+    line-height: 1;
+    -webkit-appearance: none;
+    transition: all.25s ease-in-out;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    border-radius: 1px;
+    padding: .85em 1em;
+    margin: 0 0 1rem;
+    font-size: .9rem;
+    background-color: $primary-color;
+    color: #fefefe;
+    outline: none;
+    width: 220px;
+    cursor: default;
+}
+
+#scale_value {
+  width: 90px;
+  display: inline-block;
+}
+
+#save_cancel {
+  display: none;
+
 }
