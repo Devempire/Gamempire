@@ -165,7 +165,7 @@ module.exports = class Login extends React.Component {
                   type:"GET"
                         }).done((res2)=>{
                   electron.remote.getGlobal('sharedObject').profile=res2;
-                  
+                  console.log(electron.remote.getGlobal('sharedObject').profile);
                 });
               });
 

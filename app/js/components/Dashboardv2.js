@@ -75,6 +75,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
       var profile = electron.remote.getGlobal('sharedObject').profile;
       var token = electron.remote.getGlobal('sharedObject').token;
+
       this.setState({token:token,
                       profile:profile,
                       username:profile.username,
