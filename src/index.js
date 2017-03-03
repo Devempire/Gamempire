@@ -15,8 +15,10 @@ var ipc = electron.ipcMain;
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
 global.sharedObject = {
-  token: 'empty',
-  profile:'',
+  token: null,
+  profile:null,
+  id:null,
+  layout:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will

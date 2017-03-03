@@ -136,10 +136,22 @@ module.exports = class Login extends React.Component {
         })
 
             .done((res) =>{
+
               $( ".content-loading" ).fadeOut( "slow" );
               var token =electron.remote.getGlobal('sharedObject').token = res;
-              
-              ipc.sendSync('loggedIn')
+              $.post(api_server+"/user/load",{
+                'token': token
+              }).done((d)=> {
+                electron.remote.getGlobal('sharedObject').id=d._id;
+                $.ajax({
+                  url:api_server+'/user/profile/'+ d._id + '/info',
+                  type:"GET"
+                        }).done((res2)=>{
+
+                  electron.remote.getGlobal('sharedObject').layout=res2.layout;
+                  electron.remote.getGlobal('sharedObject').profile=res2;
+               
+                   ipc.sendSync('loggedIn')
               ReactDOM.render(
                 <SideBar />,
                 document.getElementById('main-content')
@@ -157,18 +169,10 @@ module.exports = class Login extends React.Component {
               	document.getElementById('content')
               )
 
-              $.post(api_server+"/user/load",{
-                'token': token
-              }).done((d)=> {
-                $.ajax({
-                  url:api_server+'/user/profile/'+ d._id + '/info',
-                  type:"GET"
-                        }).done((res2)=>{
-                  electron.remote.getGlobal('sharedObject').profile=res2;
-                  console.log(electron.remote.getGlobal('sharedObject').profile);
-                });
               });
 
+
+            })
             })
 
             .fail((res)=>{

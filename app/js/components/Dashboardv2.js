@@ -17,27 +17,33 @@ module.exports = global.Dashboardv2 = React.createClass({
 
 
   getInitialState() {
+    var profile = electron.remote.getGlobal('sharedObject').profile;
+    var layout = electron.remote.getGlobal('sharedObject').layout;
+    var id =electron.remote.getGlobal('sharedObject').id;
     return {
       games:[],
       widgets:[],
-      response:undefined,
+      id:id,
+      username:profile.username,
+      aboutMe:profile.aboutme,
+      layouts:layout,
+      widget:profile.widgets,
       showStore:false,
       selectwidget:'',
-      token:'',
-      profile:'',
     };
+    
   },
 
 
     onLayoutChange(layout, layouts) {
-      
+        console.log(layouts);
         this.setState({layouts});
         $.ajax({
           url:api_server+"/user/profile/updatelayout",
           type:"PUT",
           contentType: 'application/json; charset=utf-8',
           data:JSON.stringify({
-                               _id:profile._id,
+                               _id:this.state.id,
                                layout:this.state.layouts
                            })
                        }).done((res)=>{
@@ -50,7 +56,6 @@ module.exports = global.Dashboardv2 = React.createClass({
     },
 
   loadWidgets(){
-
     $.get(api_server+"/widget/show").done((res)=>{
 
       for (var i = 0; i < res.length; i++) {
@@ -71,27 +76,8 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   
 
-  loadProfile(){
-
-      var profile = electron.remote.getGlobal('sharedObject').profile;
-      var token = electron.remote.getGlobal('sharedObject').token;
-
-      this.setState({token:token,
-                      profile:profile,
-                      username:profile.username,
-                      aboutMe:profile.aboutme,
-                      layouts:profile.layout,
-                      widget:profile.widgets,
-                      response:true,
-
-
-                    });
-      console.log(this.state.profile);
-
-        },
-
   loadLayout(){
-
+    var mdl =this.state.layouts.md;
     var g =this.state.widget.length;
     for (var h = 0; h < g; h++) {
         $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
@@ -99,7 +85,7 @@ module.exports = global.Dashboardv2 = React.createClass({
             var yy=res2.y;
             var ww=res2.w;
             var hh=res2.h;
-            var mdl =this.state.layouts.md;
+            
             for(var j=0; j<mdl.length; j++){
               if(mdl[j].i == res2._id){
                 xx=mdl[j].x;
@@ -135,7 +121,6 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   componentWillMount: function(){
-    this.loadProfile();
     this.loadLayout();
     this.loadWidgets();
 
@@ -186,7 +171,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:this.state.profile._id,
+                             _id:this.state.id,
                              widgetid:this.state.selectwidget,
                          })
                      }).done((res)=>{
@@ -307,7 +292,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:this.state.profile._id,
+                             _id:this.state.id,
                              widgetid:i
                          })
                      }).done((res)=>{
@@ -336,7 +321,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:this.state.profile._id,
+                             _id:this.state.id,
                              aboutme:this.state.aboutMe
                          })
                      }).done((res)=>{
@@ -360,13 +345,10 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
-    if (this.state.response) {
-      
       return (
         <div className="noselect">
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
         <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
-
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
@@ -393,11 +375,6 @@ module.exports = global.Dashboardv2 = React.createClass({
         </div>
       );
 
-    } else {
-      return (
-        <div className="content-loading"></div>
-        );
-    }
   }
 
 
