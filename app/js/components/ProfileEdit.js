@@ -1,6 +1,6 @@
 var WidthProvider = require('react-grid-layout').WidthProvider;
-var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
-ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
+var ReactGridLayout = require('react-grid-layout');
+ReactGridLayout = WidthProvider(ReactGridLayout);
 import AvatarEditor from 'react-avatar-editor'
 
 const originalLayouts = getFromLS('layouts') || {};
@@ -12,7 +12,7 @@ module.exports = global.ProfileEdit = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 12, md: 12, sm: 12, xs: 4, xxs: 4},
+      cols: 12,
       rowHeight: 20,
       verticalCompact: true
     };
@@ -67,6 +67,7 @@ module.exports = global.ProfileEdit = React.createClass({
                                 username:res.username,
                                 firstname:res.firstname,
                                 lastname:res.lastname,
+                                lastname:res.avatar,
                                 birthday:res.dateofbirth
                 });
         });
@@ -84,22 +85,14 @@ module.exports = global.ProfileEdit = React.createClass({
       <div key={i} data-grid={el} className="noselect">
         <h3>Edit Profile</h3>
         <hr/>
-        <div onClick={this.openFileExp}>
-          <input hidden id='profilepic' onChange={this.uploadPic} type='file' accept="image/*"/>
-          <AvatarEditor 
-              id={'avatarpic'}
-              image={'./../app/img/GamEmpireLogo.png'}
-              width={180}
-              height={180}
-              border={30}
-              color={[255, 255, 255, 0.6]} // RGBA
-              scale={1.1}
-              rotate={0}/>
-        </div>
-        
+          <div id='avatarEditor'></div>
+
+          <label htmlFor="profilepic" className="custom-file-upload" >Upload new avatar</label>
+          <input id="profilepic" onChange={this.uploadPic} type='file' accept="image/*" />
+
         <br></br>
         <font id='uploadmsg' color='red'></font>
-
+        <br/>
         <form>
             Username: <br></br>
             <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
@@ -132,16 +125,47 @@ module.exports = global.ProfileEdit = React.createClass({
     $("input[id='profilepic']").click();
   },
 
+  handleScale(){
+    var avatar_scale = parseFloat(document.getElementById("avatar_scale").value);
+    console.log(avatar_scale);
+  //  _props.scale = avatar_scale;
+    AvatarEditor.scale = avatar_scale;
+    //this.setState({scale: avatar_scale});
+  },
+
+
   uploadPic() {
-    var avatar = document.getElementById("avatarpic");
+    //var avatar = document.getElementById("avatarpic");
     var pic = document.getElementById("profilepic").files;
-    console.log(avatar);
+  //  console.log(avatar);
     console.log(pic);
     console.log(pic[0].path);
-    if (pic.length != 0) {
+    const element = (
+      <div>
+      <AvatarEditor
+          id={'avatarpic'}
+          image={pic[0].path}
+          width={180}
+          height={180}
+          border={10}
+          color={[255, 255, 255, 0.7]}
+          scale={AvatarEditor.scale}
+          rotate={0} />
+          <br/>
+          <input type="range" step="0.01" min="1" max="2" id="avatar_scale" defaultValue={AvatarEditor.scale || '1'}  onChange={this.handleScale} />
+          </div>
+);
+    ReactDOM.render(
+      element,
+      document.getElementById('avatarEditor')
+    );
+
+
+
+    //if (pic.length != 0) {
       //document.getElementById("profilepic").src = pic[0].path;
-      avatar.image = pic[0].path;
-    }
+    //  avatar.image = pic[0].path;
+    //}
 
     // var pic = document.getElementById("uploadedpic").files;
     // console.log(pic);
@@ -274,12 +298,12 @@ module.exports = global.ProfileEdit = React.createClass({
     if(this.state.response){
       return (
         <div>
-          <ResponsiveReactGridLayout onLayoutChange={this.onLayoutChange} onBreakpointChange={this.onBreakpointChange}
+          <ReactGridLayout onLayoutChange={this.onLayoutChange} onBreakpointChange={this.onBreakpointChange}
               {...this.props}>
               { this.createProfile(this.state.items)}
               {_.map(this.state.pw, this.changePW)}
               {_.map(this.state.email, this.changeEmail)}
-          </ResponsiveReactGridLayout>
+          </ReactGridLayout>
         </div>
       );
     }else{
