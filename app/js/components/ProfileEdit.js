@@ -85,7 +85,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
 
 
-    this.avatarCancel //in the end reset back to new pp.
+    this.avatarCancel(); //in the end reset back to new pp.
   },
 
   avatarCancel(){
