@@ -8,24 +8,52 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   getDefaultProps() {
     return {
+      breakpoint: "md",
       className: "layout",
-      cols: {lg: 18, md: 12, sm: 12, xs: 4, xxs: 4},
+      cols: {lg: 18, md: 24, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
-      verticalCompact: true
     };
   },
 
 
   getInitialState() {
     return {
-      layouts: {},
       games:[],
       widgets:[],
+      layouts:{},
       response:undefined,
       showStore:false,
       selectwidget:'',
     };
   },
+
+
+    onLayoutChange(layout, layouts) {
+      
+        this.setState({layouts});
+
+
+      var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+                {
+                   'token' :token
+                }).done((d)=> {
+                  $.ajax({
+                           url:api_server+"/user/profile/updatelayout",
+                           type:"PUT",
+                           contentType: 'application/json; charset=utf-8',
+                           data:JSON.stringify({
+                               _id:d._id,
+                               layout:this.state.layouts
+                           })
+                       }).done((res)=>{
+                        console.log("layout on server!");
+                      }).fail((err)=>{
+                        console.log("layout fail to update to server!")
+                      })
+                });
+            
+    },
 
   loadWidgets(){
 
@@ -47,68 +75,98 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   },
 
+  
+
   loadProfile(){
 
       var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/user/load",{
           'token': token
           }).done((d)=> {
-              $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
+              $.ajax({
+                         url:api_server+'/user/profile/'+ d._id + '/info',
+                         type:"GET"
+                        }).done((res)=>{
+                  console.log(res);
+                  this.setState({layouts:res.layout,
+                                  response:true});
 
-                  var g=res.widgets.length;
-                  this.setState({response: res,
-                                  username:res.username,
-                                  firstname:res.firstname,
-                                  lastname:res.lastname,
+                });
+                      });
+        },
+
+  loadProfile2(){
+
+      var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",{
+          'token': token
+          }).done((d)=> {
+              $.ajax({
+                         url:api_server+'/user/profile/'+ d._id + '/info',
+                         type:"GET"
+                        }).done((res)=>{
+                  console.log(res);
+                  this.setState({username:res.username,
                                   aboutMe:res.aboutme,
-                                  layouts:res.layout[0],
+                                  widget:res.widgets,
                                   });
-                  for (var h = 0; h < g; h++) {
-                        $.get(api_server+'/widget/find/'+ res.widgets[h].widgetid + '/info').done((res2)=>{
-                            for(var j=0; j<this.state.layouts.md.length ; j++){
-                              var X,Y,H,W;
-                              if(this.state.layouts.md[j].i == res2._id){
-                                X=this.state.layouts.md[j].x;
-                                Y=this.state.layouts.md[j].y;
-                                W=this.state.layouts.md[j].w;
-                                H=this.state.layouts.md[j].h;
-                              }else{
-                                X=res2.x;
-                                Y=res2.y;
-                                W=res2.w;
-                                H=res2.h;
-                              }
-                            
-                          }
-                          this.setState({
-                                  games: this.state.games.concat({
-                                    i: res2._id,
-                                    widgettype:res2.widgettype,
-                                    widgetname:res2.widgetname,
-                                    x:X,
-                                    y:Y,
-                                    h:H,
-                                    w:W,
-                                    minH: res2.minH,
-                                    maxH: res2.maxH,
-                                    minW: res2.minW,
-                                    maxW: res2.minW,
-                                  })
-                            });
-                        
-                      });  
-                  }
-                  
-                  
-          });
-      });
+                });
+                      });
+        },
 
+  loadLayout(){
+    console.log(this.state.layouts);
+    console.log(this.state);
+    var g =this.state.widget.length;
+    for (var h = 0; h < g; h++) {
+        $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+            var xx=res2.x;
+            var yy=res2.y;
+            var ww=res2.w;
+            var hh=res2.h;
+            var mdl =this.state.layouts.md;
+            console.log(mdl);
+            for(var j=0; j<mdl.length; j++){
+              if(mdl[j].i == res2._id){
+                xx=mdl[j].x;
+                yy=mdl[j].y;
+                ww=mdl[j].w;
+                hh=mdl[j].h;
+                }
+                console.log('x: '+ xx);
+                console.log('y: '+yy);
+                console.log('w: '+ww);
+                console.log('h: '+hh);
+            }
+
+            this.setState({
+                games: this.state.games.concat({
+                    i: res2._id,
+                    widgettype:res2.widgettype,
+                    widgetname:res2.widgetname,
+                    x:xx,
+                    y:yy,
+                    h:hh,
+                    w:ww,
+                    minH: res2.minH,
+                    maxH: res2.maxH,
+                    minW: res2.minW,
+                    maxW: res2.maxW,
+                    })
+                });
+
+              });
+
+        }
   },
 
   componentWillMount: function(){
-    this.loadProfile();
     this.loadWidgets();
+    this.loadProfile();
+    this.loadProfile2();
   },
+
+
 
   onBreakpointChange(breakpoint, cols) {
     this.setState({
@@ -117,37 +175,12 @@ module.exports = global.Dashboardv2 = React.createClass({
     });
   },
 
-  onLayoutChange(layout, layouts) {
-    this.setState({layouts});
-    console.log(JSON.stringify(this.state.layouts.md));
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
-                $.ajax({
-                         url:api_server+"/user/profile/updatelayout",
-                         type:"PUT",
-                         contentType: 'application/json; charset=utf-8',
-                         data:JSON.stringify({
-                             _id:d._id,
-                             layout:this.state.layouts
-                         })
-                     }).done((res)=>{
-                      console.log("layout on server!");
-                    }).fail((err)=>{
-                      console.log("layout fail to update to server!")
-                    })
-              });
 
-  },
-
-  
   handleChange(event) {
     $( "#add_widget_button" ).prop( "disabled", false );
-    
+
     this.setState({
-          selectwidget: event.target.value, 
+          selectwidget: event.target.value,
          });
   },
 
@@ -155,7 +188,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     this.setState({showStore: true});
   },
 
-  
+
   handleSubmit(event) {
     event.preventDefault();
     var L = this.state.games.length;
@@ -210,7 +243,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                                 minH: res2.minH,
                                 maxH: res2.maxH,
                                 minW: res2.minW,
-                                maxW: res2.minW,
+                                maxW: res2.maxW,
                               }),
                               showStore:false,
                               selectwidget:'',
@@ -224,7 +257,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                      });
   },
 
-  
+
   onGame(el){
     var i =el.i;
     var widgettype = el.widgettype;
@@ -267,9 +300,7 @@ module.exports = global.Dashboardv2 = React.createClass({
             </div>
           </div>
         );
-    } else {
-
-
+    } else if (widgettype == 'social' || widgettype == 'music') {
     //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
     //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
       return (
@@ -278,6 +309,13 @@ module.exports = global.Dashboardv2 = React.createClass({
           {listWidgets.loadwid(widgetID)}
         </div>
       );
+    } else if (widgettype == 'other') {
+      return (
+      <div key={widgetID} data-grid={el} className="widgetFrame">
+        <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+        {listWidgets.loadjsx(widgetID)}
+      </div>
+    );
     }
     //console.log(widgetTitle + ' Loaded.');
 
@@ -360,7 +398,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
-    if (this.state.response) {
+      
       return (
         <div className="noselect">
         <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
@@ -391,14 +429,7 @@ module.exports = global.Dashboardv2 = React.createClass({
           </div>
         </div>
       );
-
-    } else {
-      return (
-        <div className="content-loading"></div>
-        );
-    }
   }
 
 
 });
-
