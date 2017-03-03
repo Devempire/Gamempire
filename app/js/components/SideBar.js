@@ -1,11 +1,49 @@
 module.exports = global.Bar = React.createClass({
 
+
+
+  editAboutMe(event) {
+
+    this.setState({aboutMe:event.target.value});
+  },
+
+  updateAboutMe(event){
+                $.ajax({
+                         url:api_server+"/user/profile/updateaboutme",
+                         type:"PUT",
+                         contentType: 'application/json; charset=utf-8',
+                         data:JSON.stringify({
+                             _id:this.state.id,
+                             aboutme:this.state.aboutMe
+                         })
+                     }).done((res)=>{
+                      console.log("aboutme on server!");
+                    }).fail((err)=>{
+                      console.log("aboutme fail to update to server!")
+                    });
+
+
+  },
+
+	getInitialState() {
+		var profile = electron.remote.getGlobal('sharedObject').profile;
+		var id =electron.remote.getGlobal('sharedObject').id;
+		return {
+			id:id,
+			username:profile.username,
+			aboutMe:profile.aboutme,
+		};
+
+	},
+
+
 	render() {
+
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
+					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{this.state.username}</b></a>
+					<input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
-					<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
-					<a href="#" onClick={this._HSDeckBuilder} id="_HSDeckBuilder">Hearthstone Deck Builder</a>
 					{
 					/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>

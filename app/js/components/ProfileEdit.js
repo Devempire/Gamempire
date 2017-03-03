@@ -117,7 +117,7 @@ module.exports = global.ProfileEdit = React.createClass({
           <div id='save_cancel'>
             <div className="row expanded button-group">
               <button onClick={this.avatarSave} className="button" id="Save">Save</button>
-              <button onClick={this.avatarCancel} className="button" id="Cancel">Cancel</button>
+              <button onClick={this.avatarCancel} className="button secondary" id="Cancel">Cancel</button>
             </div>
           </div>
         <br></br>

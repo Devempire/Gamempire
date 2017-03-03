@@ -31,7 +31,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       showStore:false,
       selectwidget:'',
     };
-    
+
   },
 
 
@@ -52,7 +52,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                         console.log("layout fail to update to server!")
 
                       })
-            
+
     },
 
   loadWidgets(){
@@ -74,7 +74,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   },
 
-  
+
   loadLayout(){
     var mdl =this.state.layouts.md;
 
@@ -164,7 +164,7 @@ module.exports = global.Dashboardv2 = React.createClass({
       }
     }
 
-    
+
                  $.ajax({
                          url:api_server+"/user/profile/addwidget",
                          type:"PUT",
@@ -285,7 +285,7 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
-    
+
                  $.ajax({
                          url:api_server+"/user/profile/removewidget",
                          type:"PUT",
@@ -309,29 +309,6 @@ module.exports = global.Dashboardv2 = React.createClass({
         document.getElementById('content'));
   },
 
-  editAboutMe(event) {
-
-    this.setState({aboutMe:event.target.value});
-  },
-
-  updateAboutMe(event){
-                $.ajax({
-                         url:api_server+"/user/profile/updateaboutme",
-                         type:"PUT",
-                         contentType: 'application/json; charset=utf-8',
-                         data:JSON.stringify({
-                             _id:this.state.id,
-                             aboutme:this.state.aboutMe
-                         })
-                     }).done((res)=>{
-                      console.log("aboutme on server!");
-                    }).fail((err)=>{
-                      console.log("aboutme fail to update to server!")
-                    });
-
-
-  },
-
   render() {
     // Set Titles
     var title = "Dashboard v2 - Testing - Gamempire"
@@ -347,8 +324,6 @@ module.exports = global.Dashboardv2 = React.createClass({
 
       return (
         <div className="noselect">
-        <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
-        <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
