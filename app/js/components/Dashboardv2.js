@@ -20,10 +20,11 @@ module.exports = global.Dashboardv2 = React.createClass({
     return {
       games:[],
       widgets:[],
-      layouts:{},
       response:undefined,
       showStore:false,
       selectwidget:'',
+      token:'',
+      profile:'',
     };
   },
 
@@ -31,27 +32,20 @@ module.exports = global.Dashboardv2 = React.createClass({
     onLayoutChange(layout, layouts) {
       
         this.setState({layouts});
-
-
-      var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
-                {
-                   'token' :token
-                }).done((d)=> {
-                  $.ajax({
-                           url:api_server+"/user/profile/updatelayout",
-                           type:"PUT",
-                           contentType: 'application/json; charset=utf-8',
-                           data:JSON.stringify({
-                               _id:d._id,
+        $.ajax({
+          url:api_server+"/user/profile/updatelayout",
+          type:"PUT",
+          contentType: 'application/json; charset=utf-8',
+          data:JSON.stringify({
+                               _id:profile._id,
                                layout:this.state.layouts
                            })
                        }).done((res)=>{
                         console.log("layout on server!");
                       }).fail((err)=>{
                         console.log("layout fail to update to server!")
-                      })
-                });
+                      });
+
             
     },
 
@@ -79,44 +73,24 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   loadProfile(){
 
+      var profile = electron.remote.getGlobal('sharedObject').profile;
       var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",{
-          'token': token
-          }).done((d)=> {
-              $.ajax({
-                         url:api_server+'/user/profile/'+ d._id + '/info',
-                         type:"GET"
-                        }).done((res)=>{
-                  console.log(res);
-                  this.setState({layouts:res.layout,
-                                  response:true});
+      this.setState({token:token,
+                      profile:profile,
+                      username:profile.username,
+                      aboutMe:profile.aboutme,
+                      layouts:profile.layout,
+                      widget:profile.widgets,
+                      response:true,
 
-                });
-                      });
-        },
 
-  loadProfile2(){
-
-      var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",{
-          'token': token
-          }).done((d)=> {
-              $.ajax({
-                         url:api_server+'/user/profile/'+ d._id + '/info',
-                         type:"GET"
-                        }).done((res)=>{
-                  console.log(res);
-                  this.setState({username:res.username,
-                                  aboutMe:res.aboutme,
-                                  widget:res.widgets,
-                                  });
-                });
-                      });
+                    });
+      console.log(profile);
+      console.log(this);
         },
 
   loadLayout(){
-    console.log(this.state.layouts);
-    console.log(this.state);
+
     var g =this.state.widget.length;
     for (var h = 0; h < g; h++) {
         $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
@@ -125,7 +99,6 @@ module.exports = global.Dashboardv2 = React.createClass({
             var ww=res2.w;
             var hh=res2.h;
             var mdl =this.state.layouts.md;
-            console.log(mdl);
             for(var j=0; j<mdl.length; j++){
               if(mdl[j].i == res2._id){
                 xx=mdl[j].x;
@@ -161,9 +134,10 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   componentWillMount: function(){
-    this.loadWidgets();
     this.loadProfile();
-    this.loadProfile2();
+    //this.loadLayout();
+    this.loadWidgets();
+
   },
 
 
@@ -205,17 +179,13 @@ module.exports = global.Dashboardv2 = React.createClass({
       }
     }
 
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
+    
                  $.ajax({
                          url:api_server+"/user/profile/addwidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.profile._id,
                              widgetid:this.state.selectwidget,
                          })
                      }).done((res)=>{
@@ -254,7 +224,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                       }).fail((err)=>{
                              alert("opps!");
                           });
-                     });
+
   },
 
 
@@ -330,17 +300,13 @@ module.exports = global.Dashboardv2 = React.createClass({
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
+    
                  $.ajax({
                          url:api_server+"/user/profile/removewidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.profile._id,
                              widgetid:i
                          })
                      }).done((res)=>{
@@ -348,7 +314,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                      }).fail((res)=>{
                       console.log("fail to remove");
                      });
-                   });
+
 
   },
 
@@ -364,25 +330,20 @@ module.exports = global.Dashboardv2 = React.createClass({
   },
 
   updateAboutMe(event){
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
                 $.ajax({
                          url:api_server+"/user/profile/updateaboutme",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.profile._id,
                              aboutme:this.state.aboutMe
                          })
                      }).done((res)=>{
                       console.log("aboutme on server!");
                     }).fail((err)=>{
                       console.log("aboutme fail to update to server!")
-                    })
-              });
+                    });
+
 
   },
 
@@ -398,6 +359,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass('active');
 
+    if (this.state.response) {
       
       return (
         <div className="noselect">
@@ -429,6 +391,12 @@ module.exports = global.Dashboardv2 = React.createClass({
           </div>
         </div>
       );
+
+    } else {
+      return (
+        <div className="content-loading"></div>
+        );
+    }
   }
 
 

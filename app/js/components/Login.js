@@ -10,6 +10,12 @@ module.exports = class Login extends React.Component {
         };
     }
 
+     componentDidMount(){
+      this.loadCheck();
+      this.loadUsername();
+      this.loadPassword();
+    }
+
     userSubmit(e) {
        if (e.key == 'Enter') {
          var psw = $("#passsword").val();
@@ -30,38 +36,80 @@ module.exports = class Login extends React.Component {
           $('#login').click();
        }
     }
+    passSubmit(e) {
+       if (e.key == 'Enter') {
+          $('#login').click();
+       }
+    }
+    
+    rememberMe() {
+       if ($('#remember_me').is(':checked')) {
+           localStorage.usrname = $('#username').val();
+           localStorage.pass = $('#passsword').val();
+           localStorage.chkbx = $('#remember_me').val();
+       } else {
+           localStorage.usrname = '';
+           localStorage.pass = '';
+           localStorage.chkbx = '';
+       }
+     }
+ 
+     loadCheck() {
+       if (localStorage.chkbx && localStorage.chkbx != '') {
+           $('#remember_me').attr('checked', 'checked');
+       } else {
+           $('#remember_me').removeAttr('checked');
+       }
+     }
+ 
+     loadUsername() {
+       if (localStorage.chkbx && localStorage.chkbx != '') {
+           $('#username').val(localStorage.usrname);
+           this.setState({userName: localStorage.usrname})
+       } else {
+           $('#username').val('');
+       }
+     }
+ 
+     loadPassword() {
+       if (localStorage.chkbx && localStorage.chkbx != '') {
+           $('#passsword').val(localStorage.pass);
+           this.setState({password: localStorage.pass})
+       } else {
+           $('#passsword').val('');
+       }
+     }
+ 
 
     render() {
-      var title = "Login - Gamempire"
-      document.title = title
-      document.getElementById('title').textContent = title
-        return (
-
-
-        <div id="loginContainer" className="row align-center align-middle noselect">
-        <div className="content-loading"></div>
-            <div className="medium-6 large-6 column">
-            <img className="gamEmpireLogo" src="../app/img/GamEmpireLogo.png" />
-                <div className="input-group required">
-                    <input className="input-group-field noselect" type="text" id="username" placeholder="Username" onKeyPress={this.userSubmit.bind(this)} value={this.state.userName|| ''} onChange={(event)=> {this.setState({userName: event.target.value})}}/>
-                    <span className="input-group-label">*</span>
-                </div>
-                <div className="input-group required">
-                    <input className="input-group-field noselect" type="password" id="passsword" placeholder="Password" onKeyPress={this.passSubmit.bind(this)} value={this.state.password|| ''} onChange={(event)=> {this.setState({password: event.target.value})}}/>
-                    <span className="input-group-label">*</span>
-                </div>
-                <center><div className="input-group-field" id="loginmsg"></div></center>
-                <hr/>
-                <button className="button" id="login" onClick={this._handleLogin.bind(this)}>Login</button>
-                <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign up</button>
-            </div>
-            <script type="text/javascript">
-
-            </script>
-        </div>
-
-        );
-    }
+       var title = "Login - Gamempire"
+       document.title = title
+       document.getElementById('title').textContent = title
+         return (
+           <div id="loginContainer" className="row align-center align-middle noselect">
+           <div className="content-loading"></div>
+               <div className="medium-6 large-6 column">
+               <img className="gamEmpireLogo" src="../app/img/GamEmpireLogo.png" />
+                   <div className="input-group required">
+                       <input className="input-group-field noselect" type="text" id="username" placeholder="Username" onKeyPress={this.userSubmit.bind(this)} value={this.state.userName|| ''} onChange={(event)=> {this.setState({userName: event.target.value})}}/>
+                       <span className="input-group-label">*</span>
+                   </div>
+                   <div className="input-group required">
+                       <input className="input-group-field noselect" type="password" id="passsword" placeholder="Password" onKeyPress={this.passSubmit.bind(this)} value={this.state.password|| ''} onChange={(event)=> {this.setState({password: event.target.value})}}/>
+                       <span className="input-group-label">*</span>
+                   </div>
+                   <center><div className="input-group-field" id="loginmsg"></div></center>
+                   <hr/>
+                   <input type="checkbox" onClick={this.rememberMe} value="remember-me" id="remember_me" /> Remember Me
+                   <button className="button" id="login" onClick={this._handleLogin.bind(this)}>Login</button>
+                   <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign Up</button>
+               </div>
+               <script type="text/javascript">
+ 
+               </script>
+           </div>
+         );
+     }
 
     _handleLogin() {
 
@@ -89,7 +137,8 @@ module.exports = class Login extends React.Component {
 
             .done((res) =>{
               $( ".content-loading" ).fadeOut( "slow" );
-              electron.remote.getGlobal('sharedObject').token = res;
+              var token =electron.remote.getGlobal('sharedObject').token = res;
+              
               ipc.sendSync('loggedIn')
               ReactDOM.render(
                 <SideBar />,
@@ -107,6 +156,18 @@ module.exports = class Login extends React.Component {
               	<Dashboardv2 />,
               	document.getElementById('content')
               )
+
+              $.post(api_server+"/user/load",{
+                'token': token
+              }).done((d)=> {
+                $.ajax({
+                  url:api_server+'/user/profile/'+ d._id + '/info',
+                  type:"GET"
+                        }).done((res2)=>{
+                  electron.remote.getGlobal('sharedObject').profile=res2;
+                  
+                });
+              });
 
             })
 
