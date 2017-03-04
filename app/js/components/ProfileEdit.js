@@ -107,12 +107,11 @@ module.exports = global.ProfileEdit = React.createClass({
     var pic = document.getElementById("profilepic").files;
 
     var image = new Image();
-    image.id = "pic";
     image.src = pic[0].path;
-    var canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas");
     canvas.width = 180;
     canvas.height = 180;
-    var canvas_context = canvas.getContext("2d");
+    var canvas_context = canvas.getContext('2d');
     canvas_context.drawImage(image, 0, 0, 180, 180);
     this.setState({
       avatar: canvas.toDataURL()
