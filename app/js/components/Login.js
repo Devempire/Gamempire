@@ -37,7 +37,7 @@ module.exports = class Login extends React.Component {
           $('#login').click();
        }
     }
-    
+
     rememberMe() {
        if ($('#remember_me').is(':checked')) {
            localStorage.usrname = $('#username').val();
@@ -49,7 +49,7 @@ module.exports = class Login extends React.Component {
            localStorage.chkbx = '';
        }
      }
- 
+
      loadCheck() {
        if (localStorage.chkbx && localStorage.chkbx != '') {
            $('#remember_me').attr('checked', 'checked');
@@ -57,7 +57,7 @@ module.exports = class Login extends React.Component {
            $('#remember_me').removeAttr('checked');
        }
      }
- 
+
      loadUsername() {
        if (localStorage.chkbx && localStorage.chkbx != '') {
            $('#username').val(localStorage.usrname);
@@ -66,7 +66,7 @@ module.exports = class Login extends React.Component {
            $('#username').val('');
        }
      }
- 
+
      loadPassword() {
        if (localStorage.chkbx && localStorage.chkbx != '') {
            $('#passsword').val(localStorage.pass);
@@ -75,7 +75,7 @@ module.exports = class Login extends React.Component {
            $('#passsword').val('');
        }
      }
- 
+
 
     render() {
        var title = "Login - Gamempire"
@@ -101,7 +101,7 @@ module.exports = class Login extends React.Component {
                    <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign Up</button>
                </div>
                <script type="text/javascript">
- 
+
                </script>
            </div>
          );
@@ -146,7 +146,7 @@ module.exports = class Login extends React.Component {
                         }).done((res2)=>{
 
                   electron.remote.getGlobal('sharedObject').layout=res2.layout;
-                  electron.remote.getGlobal('sharedObject').username=res2.username;
+                  electron.remote.getGlobal('sharedObject').username=res2.userName;
                   electron.remote.getGlobal('sharedObject').aboutme=res2.aboutme;
                   electron.remote.getGlobal('sharedObject').widget=res2.widgets;
                    ipc.sendSync('loggedIn')
