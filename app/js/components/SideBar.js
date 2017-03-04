@@ -26,12 +26,13 @@ module.exports = global.Bar = React.createClass({
   },
 
 	getInitialState() {
-		var profile = electron.remote.getGlobal('sharedObject').profile;
+    var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
+    var username = electron.remote.getGlobal('sharedObject').username;
 		var id =electron.remote.getGlobal('sharedObject').id;
 		return {
 			id:id,
-			username:profile.username,
-			aboutMe:profile.aboutme,
+			userName:username,
+			aboutMe:aboutme
 		};
 
 	},
@@ -41,7 +42,7 @@ module.exports = global.Bar = React.createClass({
 
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
-					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{this.state.username}</b></a>
+					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{electron.remote.getGlobal('sharedObject').username}</b></a>
 					<input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
 					{
