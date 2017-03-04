@@ -102,6 +102,11 @@ module.exports = global.ProfileEdit = React.createClass({
     jpgImage.width = 180;
     jpgImage.height = 180;
     console.log(jpgImage);
+    ReactDOM.render(
+      <img src={jpgImage.src} />,
+      document.getElementById('userAvatar')
+    );
+
 
     this.avatarCancel(); //in the end reset back to new pp.
   },
@@ -123,7 +128,7 @@ module.exports = global.ProfileEdit = React.createClass({
       <div key={i} data-grid={el} className="noselect">
         <h3>Edit Profile</h3>
         <hr/>
-
+          <div id='userAvatar'></div>
           <div id='avatarEditor'></div>
 
           <div id='upload'>
@@ -177,6 +182,7 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   uploadPic() {
+    document.getElementById('userAvatar').innerHTML = "";
     document.getElementById('save_cancel').style.display = "block";
     document.getElementById('upload').style.display = "none";
     var pic = document.getElementById("profilepic").files;
