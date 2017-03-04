@@ -1,4 +1,3 @@
-
 'use strict'
 
 //change the value to false when package, true for developing
@@ -69,11 +68,11 @@ app.on('ready', function() {
 
     session.fromPartition(arg.partition).webRequest.onHeadersReceived({}, (d, c) => {
 
-  	if(d.responseHeaders['x-frame-options'] || d.responseHeaders['X-Frame-Options']){
-  		delete d.responseHeaders['x-frame-options'];
-  		delete d.responseHeaders['X-Frame-Options'];
-  	}
-  	c({cancel: false, responseHeaders: d.responseHeaders, statusLine: d.statusLine});
+    if(d.responseHeaders['x-frame-options'] || d.responseHeaders['X-Frame-Options']){
+      delete d.responseHeaders['x-frame-options'];
+      delete d.responseHeaders['X-Frame-Options'];
+    }
+    c({cancel: false, responseHeaders: d.responseHeaders, statusLine: d.statusLine});
     });
 
   });
