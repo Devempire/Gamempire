@@ -82,9 +82,14 @@ app.on('ready', function() {
     var width = mainWindow.getBounds().width;
     var height = mainWindow.getBounds().height;
     var width1 = (width +1);
-    mainWindow.setContentSize(width1, height);
-    mainWindow.setContentSize(width, height);
 
+    if (!mainWindow.isMaximized()) {
+      mainWindow.setContentSize(width1, height);
+      mainWindow.setContentSize(width, height);
+    } else {
+      mainWindow.unmaximize();
+      mainWindow.maximize();
+    }
   });//Logged in resize
 
   ipc.on('loggedIn', function(event, arg){
