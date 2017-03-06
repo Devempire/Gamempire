@@ -79,6 +79,11 @@ app.on('ready', function() {
 
   ipc.on('quicksize', function(event, arg){
     event.returnValue='';
+    var width = mainWindow.getBounds().width;
+    var height = mainWindow.getBounds().height;
+    var width1 = (width +1);
+    mainWindow.setContentSize(width1, height);
+    mainWindow.setContentSize(width, height);
 
   });//Logged in resize
 

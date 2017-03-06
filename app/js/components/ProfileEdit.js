@@ -23,7 +23,7 @@ module.exports = global.ProfileEdit = React.createClass({
     return {
 
       layout: layout,
-      items:{i:"edit",x:0,y:0,w:10,h:30,static: true},
+      items:{i:"edit",x:0,y:0,w:12,h:27,static: true},
       pw:[],
       email:[],
       response:undefined,
@@ -74,7 +74,6 @@ module.exports = global.ProfileEdit = React.createClass({
                                 username:res.username,
                                 firstname:res.firstname,
                                 lastname:res.lastname,
-                                lastname:res.avatar,
                                 birthday:res.dateofbirth,
                                 avatar:avatar
                 });
@@ -139,7 +138,7 @@ module.exports = global.ProfileEdit = React.createClass({
     createProfile(el) {
       var i = el.i;
       return (
-        <div key={i} data-grid={el} className="noselect">
+        <div key={i} data-grid={el} className="noselect profileedit">
           <h3>Edit Profile</h3>
           <hr/>
             <div id='userAvatar'><img src={this.state.avatar} /></div>
@@ -157,25 +156,20 @@ module.exports = global.ProfileEdit = React.createClass({
                 <button onClick={(event) => {this.resetimage(this.state.avatar); this.avatarCancel();}} className="button secondary" id="Cancel">Cancel</button>
               </div>
             </div>
-          <br/>
+
           <font id='uploadmsg' color='red'></font>
-          <br/>
           <form>
-              Username: <br></br>
+              Username: <br/>
               <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
               <font id='uname' color='red'></font>
-              <br></br>
-              First Name: <br></br>
+              First Name: <br/>
               <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
               <font id='fname' color='red'></font>
-              <br></br>
-              Last Name: <br></br>
+              Last Name: <br/>
               <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
               <font id='lname' color='red'></font>
-              <br></br>
-              Birthday: <br></br>
+              Birthday: <br/>
               <input type="date" id="birthday" value={this.state.birthday} onChange={(event) => {this.setState({birthday: moment(event.target.value).format('YYYY-MM-DD')})}}/>
-              <br></br>
           </form>
 
           <div className="row expanded button-group">
@@ -276,13 +270,11 @@ module.exports = global.ProfileEdit = React.createClass({
           <input type="password" id="oldpw" />
           <font id='oldpass' color='red'></font>
           </label>
-          <br/>
           <label>
           New password:
           <input type="password" id="newpw" />
           <font id='newpass' color='red'></font>
           </label>
-          <br/>
           <label>
           Confirm password:
           <input type="password" id="cnewpw" />
@@ -326,14 +318,14 @@ module.exports = global.ProfileEdit = React.createClass({
 
       if(this.state.response){
         return (
-          <div>
+
             <ReactGridLayout onLayoutChange={this.onLayoutChange} onBreakpointChange={this.onBreakpointChange}
                 {...this.props}>
                 { this.createProfile(this.state.items)}
                 {_.map(this.state.pw, this.changePW)}
                 {_.map(this.state.email, this.changeEmail)}
             </ReactGridLayout>
-          </div>
+
         );
       }else{
           return (<div className="content-loading"></div>);

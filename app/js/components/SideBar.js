@@ -87,7 +87,7 @@ module.exports = global.Bar = React.createClass({
 				$(".toggleNav").css({"cursor":"url('../app/img/arrow_out.png'), auto"});
 		}
 		//quicksize might be obselete will remember to chekc back and remove
-		ipc.sendSync('quicksize')
+		ipc.sendSync('quicksize');
 	},
 
 	_Dashboard(){

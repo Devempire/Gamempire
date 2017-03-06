@@ -391,18 +391,14 @@ hr {
   transform: translateX(192px);
   width: calc(100% - 192px);
 }
-#discordFrame.navOpen {
+
+#profileedit.navOpen {
+  padding-left: 25px;
+  padding-right: 8px;
   transform: translateX(192px);
   width: calc(100% - 192px);
 }
-#soundcloudFrame.navOpen {
-  transform: translateX(192px);
-  width: calc(100% - 192px);
-}
-#spotifyFrame.navOpen {
-  transform: translateX(192px);
-  width: calc(100% - 192px);
-}
+
 #playgroundFrame.navOpen {
   padding-left: 25px;
   padding-right: 8px;
@@ -1094,4 +1090,10 @@ input[type="file"] {
 #save_cancel {
   display: none;
 
+}
+
+
+#userAvatar img{
+  width: 256px;
+  height: 256px;
 }
