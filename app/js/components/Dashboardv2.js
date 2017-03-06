@@ -10,7 +10,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     return {
       breakpoint: "md",
       className: "layout",
-      cols: {lg: 12, md: 12, sm: 12, xs: 4, xxs: 4},
+      cols: {lg: 12, md: 24, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
     };
   },
