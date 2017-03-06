@@ -26,12 +26,13 @@ module.exports = global.Bar = React.createClass({
   },
 
 	getInitialState() {
-		var profile = electron.remote.getGlobal('sharedObject').profile;
+		var username = electron.remote.getGlobal('sharedObject').username;
+		var aboutme =electron.remote.getGlobal('sharedObject').aboutme;
 		var id =electron.remote.getGlobal('sharedObject').id;
 		return {
 			id:id,
-			username:profile.username,
-			aboutMe:profile.aboutme,
+			username:username,
+			aboutMe:aboutme,
 		};
 
 	},
@@ -137,7 +138,9 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Logout(){
-		electron.remote.getGlobal('sharedObject').profile=null;
+		electron.remote.getGlobal('sharedObject').username=null;
+		electron.remote.getGlobal('sharedObject').aboutme=null;
+		electron.remote.getGlobal('sharedObject').widget=null;
 		electron.remote.getGlobal('sharedObject').token=null;
 		electron.remote.getGlobal('sharedObject').id=null;
 		electron.remote.getGlobal('sharedObject').layout=null;
