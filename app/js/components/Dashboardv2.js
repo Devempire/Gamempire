@@ -10,7 +10,7 @@ module.exports = global.Dashboardv2 = React.createClass({
     return {
       breakpoint: "md",
       className: "layout",
-      cols: {lg: 18, md: 24, sm: 12, xs: 4, xxs: 4},
+      cols: {lg: 12, md: 12, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
     };
   },
@@ -184,7 +184,7 @@ module.exports = global.Dashboardv2 = React.createClass({
                           var y = 4*(i/2);
                           var x = (i%2) *12;
                         }
-                        
+
                         this.setState({
                               games: this.state.games.concat({
                                 i: this.state.selectwidget,
@@ -211,10 +211,10 @@ module.exports = global.Dashboardv2 = React.createClass({
                              }).done((res3)=>{
                             electron.remote.getGlobal('sharedObject').widget=res3.widgets;
                           });
-                          
 
-                            
-                            
+
+
+
 
                         });
                       }).fail((err)=>{
@@ -313,9 +313,9 @@ module.exports = global.Dashboardv2 = React.createClass({
                               type:"GET"
                              }).done((res3)=>{
                             electron.remote.getGlobal('sharedObject').widget=res3.widgets;
-                            
+
                           });
-                      
+
                      }).fail((res)=>{
                       console.log("fail to remove");
                      });
