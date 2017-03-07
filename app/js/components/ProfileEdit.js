@@ -4,7 +4,7 @@ ReactGridLayout = WidthProvider(ReactGridLayout);
 import AvatarEditor from 'react-avatar-editor'
 
 const originalLayouts = getFromLS('layouts') || {};
-const fs = require('fs');
+var fs = require('fs')
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
@@ -27,7 +27,6 @@ module.exports = global.ProfileEdit = React.createClass({
       pw:[],
       email:[],
       response:undefined,
-      userid:null,
       username:null,
       lastname:null,
       firstname:null,
@@ -71,7 +70,6 @@ module.exports = global.ProfileEdit = React.createClass({
                 }
 
                 this.setState({response:res,
-                                userid:d._id,
                                 username:res.username,
                                 firstname:res.firstname,
                                 lastname:res.lastname,
@@ -103,6 +101,7 @@ module.exports = global.ProfileEdit = React.createClass({
     //Push the tile name to userDB e.g. "avatar": "58b93ee3a7c98c3001ad48a8.jpg"
 
     var pic = document.getElementById("profilepic").files;
+    var token = electron.remote.getGlobal('sharedObject').token;
 
     var image = new Image();
     image.src = pic[0].path;
@@ -115,9 +114,28 @@ module.exports = global.ProfileEdit = React.createClass({
       avatar: canvas.toDataURL()
     })
 
+    $.post(api_server+"/user/load",
+
+        {
+            'token' :token
+        }).done((d)=> {
+            $.ajax({
+                    url:api_server+"/user/profile/updateAvatar",
+                    type:"POST",
+                    data:{
+                        _id:d._id,
+                        avatar:this.state.avatar
+                    }
+                }).done((res)=>{
+                    console.log('hi');
+                }).fail((err)=>{
+                    console.log('hey');
+                });
+            });
+
     //Debugging
     console.log(image)
-    console.log('Conerted canvas data URL: '+canvas.toDataURL());
+    console.log('Converted canvas data URL: '+canvas.toDataURL());
 
     this.avatarCancel(); //in the end reset back to new pp.
     this.resetimage(canvas.toDataURL()); //Display picture is reset based on state.avatar property

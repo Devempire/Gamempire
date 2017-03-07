@@ -45,15 +45,15 @@
   },
   "dependencies": {
     "foundation-sites": "^6.3.0",
-    "soundcloud-node-api": "^0.0.8",
     "jquery": "^3.1.1",
     "lodash": "^4.13.1",
     "moment": "^2.17.1",
     "react": "^15.1.0",
+    "react-avatar-editor": "^8.0.1",
     "react-dom": "^15.1.0",
     "react-tap-event-plugin": "^2.0.1",
     "request": "^2.69.0",
-    "unirest": "^0.5.1",
-    "react-avatar-editor": "^8.0.1"
+    "soundcloud-node-api": "^0.0.8",
+    "unirest": "^0.5.1"
   }
 }
