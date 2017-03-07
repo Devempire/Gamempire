@@ -144,7 +144,7 @@ module.exports = global.Bar = React.createClass({
 		electron.remote.getGlobal('sharedObject').token=null;
 		electron.remote.getGlobal('sharedObject').id=null;
 		electron.remote.getGlobal('sharedObject').layout=null;
-		console.log(electron.remote.getGlobal('sharedObject'));
+		//console.log(electron.remote.getGlobal('sharedObject'));
 
 		ipc.sendSync('loggedOut')
 		ReactDOM.render(

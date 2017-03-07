@@ -81,83 +81,83 @@ module.exports = global.HSDeckBuilder = React.createClass({
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Druid?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         //increment the value if a new hero is added or decrement if a hero is removed
         var i = 1;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Hunter') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Hunter?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Mage') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Mage?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 3;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Paladin') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Paladin?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Priest') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Priest?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Rogue') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Rogue?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 1;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Shaman') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Shaman?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Warlock') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Warlock?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 1;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Warrior') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Warrior?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        console.log(this.state.classCards);
+        //console.log(this.state.classCards);
       }.bind(this));
     }
   },

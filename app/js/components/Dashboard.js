@@ -49,7 +49,7 @@ module.exports = global.Dashboard = React.createClass({
                            })
                        }).done((res)=>{
                         electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
-                        console.log("layout on server!");
+                        
                       }).fail((err)=>{
                         console.log("layout fail to update to server!")
 
@@ -135,7 +135,7 @@ module.exports = global.Dashboard = React.createClass({
 
 
   onBreakpointChange(breakpoint, cols) {
-    console.log('onBreakpointChange Triggered \n    Breakpoint: '+ breakpoint+'\n     Cols: ' + cols );
+    //console.log('onBreakpointChange Triggered \n    Breakpoint: '+ breakpoint+'\n     Cols: ' + cols );
     this.setState({
       breakpoint: breakpoint,
       cols: cols
@@ -316,7 +316,7 @@ module.exports = global.Dashboard = React.createClass({
                              widgetid:i
                          })
                      }).done((res)=>{
-                      console.log("remvoed!");
+                      //console.log("remvoed!");
                       $.ajax({
                               url:api_server+'/user/profile/'+ this.state.id + '/info',
                               type:"GET"
