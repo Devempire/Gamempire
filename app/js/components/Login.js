@@ -27,6 +27,7 @@ module.exports = class Login extends React.Component {
          else if (psw == "" || psw == null){
            $("#passsword").focus();
          }else{
+
            $('#login').click();
          }
        }
@@ -38,17 +39,7 @@ module.exports = class Login extends React.Component {
        }
     }
 
-    rememberMe() {
-       if ($('#remember_me').is(':checked')) {
-           localStorage.usrname = $('#username').val();
-           localStorage.pass = $('#passsword').val();
-           localStorage.chkbx = $('#remember_me').val();
-       } else {
-           localStorage.usrname = '';
-           localStorage.pass = '';
-           localStorage.chkbx = '';
-       }
-     }
+  
 
      loadCheck() {
        if (localStorage.chkbx && localStorage.chkbx != '') {
@@ -96,7 +87,7 @@ module.exports = class Login extends React.Component {
                    </div>
                    <center><div className="input-group-field" id="loginmsg"></div></center>
                    <hr/>
-                   <input type="checkbox" onClick={this.rememberMe} value="remember-me" id="remember_me" /> Remember Me
+                   <input type="checkbox" value="remember-me" id="remember_me" /> Remember Me
                    <button className="button" id="login" onClick={this._handleLogin.bind(this)}>Login</button>
                    <button className="button secondary" onClick={this._handleRegistry.bind(this)}>Sign Up</button>
                </div>
@@ -109,7 +100,15 @@ module.exports = class Login extends React.Component {
 
 
     _handleLogin() {
-
+      if ($('#remember_me').is(':checked')) {
+           localStorage.usrname = $('#username').val();
+           localStorage.pass = $('#passsword').val();
+           localStorage.chkbx = $('#remember_me').val();
+       } else {
+           localStorage.usrname = '';
+           localStorage.pass = '';
+           localStorage.chkbx = '';
+       }
     var user_id = this.state.userName;
     var pwrd = this.state.password;
     if (user_id==null || user_id=="" || pwrd==null || pwrd=="")
