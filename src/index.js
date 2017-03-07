@@ -87,7 +87,6 @@ app.on('ready', function() {
       mainWindow.setContentSize(width1, height);
       mainWindow.setContentSize(width, height);
     } else {
-      mainWindow.unmaximize();
       mainWindow.maximize();
     }
   });//Logged in resize
