@@ -17,7 +17,7 @@ module.exports = global.Bar = React.createClass({
                              aboutme:this.state.aboutMe
                          })
                      }).done((res)=>{
-                      console.log("aboutme on server!");
+                      
                     }).fail((err)=>{
                       console.log("aboutme fail to update to server!")
                     });

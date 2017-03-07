@@ -61,7 +61,13 @@ module.exports = global.Dashboard = React.createClass({
     $.get(api_server+"/widget/show").done((res)=>{
 
       for (var i = 0; i < res.length; i++) {
-         this.setState({
+        for(var j=0; j<this.state.widget.length;j++){
+          if (res[i]._id ==this.state.widget[j].widgetid) {
+            res.splice(i, 1);
+            
+          }
+        }
+          this.setState({
           widgets: this.state.widgets.concat({
             value:res[i]._id,
             text:res[i].widgetname,
@@ -70,6 +76,7 @@ module.exports = global.Dashboard = React.createClass({
          });
 
       }
+      
     }).fail((err)=>{
       console.log("something wrong with the load widget");
     });
@@ -158,19 +165,7 @@ module.exports = global.Dashboard = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
-    var L = this.state.games.length;
-    for (var h = 0; h < L; h++) {
-      if(this.state.selectwidget === this.state.games[h].i){
-        $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
-        $("#msg").addClass('label warning input-group-field');
-        $("#msg").addClass("shake");
-        $("#msg").show();
-        setTimeout(function () {
-          $("#msg").removeClass("shake");
-        },200);
-        return false;
-      }
-    }
+    
 
 
                  $.ajax({
@@ -208,8 +203,7 @@ module.exports = global.Dashboard = React.createClass({
                                 minW: res2.minW,
                                 maxW: res2.maxW,
                               }),
-                              widget:this.state.widget.concat({
-                              "widgetid": this.selectwidget}),
+                              widgets: _.reject(this.state.widgets, {value: this.state.selectwidget}),
                               showStore:false,
                               selectwidget:'',
 
@@ -220,6 +214,7 @@ module.exports = global.Dashboard = React.createClass({
                              }).done((res3)=>{
                             electron.remote.getGlobal('sharedObject').widget=res3.widgets;
                           });
+                        $( "#add_widget_button" ).prop( "disabled", true );
 
 
 
@@ -316,7 +311,15 @@ module.exports = global.Dashboard = React.createClass({
                              widgetid:i
                          })
                      }).done((res)=>{
-                      //console.log("remvoed!");
+                      $.get(api_server+'/widget/find/'+ i + '/info').done((res2)=>{
+                        this.setState({
+                              widgets: this.state.widgets.concat({
+                                value:res2._id,
+                                text:res2.widgetname,
+                                widgettype:res2.widgettype
+                              })
+                            });
+                          });
                       $.ajax({
                               url:api_server+'/user/profile/'+ this.state.id + '/info',
                               type:"GET"
