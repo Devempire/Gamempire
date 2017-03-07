@@ -35,7 +35,10 @@ module.exports = global.Dashboard = React.createClass({
 
     onLayoutChange(layout, layouts) {
 
-        this.setState({layouts});
+      this.setState({layouts});
+      if(JSON.stringify(layouts.md)=="[]") {
+              //console.log('Just stopped a unnecessary API request on blank layouts.');
+      }else{
         $.ajax({
           url:api_server+"/user/profile/updatelayout",
           type:"PUT",
@@ -51,7 +54,7 @@ module.exports = global.Dashboard = React.createClass({
                         console.log("layout fail to update to server!")
 
                       })
-
+      }
     },
 
   loadWidgets(){
@@ -91,10 +94,12 @@ module.exports = global.Dashboard = React.createClass({
                 ww=mdl[j].w;
                 hh=mdl[j].h;
                 }
-                console.log('x: '+ xx);
-                console.log('y: '+yy);
-                console.log('w: '+ww);
-                console.log('h: '+hh);
+
+                //Debugging
+                //console.log('x: '+ xx);
+                //console.log('y: '+yy);
+                //console.log('w: '+ww);
+                //console.log('h: '+hh);
             }
 
             this.setState({
@@ -125,15 +130,12 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   componentDidMount: function(){
-
-    console.log("component did mouint!");
-
+    //console.log("component did mouint!");
   },
 
 
   onBreakpointChange(breakpoint, cols) {
-    console.log(breakpoint);
-    console.log(cols);
+    console.log('onBreakpointChange Triggered \n    Breakpoint: '+ breakpoint+'\n     Cols: ' + cols );
     this.setState({
       breakpoint: breakpoint,
       cols: cols
