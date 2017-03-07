@@ -81,13 +81,21 @@ app.on('ready', function() {
     event.returnValue='';
     var width = mainWindow.getBounds().width;
     var height = mainWindow.getBounds().height;
-    var width1 = (width +1);
+    var x = mainWindow.getBounds().x;
+    var y = mainWindow.getBounds().y;
+    var width1 = (width -1);
 
     if (!mainWindow.isMaximized()) {
       mainWindow.setContentSize(width1, height);
       mainWindow.setContentSize(width, height);
     } else {
+      mainWindow.setPosition(x, y);
+      mainWindow.setContentSize(width1, height);
+
       mainWindow.maximize();
+
+      //mainWindow.setContentSize(width1, height);
+      //mainWindow.maximize();
     }
   });//Logged in resize
 

@@ -93,7 +93,7 @@ module.exports = global.Bar = React.createClass({
 	_Dashboard(){
 
 		ReactDOM.render(
-		  	<Dashboardv2 />,
+		  	<Dashboard />,
 		  	document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
