@@ -1,3 +1,5 @@
+//This file is intended to be the only place we currently have to hardcode the WidgetIDs.
+
 const discord = '58b93e79a7c98c3001ad48a4';
 const messenger = '58b93e8ca7c98c3001ad48a5';
 const steamchat = '58b93e97a7c98c3001ad48a6';

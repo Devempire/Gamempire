@@ -23,7 +23,7 @@ module.exports = global.ProfileEdit = React.createClass({
     return {
 
       layout: layout,
-      items:{i:"edit",x:0,y:0,w:10,h:30,static: true},
+      items:{i:"edit",x:0,y:0,w:12,h:27,static: true},
       pw:[],
       email:[],
       response:undefined,
@@ -63,21 +63,21 @@ module.exports = global.ProfileEdit = React.createClass({
      $.post(api_server+"/user/load",{
         'token': token
          }).done((d)=> {
-            $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
-              if (!res.avatar) {
-                var avatar = './../app/img/user.jpg';
-              } else {
-                var avatar = res.avatar;
-              }
+             $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
+                if (!res.avatar) {
+                  var avatar = './../app/img/user.jpg';
+                } else {
+                  var avatar = res.avatar;
+                }
 
-              this.setState({response: res,
-                              userid:d._id,
-                              username:res.username,
-                              firstname:res.firstname,
-                              lastname:res.lastname,
-                              birthday:res.dateofbirth,
-                              avatar:avatar
-              });
+                this.setState({response:res,
+                                userid:d._id,
+                                username:res.username,
+                                firstname:res.firstname,
+                                lastname:res.lastname,
+                                birthday:res.dateofbirth,
+                                avatar:avatar
+                });
         });
     });
   },
@@ -87,9 +87,7 @@ module.exports = global.ProfileEdit = React.createClass({
     global.avatar_scale = this.state.scale;
   },
 
-
   resetimage(e){
-
     ReactDOM.render(
       <img src={e} />,
       document.getElementById('userAvatar')
@@ -101,7 +99,7 @@ module.exports = global.ProfileEdit = React.createClass({
     //take output image and make sure it's 180x180.
     //make sure the image if formated to JPEG. Doesn't matter if user uploads bmp,gif etc, app should convert to 180x180 JPEG image.
     //rename the ouput image to users ID  (e.g. 58b93ee3a7c98c3001ad48a8.jpg)
-    //Push this image to server inside ~/server/view/img/avatars/ i think is the directory. double check server via API request upload put. Overwriite current image on sever if exists.
+    //Push this image to server inside ~/server/view/img/avatar/ i think is the directory. double check server via API request upload put. Overwriite current image on sever if exists.
     //Push the tile name to userDB e.g. "avatar": "58b93ee3a7c98c3001ad48a8.jpg"
 
     var pic = document.getElementById("profilepic").files;
@@ -117,11 +115,9 @@ module.exports = global.ProfileEdit = React.createClass({
       avatar: canvas.toDataURL()
     })
 
-    
-
     //Debugging
     console.log(image)
-    console.log('Converted canvas data URL: '+canvas.toDataURL());
+    console.log('Conerted canvas data URL: '+canvas.toDataURL());
 
     this.avatarCancel(); //in the end reset back to new pp.
     this.resetimage(canvas.toDataURL()); //Display picture is reset based on state.avatar property
@@ -141,7 +137,7 @@ module.exports = global.ProfileEdit = React.createClass({
   createProfile(el) {
     var i = el.i;
     return (
-      <div key={i} data-grid={el} className="noselect">
+      <div key={i} data-grid={el} className="noselect profileedit">
         <h3>Edit Profile</h3>
         <hr/>
           <div id='userAvatar'><img src={this.state.avatar} /></div>
@@ -159,25 +155,20 @@ module.exports = global.ProfileEdit = React.createClass({
               <button onClick={(event) => {this.resetimage(this.state.avatar); this.avatarCancel();}} className="button secondary" id="Cancel">Cancel</button>
             </div>
           </div>
-        <br/>
+
         <font id='uploadmsg' color='red'></font>
-        <br/>
         <form>
-            Username: <br></br>
+            Username: <br/>
             <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
             <font id='uname' color='red'></font>
-            <br></br>
-            First Name: <br></br>
+            First Name: <br/>
             <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
             <font id='fname' color='red'></font>
-            <br></br>
-            Last Name: <br></br>
+            Last Name: <br/>
             <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
             <font id='lname' color='red'></font>
-            <br></br>
-            Birthday: <br></br>
+            Birthday: <br/>
             <input type="date" id="birthday" value={this.state.birthday} onChange={(event) => {this.setState({birthday: moment(event.target.value).format('YYYY-MM-DD')})}}/>
-            <br></br>
         </form>
 
         <div className="row expanded button-group">
@@ -278,13 +269,11 @@ module.exports = global.ProfileEdit = React.createClass({
         <input type="password" id="oldpw" />
         <font id='oldpass' color='red'></font>
         </label>
-        <br/>
         <label>
         New password:
         <input type="password" id="newpw" />
         <font id='newpass' color='red'></font>
         </label>
-        <br/>
         <label>
         Confirm password:
         <input type="password" id="cnewpw" />
@@ -328,14 +317,14 @@ module.exports = global.ProfileEdit = React.createClass({
 
     if(this.state.response){
       return (
-        <div>
+
           <ReactGridLayout onLayoutChange={this.onLayoutChange} onBreakpointChange={this.onBreakpointChange}
               {...this.props}>
               { this.createProfile(this.state.items)}
               {_.map(this.state.pw, this.changePW)}
               {_.map(this.state.email, this.changeEmail)}
           </ReactGridLayout>
-        </div>
+
       );
     }else{
         return (<div className="content-loading"></div>);

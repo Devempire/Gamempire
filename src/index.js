@@ -79,7 +79,16 @@ app.on('ready', function() {
 
   ipc.on('quicksize', function(event, arg){
     event.returnValue='';
+    var width = mainWindow.getBounds().width;
+    var height = mainWindow.getBounds().height;
+    var width1 = (width +1);
 
+    if (!mainWindow.isMaximized()) {
+      mainWindow.setContentSize(width1, height);
+      mainWindow.setContentSize(width, height);
+    } else {
+      mainWindow.maximize();
+    }
   });//Logged in resize
 
   ipc.on('loggedIn', function(event, arg){
