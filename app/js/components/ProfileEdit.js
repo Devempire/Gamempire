@@ -175,7 +175,7 @@ module.exports = global.ProfileEdit = React.createClass({
           <button className="button" onClick={this.checkValid}> Submit </button>
           <button className="button" onClick={this.onAddchangepw}>Change Password</button>
           <button className="button" onClick={this.onAddchangeEmail}>Change Email</button>
-          <button className="button secondary" onClick={this.backToDashboard}>Back</button>
+          <button className="button secondary" onClick={this.backToDashboard}>Back to Dashboard</button>
         </div>
       </div>
     );
@@ -253,7 +253,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
   backToDashboard() {
   let MainWindow =  ReactDOM.render(
-        <Dashboardv2 />,
+        <Dashboard />,
         document.getElementById('content'));
   },
 

@@ -162,7 +162,7 @@ module.exports = class Login extends React.Component {
               document.getElementById('playgroundFrame').style.visibility = "hidden";
 
               ReactDOM.render(
-                <Dashboardv2 />,
+                <Dashboard />,
                 document.getElementById('content')
               )
 

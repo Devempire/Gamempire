@@ -21,13 +21,11 @@ global.api_server = "http://gamempire.net";
 
 global.Login = require('./components/Login.js')
 global.Registration = require('./components/Registration.js')
-//global.Dashboard = require('./components/Dashboard.js')
 global.ProfileEdit = require('./components/ProfileEdit.js')
 global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
 global.SideBar = require('./components/SideBar.js')
-//global.Playground = require('./components/Playground.js')
-global.Dashboardv2 = require('./components/Dashboardv2.js')
-//let Index = require('./components/index.js')
+global.Dashboard = require('./components/Dashboard.js')
+
 injectTapEventPlugin();
 
 ReactDOM.render(
