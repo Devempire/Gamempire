@@ -19,7 +19,7 @@ module.exports = global.Dashboardv2 = React.createClass({
   getInitialState() {
     var widget = electron.remote.getGlobal('sharedObject').widget;
     var layout = electron.remote.getGlobal('sharedObject').layout;
-    var id =electron.remote.getGlobal('sharedObject').id;
+    var id = electron.remote.getGlobal('sharedObject').id;
     return {
       games:[],
       widgets:[],
@@ -42,7 +42,7 @@ module.exports = global.Dashboardv2 = React.createClass({
           contentType: 'application/json; charset=utf-8',
           data:JSON.stringify({
                                _id:this.state.id,
-                               layout:this.state.layouts
+                               layout:layouts
                            })
                        }).done((res)=>{
                         electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
@@ -124,9 +124,16 @@ module.exports = global.Dashboardv2 = React.createClass({
     this.loadWidgets();
   },
 
+  componentDidMount: function(){
+
+    console.log("component did mouint!");
+
+  },
 
 
   onBreakpointChange(breakpoint, cols) {
+    console.log(breakpoint);
+    console.log(cols);
     this.setState({
       breakpoint: breakpoint,
       cols: cols
