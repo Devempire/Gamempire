@@ -6,7 +6,6 @@ const _ = require('lodash')
 const moment = require('moment')
 const PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin.js')
 const ReactGridLayout = require('react-grid-layout');
-global.$ = require('jquery')
 
 window.React = React
 window.ReactDOM = ReactDOM

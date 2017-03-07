@@ -91,27 +91,19 @@ module.exports = global.ProfileEdit = React.createClass({
       document.getElementById('userAvatar')
     );
   },
-
+  setEditorRef (editor) {
+     if (editor) this.editor = editor
+   },
   avatarSave(){
-    //TODO:
-    //take output image and make sure it's 180x180.
-    //make sure the image if formated to JPEG. Doesn't matter if user uploads bmp,gif etc, app should convert to 180x180 JPEG image.
-    //rename the ouput image to users ID  (e.g. 58b93ee3a7c98c3001ad48a8.jpg)
-    //Push this image to server inside ~/server/view/img/avatar/ i think is the directory. double check server via API request upload put. Overwriite current image on sever if exists.
-    //Push the tile name to userDB e.g. "avatar": "58b93ee3a7c98c3001ad48a8.jpg"
 
-    var pic = document.getElementById("profilepic").files;
+    const imgData = this.editor.getImageScaledToCanvas();
+    console.log('Conerted canvas data URL: ' + imgData.toDataURL('image/jpeg'));
+
+    this.avatarCancel(); //in the end reset back to new pp.
+    this.resetimage(imgData.toDataURL()); //Display picture is reset based on state.avatar property
     var token = electron.remote.getGlobal('sharedObject').token;
-
-    var image = new Image();
-    image.src = pic[0].path;
-    const canvas = document.createElement("canvas");
-    canvas.width = 180;
-    canvas.height = 180;
-    var canvas_context = canvas.getContext('2d');
-    canvas_context.drawImage(image, 0, 0, 180, 180);
     this.setState({
-      avatar: canvas.toDataURL()
+      avatar: imgData.toDataURL()
     })
 
     $.post(api_server+"/user/load",
@@ -124,7 +116,7 @@ module.exports = global.ProfileEdit = React.createClass({
                     type:"POST",
                     data:{
                         _id:d._id,
-                        avatar:this.state.avatar
+                        avatar:imgData.toDataURL()
                     }
                 }).done((res)=>{
                     console.log('hi');
@@ -133,12 +125,6 @@ module.exports = global.ProfileEdit = React.createClass({
                 });
             });
 
-    //Debugging
-    console.log(image)
-    console.log('Converted canvas data URL: '+canvas.toDataURL());
-
-    this.avatarCancel(); //in the end reset back to new pp.
-    this.resetimage(canvas.toDataURL()); //Display picture is reset based on state.avatar property
   },
 
   avatarCancel(){
@@ -215,6 +201,7 @@ module.exports = global.ProfileEdit = React.createClass({
     const element = (
       <div>
       <AvatarEditor
+          ref={this.setEditorRef}
           image={pic[0].path}
           width={180}
           height={180}
