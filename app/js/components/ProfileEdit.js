@@ -63,7 +63,6 @@ module.exports = global.ProfileEdit = React.createClass({
         'token': token
          }).done((d)=> {
              $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
-               console.log(res.avatar);
                 if (!res.avatar) {
                   var avatar = './../app/img/user.jpg';
                 } else {
@@ -98,7 +97,7 @@ module.exports = global.ProfileEdit = React.createClass({
   avatarSave(){
 
     const imgData = this.editor.getImageScaledToCanvas();
-    console.log('Conerted canvas data URL: ' + imgData.toDataURL('image/jpeg'));
+    //console.log('Conerted canvas data URL: ' + imgData.toDataURL('image/jpeg'));
 
     this.avatarCancel(); //in the end reset back to new pp.
     this.resetimage(imgData.toDataURL()); //Display picture is reset based on state.avatar property

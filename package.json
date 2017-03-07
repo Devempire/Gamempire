@@ -1,11 +1,11 @@
 {
   "name": "Gamempire",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Phase 1",
   "main": "build/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vulpino/berb.git"
+    "url": "git+https://github.com/devempire/gamempire.git"
   },
   "author": "Borys Kotanski, Seong-Min Jeong, Jiaqin Meng, Nathan Pilla",
   "license": "Copyright © 2017 Gaming Hub Inc.",
@@ -53,7 +53,6 @@
     "react-dom": "^15.1.0",
     "react-tap-event-plugin": "^2.0.1",
     "request": "^2.69.0",
-    "soundcloud-node-api": "^0.0.8",
     "unirest": "^0.5.1"
   }
 }

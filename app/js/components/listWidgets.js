@@ -8,6 +8,7 @@ const soundcloud = '58b93eafa7c98c3001ad48a7';
 const googleplaymusic = '58b93ee3a7c98c3001ad48a8';
 
 const heathstonebuilder = '58b93f03a7c98c3001ad48a9';
+const soundcloudapp = '58be7102884985c454420bbd';
 
 class listWidgets {
   loadwid(i) {
@@ -22,6 +23,7 @@ class listWidgets {
 
   loadjsx(i) {
     if ( i == heathstonebuilder) { return ( <div className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
+    if ( i == soundcloudapp) { return ( <div className="hearthstone_scroll widget jsx"><Soundcloud /></div> ); }
   }
 }
 

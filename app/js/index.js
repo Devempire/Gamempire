@@ -20,10 +20,11 @@ global.api_server = "http://gamempire.net";
 
 global.Login = require('./components/Login.js')
 global.Registration = require('./components/Registration.js')
-global.ProfileEdit = require('./components/ProfileEdit.js')
-global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
 global.SideBar = require('./components/SideBar.js')
 global.Dashboard = require('./components/Dashboard.js')
+global.ProfileEdit = require('./components/ProfileEdit.js')
+global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
+global.Soundcloud = require('./components/Soundcloud.js')
 
 injectTapEventPlugin();
 
