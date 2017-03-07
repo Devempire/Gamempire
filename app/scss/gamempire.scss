@@ -1092,8 +1092,14 @@ input[type="file"] {
 
 }
 
-
 #userAvatar img{
   width: 256px;
   height: 256px;
+}
+
+.custom-file-upload.remove {
+  width: 32px;
+  margin-left: 4px;
+  padding-left: 0px;
+  padding-right: 0px;
 }

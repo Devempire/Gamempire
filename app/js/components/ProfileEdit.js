@@ -63,10 +63,11 @@ module.exports = global.ProfileEdit = React.createClass({
         'token': token
          }).done((d)=> {
              $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
+               console.log(res.avatar);
                 if (!res.avatar) {
                   var avatar = './../app/img/user.jpg';
                 } else {
-                  var avatar = res.avatar;
+                  var avatar = 'http://gamempire.net/img/avatars/'+d._id+'.jpg?' + new Date().getTime();
                 }
 
                 this.setState({response:res,
@@ -103,7 +104,7 @@ module.exports = global.ProfileEdit = React.createClass({
     this.resetimage(imgData.toDataURL()); //Display picture is reset based on state.avatar property
     var token = electron.remote.getGlobal('sharedObject').token;
     this.setState({
-      avatar: imgData.toDataURL()
+      avatar: imgData.toDataURL('image/jpeg')
     })
 
     $.post(api_server+"/user/load",
@@ -116,12 +117,12 @@ module.exports = global.ProfileEdit = React.createClass({
                     type:"POST",
                     data:{
                         _id:d._id,
-                        avatar:imgData.toDataURL()
+                        avatar:imgData.toDataURL('image/jpeg')
                     }
                 }).done((res)=>{
-                    console.log('hi');
+                    console.log('New avatar updated');
                 }).fail((err)=>{
-                    console.log('hey');
+                    console.log('avatar update failed');
                 });
             });
 
@@ -138,6 +139,12 @@ module.exports = global.ProfileEdit = React.createClass({
     document.getElementById('upload').style.display = "block";
   },
 
+  deleteAvatar(){
+    console.log("TODO:\n    1. Write API on routeUser.js that will be at /user/profile/deleteAvatar\n        This api will set the users avatar boolean to false. \n        This api should also delete the usersID.jpg image from the sever located in /view/img/avatars/");
+
+
+  },
+
   createProfile(el) {
     var i = el.i;
     return (
@@ -151,6 +158,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <br/>
             <label htmlFor='profilepic' className='custom-file-upload'>Upload Profile Picture</label>
             <input id='profilepic' onChange={this.uploadPic} type='file' accept='image/*'/>
+            <label onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
           </div>
 
           <div id='save_cancel'>
