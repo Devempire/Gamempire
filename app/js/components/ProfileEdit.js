@@ -91,11 +91,12 @@ module.exports = global.ProfileEdit = React.createClass({
       document.getElementById('userAvatar')
     );
   },
-  setEditorRef (editor) {
-     if (editor) this.editor = editor
-   },
-  avatarSave(){
 
+  setEditorRef (editor) {
+    if (editor) this.editor = editor
+  },
+
+  avatarSave(){
     const imgData = this.editor.getImageScaledToCanvas();
     //console.log('Conerted canvas data URL: ' + imgData.toDataURL('image/jpeg'));
 
@@ -107,7 +108,6 @@ module.exports = global.ProfileEdit = React.createClass({
     })
 
     $.post(api_server+"/user/load",
-
         {
             'token' :token
         }).done((d)=> {
@@ -119,12 +119,11 @@ module.exports = global.ProfileEdit = React.createClass({
                         avatar:imgData.toDataURL('image/jpeg')
                     }
                 }).done((res)=>{
-                    console.log('New avatar updated');
+                    console.log('New avatar updated.');
                 }).fail((err)=>{
-                    console.log('avatar update failed');
+                    console.log('Avatar update failed.');
                 });
             });
-
   },
 
   avatarCancel(){
@@ -139,9 +138,25 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   deleteAvatar(){
-    console.log("TODO:\n    1. Write API on routeUser.js that will be at /user/profile/deleteAvatar\n        This api will set the users avatar boolean to false. \n        This api should also delete the usersID.jpg image from the sever located in /view/img/avatars/");
-
-
+    var token = electron.remote.getGlobal('sharedObject').token;
+    var avatar = './../app/img/user.jpg';
+    $.post(api_server+"/user/load",
+        {
+            'token' :token
+        }).done((d)=> {
+            $.ajax({
+                    url:api_server+"/user/profile/deleteAvatar",
+                    type:"PUT",
+                    data:{
+                        _id:d._id,
+                    }
+                }).done((res)=>{
+                    console.log('Avatar deleted.');
+                }).fail((err)=>{
+                    console.log('Avatar deletion failed.');
+                });
+            });
+    this.resetimage(avatar);
   },
 
   createProfile(el) {
