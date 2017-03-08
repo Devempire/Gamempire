@@ -59,19 +59,20 @@ module.exports = global.Dashboard = React.createClass({
 
   loadWidgets(){
     $.get(api_server+"/widget/show").done((res)=>{
-
+      var copy =res;
+      console.log(res);
       for (var i = 0; i < res.length; i++) {
         for(var j=0; j<this.state.widget.length;j++){
           if (res[i]._id ==this.state.widget[j].widgetid) {
-            res.splice(i, 1);
+            copy.splice(i, 1);
             
           }
         }
           this.setState({
           widgets: this.state.widgets.concat({
-            value:res[i]._id,
-            text:res[i].widgetname,
-            widgettype:res[i].widgettype
+            value:copy[i]._id,
+            text:copy[i].widgetname,
+            widgettype:copy[i].widgettype
           })
          });
 
@@ -133,10 +134,11 @@ module.exports = global.Dashboard = React.createClass({
   componentWillMount: function(){
 
     this.loadLayout();
-    this.loadWidgets();
+    
   },
 
   componentDidMount: function(){
+    this.loadWidgets();
     //console.log("component did mouint!");
   },
 
@@ -165,8 +167,19 @@ module.exports = global.Dashboard = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
-    
-
+ var L = this.state.games.length;
+     for (var h = 0; h < L; h++) {
+       if(this.state.selectwidget === this.state.games[h].i){
+         $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
+         $("#msg").addClass('label warning input-group-field');
+         $("#msg").addClass("shake");
+         $("#msg").show();
+         setTimeout(function () {
+           $("#msg").removeClass("shake");
+         },200);
+         return false;
+       }
+     }
 
                  $.ajax({
                          url:api_server+"/user/profile/addwidget",
