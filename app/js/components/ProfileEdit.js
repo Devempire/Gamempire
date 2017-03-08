@@ -251,9 +251,11 @@ module.exports = global.ProfileEdit = React.createClass({
           <br/>
           <label id="scale_value" htmlFor="avatar_scale">Zoom: {global.avatar_scale}</label>
           <input type="range" step="0.10" min="1" max="4" id="avatar_scale" defaultValue={this.state.scale} onInput={this.handleScale} />
-          <label>Rotate: </label>
-          <input type="button" className="button" id="rotate_left" value="Left" onClick={this.rotateLeft} />
-          <input type="button" className="button" id="rotate_right" value="Right" onClick={this.rotateRight} />
+          <div className="row expanded button-group">
+            <label>Rotate: </label>
+            <label id="rotate_left" onClick={this.rotateLeft} className="custom-file-upload rotate">Left</label>
+            <label id="rotate_right" onClick={this.rotateRight} className="custom-file-upload rotate">Right</label>
+          </div>
           </div>
     );
     ReactDOM.render(
