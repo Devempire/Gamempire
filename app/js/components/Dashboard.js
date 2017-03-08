@@ -59,28 +59,24 @@ module.exports = global.Dashboard = React.createClass({
 
   loadWidgets(){
     $.get(api_server+"/widget/show").done((res)=>{
-      
-      console.log(res);
-      var copy=[]
-      for (var i = 0; i < res.length; i++) {
-        for(var j=0; j<this.state.widget.length;j++){
+
+        var i = res.length;
+        while (i--) {
+          for(var j=0; j<this.state.widget.length;j++){
           if (res[i]._id ==this.state.widget[j].widgetid) {
             res.splice(i, 1);
-            console.log(i);
-            console.log(j);
 
           }
         }
       }
-      for (var i = 0; i < copy.length; i++) {
+      for (var i = 0; i < res.length; i++) {
           this.setState({
           widgets: this.state.widgets.concat({
-            value:copy[i]._id,
-            text:copy[i].widgetname,
-            widgettype:copy[i].widgettype
+            value:res[i]._id,
+            text:res[i].widgetname,
+            widgettype:res[i].widgettype
           })
          });
-          console.log(i);
           
       }
       
