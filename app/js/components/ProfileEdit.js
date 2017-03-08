@@ -177,7 +177,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <br/>
             <label htmlFor='profilepic' className='custom-file-upload'>Upload Profile Picture</label>
             <input id='profilepic' onChange={this.uploadPic} type='file' accept='image/*'/>
-            <label style={{display: this.state.showImageDelete ? 'block' : 'none'}} onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
+            <label style={{display: this.state.showImageDelete ? 'inline-block' : 'none'}} onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
           </div>
 
           <div id='save_cancel'>
