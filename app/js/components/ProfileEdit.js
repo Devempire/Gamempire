@@ -32,7 +32,8 @@ module.exports = global.ProfileEdit = React.createClass({
       firstname:null,
       birthday:null,
       avatar:null,
-      scale: 1.2
+      scale: 1.2,
+      showImageDelete:false
 
     };
   },
@@ -67,6 +68,7 @@ module.exports = global.ProfileEdit = React.createClass({
                   var avatar = './../app/img/user.jpg';
                 } else {
                   var avatar = 'http://gamempire.net/img/avatars/'+d._id+'.jpg?' + new Date().getTime();
+                  this.setState({showImageDelete:true});
                 }
 
                 this.setState({response:res,
@@ -83,6 +85,7 @@ module.exports = global.ProfileEdit = React.createClass({
   componentWillMount: function(){
     this.loadProfile();
     global.avatar_scale = this.state.scale;
+    global.rotate = 0;
   },
 
   resetimage(e){
@@ -91,11 +94,12 @@ module.exports = global.ProfileEdit = React.createClass({
       document.getElementById('userAvatar')
     );
   },
-  setEditorRef (editor) {
-     if (editor) this.editor = editor
-   },
-  avatarSave(){
 
+  setEditorRef (editor) {
+    if (editor) this.editor = editor
+  },
+
+  avatarSave(){
     const imgData = this.editor.getImageScaledToCanvas();
     //console.log('Conerted canvas data URL: ' + imgData.toDataURL('image/jpeg'));
 
@@ -107,7 +111,6 @@ module.exports = global.ProfileEdit = React.createClass({
     })
 
     $.post(api_server+"/user/load",
-
         {
             'token' :token
         }).done((d)=> {
@@ -119,12 +122,13 @@ module.exports = global.ProfileEdit = React.createClass({
                         avatar:imgData.toDataURL('image/jpeg')
                     }
                 }).done((res)=>{
-                    console.log('New avatar updated');
+                    console.log('New avatar updated.');
                 }).fail((err)=>{
-                    console.log('avatar update failed');
+                    console.log('Avatar update failed.');
                 });
             });
 
+    this.setState({showImageDelete:true});
   },
 
   avatarCancel(){
@@ -139,9 +143,27 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   deleteAvatar(){
-    console.log("TODO:\n    1. Write API on routeUser.js that will be at /user/profile/deleteAvatar\n        This api will set the users avatar boolean to false. \n        This api should also delete the usersID.jpg image from the sever located in /view/img/avatars/");
-
-
+    var token = electron.remote.getGlobal('sharedObject').token;
+    var avatar = './../app/img/user.jpg';
+    $.post(api_server+"/user/load",
+        {
+            'token' :token
+        }).done((d)=> {
+            $.ajax({
+                    url:api_server+"/user/profile/deleteAvatar",
+                    type:"PUT",
+                    data:{
+                        _id:d._id,
+                    }
+                }).done((res)=>{
+                    console.log('Avatar deleted.');
+                }).fail((err)=>{
+                    console.log('Avatar deletion failed.');
+                });
+            });
+    this.resetimage(avatar);
+    this.setState({showImageDelete:false});
+    global.rotate = 0;
   },
 
   createProfile(el) {
@@ -157,7 +179,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <br/>
             <label htmlFor='profilepic' className='custom-file-upload'>Upload Profile Picture</label>
             <input id='profilepic' onChange={this.uploadPic} type='file' accept='image/*'/>
-            <label onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
+            <label style={{display: this.state.showImageDelete ? 'inline-block' : 'none'}} onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
           </div>
 
           <div id='save_cancel'>
@@ -200,6 +222,16 @@ module.exports = global.ProfileEdit = React.createClass({
     this.uploadPic();
   },
 
+  rotateLeft(){
+    global.rotate = global.rotate + 270;
+    this.uploadPic();
+  },
+
+  rotateRight(){
+    global.rotate = global.rotate + 90;
+    this.uploadPic();
+  },
+
   uploadPic() {
     document.getElementById('userAvatar').innerHTML = "";
     document.getElementById('save_cancel').style.display = "block";
@@ -215,10 +247,13 @@ module.exports = global.ProfileEdit = React.createClass({
           border={20}
           color={[255, 255, 255, 0.8]}
           scale={global.avatar_scale}
-          rotate={0} />
+          rotate={global.rotate} />
           <br/>
           <label id="scale_value" htmlFor="avatar_scale">Zoom: {global.avatar_scale}</label>
           <input type="range" step="0.10" min="1" max="4" id="avatar_scale" defaultValue={this.state.scale} onInput={this.handleScale} />
+          <label>Rotate: </label>
+          <input type="button" className="button" id="rotate_left" value="Left" onClick={this.rotateLeft} />
+          <input type="button" className="button" id="rotate_right" value="Right" onClick={this.rotateRight} />
           </div>
     );
     ReactDOM.render(
