@@ -136,11 +136,12 @@ module.exports = global.Dashboard = React.createClass({
   componentWillMount: function(){
 
     this.loadLayout();
+    this.loadWidgets();
     
   },
 
   componentDidMount: function(){
-    this.loadWidgets();
+    
     //console.log("component did mouint!");
   },
 
