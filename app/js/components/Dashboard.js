@@ -168,6 +168,11 @@ module.exports = global.Dashboard = React.createClass({
   },
 
 
+  submitname(id){
+
+  },
+
+
   handleSubmit(event) {
     event.preventDefault();
  var L = this.state.games.length;
@@ -265,7 +270,10 @@ module.exports = global.Dashboard = React.createClass({
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
               <div className="row">
                 <div className="overlay">
-                  <p>example</p>
+                  <p>Welcome to your Gamempire</p>
+                  <label>Enter Name </label>
+                  <input className="input-group-field noselect" type="text" onChange={(event)=> {this.setState({Name: event.target.value})}}/> 
+                  <button className="button"  onClick={this.submitname.bind(this,i)}>Submit</button>
                 </div>
               </div>
             </div>
