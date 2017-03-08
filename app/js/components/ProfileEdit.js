@@ -32,7 +32,8 @@ module.exports = global.ProfileEdit = React.createClass({
       firstname:null,
       birthday:null,
       avatar:null,
-      scale: 1.2
+      scale: 1.2,
+      showImageDelete:false
 
     };
   },
@@ -67,6 +68,7 @@ module.exports = global.ProfileEdit = React.createClass({
                   var avatar = './../app/img/user.jpg';
                 } else {
                   var avatar = 'http://gamempire.net/img/avatars/'+d._id+'.jpg?' + new Date().getTime();
+                  this.setState({showImageDelete:true});
                 }
 
                 this.setState({response:res,
@@ -124,6 +126,8 @@ module.exports = global.ProfileEdit = React.createClass({
                     console.log('Avatar update failed.');
                 });
             });
+
+    this.setState({showImageDelete:true});
   },
 
   avatarCancel(){
@@ -157,6 +161,7 @@ module.exports = global.ProfileEdit = React.createClass({
                 });
             });
     this.resetimage(avatar);
+    this.setState({showImageDelete:false});
   },
 
   createProfile(el) {
@@ -172,7 +177,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <br/>
             <label htmlFor='profilepic' className='custom-file-upload'>Upload Profile Picture</label>
             <input id='profilepic' onChange={this.uploadPic} type='file' accept='image/*'/>
-            <label onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
+            <label style={{display: this.state.showImageDelete ? 'block' : 'none'}} onClick={this.deleteAvatar} className="custom-file-upload remove">X</label>
           </div>
 
           <div id='save_cancel'>
