@@ -30,8 +30,8 @@ let createWindow = () => {
   // Create the browser window.
   mainWindow  = new BrowserWindow({
     minHeight: 480,
-    minWidth: 276,
-    width: 276,
+    minWidth: 313,
+    width: 213,
     height: 480,
     frame: false,
     thickFrame: true,

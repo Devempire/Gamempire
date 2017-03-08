@@ -17,7 +17,7 @@ module.exports = global.Bar = React.createClass({
                              aboutme:this.state.aboutMe
                          })
                      }).done((res)=>{
-                      
+
                     }).fail((err)=>{
                       console.log("aboutme fail to update to server!")
                     });
@@ -38,6 +38,16 @@ module.exports = global.Bar = React.createClass({
 	},
 
 
+      componentDidMount: function(){
+      //  ReactDOM.render(
+      //    <Dashboard />,
+        //  document.getElementById('content')
+      //  );
+      //  console.log("Dashbaord loading...");
+      },
+
+
+
 	render() {
 
 		return <div>
@@ -45,36 +55,36 @@ module.exports = global.Bar = React.createClass({
 					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{this.state.username}</b></a>
 					<input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
-					{
-					/*
+	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
-
-
-					<a href="#" onClick={this._Dashboardv2} id="_Dashboardv2">Dashboard v2 [Buggy]</a>
-
-
-					 NOT WORKING YET
-					<a href="#" onClick={this._Spotify} id="_Spotify">Spotify</a>
-
-					<a href="#" id="3">Video Streams</a>
-					<a href="#" id="4">Tips & Tricks</a>
-					<a href="#" id="5">Guides</a>
-					<a href="#" id="6">Esports</a>
 					<a id="8" >Add custom page</a>
-					*/
-					}
+	*/}
 
 					<a href="#" id="_Logout" onClick={this._Logout}>Logout </a>
 					<div className="toggleNav" onClick={this.toggleNav}></div>
-						    </div>
+				</div>
+        <div id="top_bar"></div>
 				<div id="content">
-          <div id="main_content"></div>
+          <div id="main_content"><Dashboard /></div>
 	    	</div>
-				<div className="discordFrame hearthstone_scroll" id="playgroundFrame">
 
+				<div className="discordFrame hearthstone_scroll" id="playgroundFrame">
 				</div>
 
 		</div>;
+    const topbart = (
+      <div>
+        <h1>Hello, {this.state.username}</h1>
+        <input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
+      </div>
+    );
+    ReactDOM.render(
+      topbart,
+      document.getElementById('top_bar')
+    );
+
+    this._Dashboard();
+
 	},
 
 	toggleNav(){
@@ -90,11 +100,26 @@ module.exports = global.Bar = React.createClass({
 		ipc.sendSync('quicksize');
 	},
 
+
+        topbar(){
+          const topbart = (
+            <div>
+              <h1>Hello, {this.state.username}</h1>
+              <input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
+            </div>
+          );
+          ReactDOM.render(
+            topbart,
+            document.getElementById('top_bar')
+          );
+
+        },
+
 	_Dashboard(){
 
 		ReactDOM.render(
 		  	<Dashboard />,
-		  	document.getElementById('content')
+	  	document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
@@ -109,14 +134,6 @@ module.exports = global.Bar = React.createClass({
 		document.getElementById('content').style.visibility = "visible";
 	},
 
-	_HSDeckBuilder(){
-		ReactDOM.render(
-			<HSDeckBuilder />,
-			document.getElementById('content')
-		);
-		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('content').style.visibility = "visible";
-	},
 
 	_Playground(){
 		document.getElementById('content').style.visibility = "hidden";
@@ -126,15 +143,6 @@ module.exports = global.Bar = React.createClass({
 		document.getElementById('title').textContent = title
 		$("#mySidenav>a.active").removeClass("active");
 		$( "#_Playground" ).addClass('active');
-	},
-
-	_Dashboardv2(){
-		ReactDOM.render(
-				<Dashboardv2 />,
-				document.getElementById('content')
-		);
-		document.getElementById('playgroundFrame').style.visibility = "hidden";
-		document.getElementById('content').style.visibility = "visible";
 	},
 
 	_Logout(){

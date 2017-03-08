@@ -160,10 +160,6 @@ module.exports = class Login extends React.Component {
               //TODO: find faster way to way.
               document.getElementById('playgroundFrame').style.visibility = "hidden";
 
-              ReactDOM.render(
-                <Dashboard />,
-                document.getElementById('content')
-              )
 
               });
 
