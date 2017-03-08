@@ -85,6 +85,7 @@ module.exports = global.ProfileEdit = React.createClass({
   componentWillMount: function(){
     this.loadProfile();
     global.avatar_scale = this.state.scale;
+    global.rotate = 0;
   },
 
   resetimage(e){
@@ -162,6 +163,7 @@ module.exports = global.ProfileEdit = React.createClass({
             });
     this.resetimage(avatar);
     this.setState({showImageDelete:false});
+    global.rotate = 0;
   },
 
   createProfile(el) {
@@ -220,6 +222,16 @@ module.exports = global.ProfileEdit = React.createClass({
     this.uploadPic();
   },
 
+  rotateLeft(){
+    global.rotate = global.rotate + 270;
+    this.uploadPic();
+  },
+
+  rotateRight(){
+    global.rotate = global.rotate + 90;
+    this.uploadPic();
+  },
+
   uploadPic() {
     document.getElementById('userAvatar').innerHTML = "";
     document.getElementById('save_cancel').style.display = "block";
@@ -235,10 +247,13 @@ module.exports = global.ProfileEdit = React.createClass({
           border={20}
           color={[255, 255, 255, 0.8]}
           scale={global.avatar_scale}
-          rotate={0} />
+          rotate={global.rotate} />
           <br/>
           <label id="scale_value" htmlFor="avatar_scale">Zoom: {global.avatar_scale}</label>
           <input type="range" step="0.10" min="1" max="4" id="avatar_scale" defaultValue={this.state.scale} onInput={this.handleScale} />
+          <label>Rotate: </label>
+          <input type="button" className="button" id="rotate_left" value="Left" onClick={this.rotateLeft} />
+          <input type="button" className="button" id="rotate_right" value="Right" onClick={this.rotateRight} />
           </div>
     );
     ReactDOM.render(
