@@ -39,7 +39,7 @@ module.exports = class Login extends React.Component {
        }
     }
 
-  
+
 
      loadCheck() {
        if (localStorage.chkbx && localStorage.chkbx != '') {
@@ -69,7 +69,7 @@ module.exports = class Login extends React.Component {
 
 
     render() {
-       var title = "Login - Gamempire"
+       var title = "Login \u2014 Gamempire"
        document.title = title
        document.getElementById('title').textContent = title
          return (

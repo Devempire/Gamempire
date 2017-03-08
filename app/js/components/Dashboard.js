@@ -49,7 +49,7 @@ module.exports = global.Dashboard = React.createClass({
                            })
                        }).done((res)=>{
                         electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
-                        
+
                       }).fail((err)=>{
                         console.log("layout fail to update to server!")
 
@@ -77,9 +77,9 @@ module.exports = global.Dashboard = React.createClass({
             widgettype:res[i].widgettype
           })
          });
-          
+
       }
-      
+
     }).fail((err)=>{
       console.log("something wrong with the load widget");
     });
@@ -137,11 +137,11 @@ module.exports = global.Dashboard = React.createClass({
 
     this.loadLayout();
     this.loadWidgets();
-    
+
   },
 
   componentDidMount: function(){
-    
+
     //console.log("component did mouint!");
   },
 
@@ -359,7 +359,7 @@ module.exports = global.Dashboard = React.createClass({
 
   render() {
     // Set Titles
-    var title = "Dashboard - Gamempire"
+    var title = "Dashboard \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
 

@@ -354,7 +354,7 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   render() {
-    var title = "Profile Edit - Gamempire"
+    var title = "Profile Edit \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
 

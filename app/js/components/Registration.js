@@ -21,7 +21,7 @@ module.exports = class Registration extends React.Component {
     // }
 
     render() {
-      var title = "Registration - Gamempire"
+      var title = "Sign up  \u2014 Gamempire"
       document.title = title
       document.getElementById('title').textContent = title
 
@@ -185,7 +185,7 @@ module.exports = class Registration extends React.Component {
     }
 
      _register(){
-       
+
         $.post(api_server+'/user/add',
 
                 {
@@ -201,7 +201,7 @@ module.exports = class Registration extends React.Component {
                 }
         )
             .done((res) =>{
-                
+
                 this._backToLogin();
             })
             .fail((res)=>{
