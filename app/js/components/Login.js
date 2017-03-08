@@ -153,6 +153,10 @@ module.exports = class Login extends React.Component {
                 <SideBar />,
                 document.getElementById('main-content')
               )
+
+
+
+
               //The <SideBar> loads a content div which will allow the screens to change while the sidebar remains untouched
 
               //Always alive content loads, and needs to be imediatley set to invisible.

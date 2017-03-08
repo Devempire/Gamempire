@@ -1,6 +1,5 @@
+
 module.exports = global.Bar = React.createClass({
-
-
 
   editAboutMe(event) {
 
@@ -39,6 +38,7 @@ module.exports = global.Bar = React.createClass({
 
 
       componentDidMount: function(){
+        this.topbar();
       //  ReactDOM.render(
       //    <Dashboard />,
         //  document.getElementById('content')
@@ -49,7 +49,6 @@ module.exports = global.Bar = React.createClass({
 
 
 	render() {
-
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{this.state.username}</b></a>
@@ -63,7 +62,7 @@ module.exports = global.Bar = React.createClass({
 					<a href="#" id="_Logout" onClick={this._Logout}>Logout </a>
 					<div className="toggleNav" onClick={this.toggleNav}></div>
 				</div>
-        <div id="top_bar"></div>
+
 				<div id="content">
           <div id="main_content"><Dashboard /></div>
 	    	</div>
@@ -72,16 +71,6 @@ module.exports = global.Bar = React.createClass({
 				</div>
 
 		</div>;
-    const topbart = (
-      <div>
-        <h1>Hello, {this.state.username}</h1>
-        <input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
-      </div>
-    );
-    ReactDOM.render(
-      topbart,
-      document.getElementById('top_bar')
-    );
 
     this._Dashboard();
 
