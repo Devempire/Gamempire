@@ -169,6 +169,21 @@ module.exports = global.Dashboard = React.createClass({
 
 
   submitname(id){
+    $.ajax({
+          url:api_server+"/user/profile/updatewidget",
+          type:"PUT",
+          contentType: 'application/json; charset=utf-8',
+          data:JSON.stringify({
+            _id:this.state.id,
+            widgetid:id,
+            name:this.state.Name
+            })
+            }).done((res)=>{
+              console.log("done");
+            }).fail((res)=>{
+              console.log("fail");
+            });
+
 
   },
 
