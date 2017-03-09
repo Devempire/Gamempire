@@ -69,6 +69,7 @@ module.exports = class Login extends React.Component {
 
 
     render() {
+      document.getElementById('top_bar').style.visibility = "hidden";
        var title = "Login \u2014 Gamempire"
        document.title = title
        document.getElementById('title').textContent = title
@@ -150,6 +151,7 @@ module.exports = class Login extends React.Component {
                   electron.remote.getGlobal('sharedObject').widget=res2.widgets;
                   electron.remote.getGlobal('sharedObject').avatar=res2.avatar;
                    ipc.sendSync('loggedIn')
+                   document.getElementById('top_bar').style.visibility = "visible";
               ReactDOM.render(
                 <SideBar />,
                 document.getElementById('main-content')

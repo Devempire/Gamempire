@@ -114,8 +114,8 @@ module.exports = global.Dashboard = React.createClass({
                 //console.log('h: '+hh);
             }
 
-            
-            
+
+
             this.setState({
                 games: this.state.games.concat({
                     i: res2._id,
@@ -296,7 +296,7 @@ module.exports = global.Dashboard = React.createClass({
                   <input className="input-group-field noselect" type="text" onChange={(event)=> {this.setState({Name: event.target.value})}}/>
                   <button className="button"  onClick={this.submitname.bind(this,i)}>Submit</button> </div>)
                 }
-                  
+
                 </div>
               </div>
             </div>

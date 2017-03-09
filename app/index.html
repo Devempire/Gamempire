@@ -21,7 +21,7 @@ var ipc = electron.ipcRenderer;
       <button id="close-btn" title="Close" onclick="ipc.sendSync('closeWindow')"></button>
     </div><!-- title bar buttons -->
   </div><!-- title bar -->
-  <div id="top_bar"></div>
+  <div id="top_bar" class="noselect"></div>
   <div id="main-content"></div>
   <script src="js/index.js"></script>
   <!-- build:remove -->

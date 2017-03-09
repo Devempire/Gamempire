@@ -89,12 +89,20 @@ module.exports = global.Bar = React.createClass({
 		ipc.sendSync('quicksize');
 	},
 
+    extendaboutme(event){
+      var ew = ((event.target.value.length + 1) * 10) + 'px';
+      document.getElementById('topbar_aboutme').style.width = ew;
+      if(event.keyCode == 13){
+          document.getElementById('topbar_aboutme').blur();
+      }
+    },
+
     topbar(){
 
       const topbart = (
         <div id="usertopbar">
-          <img src={this.state.avatar}/> <h5> {this.state.username}</h5>
-  				<input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
+          <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
+  				<input type="text" id="topbar_aboutme" defaultValue={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
         </div>
   		);
 
@@ -102,7 +110,6 @@ module.exports = global.Bar = React.createClass({
   			topbart,
   		document.getElementById('top_bar')
   		);
-
     },
 
 	_Dashboard(){
@@ -134,6 +141,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Logout(){
+    $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
 		document.getElementById('top_bar').innerHTML = "";
 		electron.remote.getGlobal('sharedObject').username=null;
 		electron.remote.getGlobal('sharedObject').aboutme=null;

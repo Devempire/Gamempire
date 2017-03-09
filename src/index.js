@@ -39,7 +39,6 @@ let createWindow = () => {
     backgroundColor: '#0e1519',
     icon: iconPath
   }); //mainWindow
-
   // and load the index.html of the app.
   mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 

@@ -129,6 +129,13 @@ module.exports = global.ProfileEdit = React.createClass({
             });
 
     this.setState({showImageDelete:true});
+
+    ReactDOM.render(
+      <img src={imgData.toDataURL('image/jpeg')}/>,
+    document.getElementById('topbar_avatar')
+    );
+
+
   },
 
   avatarCancel(){
