@@ -1,56 +1,58 @@
-
 module.exports = global.Bar = React.createClass({
 
-  editAboutMe(event) {
+	editAboutMe(event) {
+		this.setState({aboutMe:event.target.value});
+	},
 
-    this.setState({aboutMe:event.target.value});
-  },
+	updateAboutMe(event){
+	    $.ajax({
+			url:api_server+"/user/profile/updateaboutme",
+			type:"PUT",
+			contentType: 'application/json; charset=utf-8',
+			data:JSON.stringify({
+				_id:this.state.id,
+				aboutme:this.state.aboutMe
+			})
+		}).done((res)=>{
 
-  updateAboutMe(event){
-                $.ajax({
-                         url:api_server+"/user/profile/updateaboutme",
-                         type:"PUT",
-                         contentType: 'application/json; charset=utf-8',
-                         data:JSON.stringify({
-                             _id:this.state.id,
-                             aboutme:this.state.aboutMe
-                         })
-                     }).done((res)=>{
-
-                    }).fail((err)=>{
-                      console.log("aboutme fail to update to server!")
-                    });
-
-
-  },
+	        }).fail((err)=>{
+	          console.log("AboutMe failed to update on server!")
+	        });
+	},
 
 	getInitialState() {
 		var username = electron.remote.getGlobal('sharedObject').username;
-		var aboutme =electron.remote.getGlobal('sharedObject').aboutme;
-		var id =electron.remote.getGlobal('sharedObject').id;
+		var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
+		var id = electron.remote.getGlobal('sharedObject').id;
+		var avatar = electron.remote.getGlobal('sharedObject').avatar;
+
+		if (avatar == false) {
+			avatar = './../app/img/user.jpg';
+		} else {
+			avatar = 'http://gamempire.net/img/avatars/'+id+'.jpg?' + new Date().getTime();
+		}
+
 		return {
 			id:id,
 			username:username,
 			aboutMe:aboutme,
+			avatar:avatar
 		};
-
 	},
 
-
-      componentDidMount: function(){
-        this.topbar();
+    componentDidMount: function(){
+    	this.topbar();
       //  ReactDOM.render(
       //    <Dashboard />,
         //  document.getElementById('content')
       //  );
       //  console.log("Dashbaord loading...");
-      },
-
-
+    },
 
 	render() {
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
+		    		<img src={this.state.avatar} width="100" height="100"/>
 					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{this.state.username}</b></a>
 					<input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
@@ -89,23 +91,20 @@ module.exports = global.Bar = React.createClass({
 		ipc.sendSync('quicksize');
 	},
 
-
-        topbar(){
-          const topbart = (
-            <div>
-              <h1>Hello, {this.state.username}</h1>
-              <input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
-            </div>
-          );
-          ReactDOM.render(
-            topbart,
-            document.getElementById('top_bar')
-          );
-
-        },
+    topbar(){
+		const topbart = (
+			<div>
+				<h1>Hello, {this.state.username}</h1>
+				<input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
+			</div>
+		);
+		ReactDOM.render(
+			topbart,
+		document.getElementById('top_bar')
+		);
+    },
 
 	_Dashboard(){
-
 		ReactDOM.render(
 		  	<Dashboard />,
 	  	document.getElementById('content')
@@ -122,7 +121,6 @@ module.exports = global.Bar = React.createClass({
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
 	},
-
 
 	_Playground(){
 		document.getElementById('content').style.visibility = "hidden";
