@@ -52,10 +52,8 @@ module.exports = global.Bar = React.createClass({
 	render() {
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
-		    		<img src={this.state.avatar} width="100" height="100"/>
-					<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit"><b>{this.state.username}</b></a>
-					<input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
+          <a href="#"onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 					<a id="8" >Add custom page</a>
@@ -80,7 +78,7 @@ module.exports = global.Bar = React.createClass({
 
 	toggleNav(){
 
-		$("#mySidenav, #content, #playgroundFrame").toggleClass("navOpen");
+		$("#mySidenav, #top_bar, #content, #playgroundFrame").toggleClass("navOpen");
 		if ( $("#mySidenav").hasClass("navOpen") ) {
 				//do something it does have the protected class!
 				$(".toggleNav").css({"cursor":"url('../app/img/arrow_in.png'), auto"});
@@ -92,16 +90,19 @@ module.exports = global.Bar = React.createClass({
 	},
 
     topbar(){
-		const topbart = (
-			<div>
-				<h1>Hello, {this.state.username}</h1>
-				<input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
-			</div>
-		);
-		ReactDOM.render(
-			topbart,
-		document.getElementById('top_bar')
-		);
+
+      const topbart = (
+        <div id="usertopbar">
+          <img src={this.state.avatar}/> <h5> {this.state.username}</h5>
+  				<input type="text" value={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe} />
+        </div>
+  		);
+
+  		ReactDOM.render(
+  			topbart,
+  		document.getElementById('top_bar')
+  		);
+
     },
 
 	_Dashboard(){
@@ -133,6 +134,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	_Logout(){
+		document.getElementById('top_bar').innerHTML = "";
 		electron.remote.getGlobal('sharedObject').username=null;
 		electron.remote.getGlobal('sharedObject').aboutme=null;
 		electron.remote.getGlobal('sharedObject').widget=null;

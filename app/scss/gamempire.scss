@@ -146,16 +146,17 @@ h6 {
 html,
 body,
 #loginContainer {
+    transition: 0.5s;
     height: 100%;
 }
 
 #content {
     transition: 0.5s;
-    padding-top: 2rem;
     padding-left: 20px;
 }
 
 #main_content {
+    transition: 0.5s;
     padding: 50px;
 }
 
@@ -421,6 +422,13 @@ hr {
 
 #content.navOpen {
     padding-left: 25px;
+    padding-right: 8px;
+    transform: translateX(192px);
+    width: calc(100% - 192px);
+}
+
+#top_bar.navOpen {
+    padding-left: 35px;
     padding-right: 8px;
     transform: translateX(192px);
     width: calc(100% - 192px);
@@ -1201,4 +1209,30 @@ input[type=checkbox]:checked:after {
   padding: 10px 0 0 0;
   margin-bottom: 0rem;
   line-height: 0;
+}
+
+#top_bar{
+      display: flex;
+      transition: 0.5s;
+      animation-name: dropFade;
+      animation-duration: 1s;
+      animation-timing-function: ease-in-out;
+      padding-top: 10px;
+      padding-left: 20px;
+      transform: translate(10px, 0px);
+
+}
+#top_bar img{
+  width: 50px;
+  height: 50px;
+  display:inline-block;
+}
+#top_bar input{
+  display:inline-block;
+}
+#top_bar h5{
+  display:inline-block;
+}
+#top_bar #usertopbar{
+  display:flex;
 }
