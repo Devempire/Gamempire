@@ -9,6 +9,7 @@ const googleplaymusic = '58b93ee3a7c98c3001ad48a8';
 
 const heathstonebuilder = '58b93f03a7c98c3001ad48a9';
 const soundcloudapp = '58be7102884985c454420bbd';
+const notepad ='58c32d942ca0d464773a4dbb';
 
 class listWidgets {
   loadwid(i) {
@@ -24,6 +25,7 @@ class listWidgets {
   loadjsx(i) {
     if ( i == heathstonebuilder) { return ( <div className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
     if ( i == soundcloudapp) { return ( <div className="hearthstone_scroll widget jsx"><Soundcloud /></div> ); }
+    if ( i == notepad) { return ( <div className="hearthstone_scroll widget jsx"><form> <textarea rows="4" wrap="virtual" cols="20"></textarea><br/><input type="reset" value="Clear"/></form></div> ); }
   }
 }
 
