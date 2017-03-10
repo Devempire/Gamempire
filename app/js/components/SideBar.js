@@ -79,7 +79,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	toggleNav(){
-
+global.$('#usertopbar').width(global.$('#top_bar').width());
 		$("#mySidenav, #top_bar, #content, #playgroundFrame").toggleClass("navOpen");
 		if ( $("#mySidenav").hasClass("navOpen") ) {
 				//do something it does have the protected class!
@@ -147,7 +147,7 @@ module.exports = global.Bar = React.createClass({
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
-				global.$('#usertopbar').width(global.$('#top_bar').width());
+
 	},
 
 	_ProfileEdit(){

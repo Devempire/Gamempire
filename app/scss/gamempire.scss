@@ -1245,7 +1245,7 @@ input[type=checkbox]:checked:after {
     width: auto;
 
 }
-#top_bar h5:hover, span:hover{
+#top_bar #logout:hover, h5:hover, span:hover{
 color: lighten( $background-color, 55%);
 }
 
@@ -1270,4 +1270,6 @@ color: lighten( $background-color, 55%);
   font-weight: 900;
   margin-top: -6px;
   font-size: x-large;
+  right: 10px;
+    position: fixed;
 }
