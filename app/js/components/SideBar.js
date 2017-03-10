@@ -119,27 +119,17 @@ module.exports = global.Bar = React.createClass({
 
     topbar(){
 			if (!this.state.aboutMe) {
-	      var spanabout = <span title="Click to edit" id="span_about" onClick={this.aboutP}> About Me</span>;
+	      var spanabout = <span title="Click to edit" id="span_about" onClick={this.aboutP}> About Me</span>;//special chatarer used in placeholder. try not to edit any palce with " About me"
 	    } else {
 	      var spanabout = <span title="Click to edit" id="span_about" onClick={this.aboutP}>{this.state.aboutMe}</span>;
 	    }
 
       const topbart = (
         <div id="usertopbar">
-
-
-{/*  var save = function(){
-    var $p = $('<p data-editable />').text( $input.val() );
-    $input.replaceWith( $p );
-  };
-
-
-  $input.one('blur', save).focus();
-*/}
           <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
-
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
+					<a href="#" title="Logout" onClick={this._Logout} id="logout">☒</a>
         </div>
   		);
 
@@ -147,6 +137,7 @@ module.exports = global.Bar = React.createClass({
   			topbart,
   		document.getElementById('top_bar')
   		);
+
     },
 
 	_Dashboard(){
@@ -156,6 +147,7 @@ module.exports = global.Bar = React.createClass({
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
+				global.$('#usertopbar').width(global.$('#top_bar').width());
 	},
 
 	_ProfileEdit(){

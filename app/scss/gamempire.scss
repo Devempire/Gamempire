@@ -1261,3 +1261,13 @@ color: lighten( $background-color, 55%);
 #top_bar #usertopbar{
   display:flex;
 }
+#top_bar #logout{
+  display: block;
+  padding-left: 15px;
+  padding-top: 3px;
+  float: right;
+  color: #8b0000;
+  font-weight: 900;
+  margin-top: -6px;
+  font-size: x-large;
+}
