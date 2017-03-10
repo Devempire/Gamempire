@@ -286,7 +286,7 @@ module.exports = global.Dashboard = React.createClass({
     if (widgettype == 'game') {
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
-            <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+            <p className="widgetTitle noselect">{widgetTitle} <span title="Remove widget" className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
             <div className="widget">
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
               <div className="row">

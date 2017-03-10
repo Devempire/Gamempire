@@ -1234,7 +1234,7 @@ input[type=checkbox]:checked:after {
 
 }
 #top_bar input[type=text]{
-    display:inline-block;
+    display:none;
     margin-left: 15px;
     margin-bottom: 0px;
     padding-top: 0px;
@@ -1245,10 +1245,15 @@ input[type=checkbox]:checked:after {
     width: auto;
 
 }
-#top_bar h5:hover{
+#top_bar h5:hover, span:hover{
 color: lighten( $background-color, 55%);
 }
 
+#top_bar span{
+  display: inline-block;
+  padding-left: 15px;
+  padding-top: 3px;
+}
 #top_bar h5{
   margin-bottom: 0px;
   display:inline-block;

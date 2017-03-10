@@ -5,6 +5,14 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	updateAboutMe(event){
+		//global.$('#span_about').text(this.state.aboutMe);
+		global.$('#span_about').css({"display":"inline-block"});
+		global.$('#topbar_aboutme').css({"display":"none"});
+		if (!this.state.aboutMe){
+			global.$('#span_about').text(" About Me");//uses special blank character that lets app identify placeholder vs user text. So if userver were to type in [*spacebar* About me] it would recognize as user input vs placeholder.  [U+200C]  Name[En Quad]  html[&#8192;]
+		}else{
+			global.$('#span_about').text(this.state.aboutMe);
+		}
 	    $.ajax({
 			url:api_server+"/user/profile/updateaboutme",
 			type:"PUT",
@@ -14,7 +22,6 @@ module.exports = global.Bar = React.createClass({
 				aboutme:this.state.aboutMe
 			})
 		}).done((res)=>{
-
 	        }).fail((err)=>{
 	          console.log("AboutMe failed to update on server!")
 	        });
@@ -42,11 +49,6 @@ module.exports = global.Bar = React.createClass({
 
     componentDidMount: function(){
     	this.topbar();
-      //  ReactDOM.render(
-      //    <Dashboard />,
-        //  document.getElementById('content')
-      //  );
-      //  console.log("Dashbaord loading...");
     },
 
 	render() {
@@ -92,17 +94,52 @@ module.exports = global.Bar = React.createClass({
     extendaboutme(event){
       var ew = ((event.target.value.length + 1) * 10) + 'px';
       document.getElementById('topbar_aboutme').style.width = ew;
-      if(event.keyCode == 13){
-          document.getElementById('topbar_aboutme').blur();
+			if (event.key == 'Enter') {
+				this.updateAboutMe(event);
+          //document.getElementById('topbar_aboutme').blur();
       }
     },
 
+
+		aboutP(){
+			var about = global.$('#span_about').text();
+			if (about ==" About Me"){ //uses special blank character that lets app identify placeholder vs user text. So if userver were to type in [*spacebar* About me] it would recognize as user input vs placeholder.  [U+200C]  Name[En Quad]  html[&#8192;]
+				global.$('#topbar_aboutme').val("");
+			}else{
+				global.$('#topbar_aboutme').val(about);
+			}
+			global.$('#span_about').css({"display":"none"});
+			global.$('#topbar_aboutme').css({"display":"inline-block"});
+			global.$('#topbar_aboutme').focus();
+
+			var ew = ((about.length + 1) * 10) + 'px';
+      document.getElementById('topbar_aboutme').style.width = ew;
+
+		},
+
     topbar(){
+			if (!this.state.aboutMe) {
+	      var spanabout = <span title="Click to edit" id="span_about" onClick={this.aboutP}> About Me</span>;
+	    } else {
+	      var spanabout = <span title="Click to edit" id="span_about" onClick={this.aboutP}>{this.state.aboutMe}</span>;
+	    }
 
       const topbart = (
         <div id="usertopbar">
+
+
+{/*  var save = function(){
+    var $p = $('<p data-editable />').text( $input.val() );
+    $input.replaceWith( $p );
+  };
+
+
+  $input.one('blur', save).focus();
+*/}
           <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
-  				<input type="text" id="topbar_aboutme" defaultValue={this.state.aboutMe}  onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
+					{spanabout}
+
+  				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
         </div>
   		);
 

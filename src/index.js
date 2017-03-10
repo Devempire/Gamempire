@@ -44,7 +44,7 @@ let createWindow = () => {
 
   if (isDevelopment) {
     // Open the DevTools.
-    mainWindow.webContents.openDevTools({mode: 'undocked'})
+    mainWindow.webContents.openDevTools({mode: 'detached'})
   }
 
   mainWindow.center();
