@@ -195,19 +195,20 @@ module.exports = global.Dashboard = React.createClass({
 
   handleSubmit(event) {
     event.preventDefault();
- var L = this.state.games.length;
-     for (var h = 0; h < L; h++) {
-       if(this.state.selectwidget === this.state.games[h].i){
-         $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
-         $("#msg").addClass('label warning input-group-field');
-         $("#msg").addClass("shake");
-         $("#msg").show();
-         setTimeout(function () {
-           $("#msg").removeClass("shake");
-         },200);
-         return false;
-       }
-     }
+    // avoid dup checking in widget, it should never happen again with current option selection. 
+ // var L = this.state.games.length;
+ //     for (var h = 0; h < L; h++) {
+ //       if(this.state.selectwidget === this.state.games[h].i){
+ //         $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
+ //         $("#msg").addClass('label warning input-group-field');
+ //         $("#msg").addClass("shake");
+ //         $("#msg").show();
+ //         setTimeout(function () {
+ //           $("#msg").removeClass("shake");
+ //         },200);
+ //         return false;
+ //       }
+ //     }
 
                  $.ajax({
                          url:api_server+"/user/profile/addwidget",
