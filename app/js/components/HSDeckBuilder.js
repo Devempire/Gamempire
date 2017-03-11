@@ -33,8 +33,10 @@ module.exports = global.HSDeckBuilder = React.createClass({
       decks:[],
       neutral:[],
       classCards:[],
+      heroCard:'',
       title:'',
       description:'',
+      cardCounter:0
     };
 
   },
@@ -64,6 +66,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({selectclass: event.target.value});
     this.setState({showDeckBuilder: true});
     this.setState({showStore: false});
+    // Uncomment the below code during release/testing phases. Comment it during development.
     // unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
     // .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
     // .end(function (result) {
@@ -85,6 +88,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //increment the value if a new hero is added or decrement if a hero is removed
         var i = 1;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Hunter') {
@@ -94,6 +98,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Mage') {
@@ -103,6 +108,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 3;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Paladin') {
@@ -112,6 +118,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Priest') {
@@ -121,6 +128,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Rogue') {
@@ -130,6 +138,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 1;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Shaman') {
@@ -139,6 +148,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Warlock') {
@@ -148,6 +158,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 1;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Warrior') {
@@ -157,6 +168,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
+        this.setState({heroCard: result.body[0].img});
         //console.log(this.state.classCards);
       }.bind(this));
     }
@@ -216,8 +228,11 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var count = 0;
 
     for (var j = 0; j < this.state.myDeckFinal.length; j++) {
+      console.log(this.state.myDeckFinal[j].props.children);
       if (this.state.myDeckFinal[j].props.children == card_name) {
         count++;
+      } else if (this.state.myDeckFinal[j].props.children == card_name+' x2') {
+        count = 2;
       }
     }
 
@@ -225,18 +240,44 @@ module.exports = global.HSDeckBuilder = React.createClass({
     //to call removeCard function to remove a desired card.
     //myDeckFinal is for publishing the deck, the deck names are not clickable
     //and only for display.
-    if (i < 30 && card_rarity != 'Legendary' && count < 2) {
+    if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count < 2) {
+      //base case, add a card if myDeck list is empty.
+      if (i == 0) {
+        this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
+            <a href="#" name={card_name} value={card_rarity}
+            onClick={this.removeCard}>{card_name}</a></li>)});
+        this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
+            {card_name}</li>)});
+      } else {
+        //if a card already exists and the user wants to add the same card,
+        //remove the original card from the list and add in the card with x2
+        //to indicate there are 2 cards. otherwise, just add the card normally.
+        for (j = 0; j < i; j++) {
+          if (this.state.myDeckFinal[j].props.children == card_name) {
+            this.state.myDeck.splice(j, j+1, <li key={j}>
+                <a href="#" name={card_name} value={card_rarity}
+                onClick={this.removeCard}>{card_name+' x2'}</a></li>)
+            this.setState({myDeck: this.state.myDeck});
+            this.state.myDeckFinal.splice(j, j+1, <li key={j}>
+                {card_name+' x2'}</li>)
+            this.setState({myDeckFinal: this.state.myDeckFinal});
+          } else {
+            this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
+                <a href="#" name={card_name} value={card_rarity}
+                onClick={this.removeCard}>{card_name}</a></li>)});
+            this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
+                {card_name}</li>)});
+          }
+        }
+      }
+      this.setState({cardCounter: this.state.cardCounter + 1});
+    } else if (this.state.cardCounter < 30 && card_rarity == 'Legendary' && count < 1) {
       this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
           <a href="#" name={card_name} value={card_rarity}
           onClick={this.removeCard}>{card_name}</a></li>)});
       this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
           {card_name}</li>)});
-    } else if (i < 30 && card_rarity == 'Legendary' && count < 1) {
-      this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
-          <a href="#" name={card_name} value={card_rarity}
-          onClick={this.removeCard}>{card_name}</a></li>)});
-      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
-          {card_name}</li>)});
+      this.setState({cardCounter: this.state.cardCounter + 1});
     }
   },
 
@@ -260,8 +301,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({myDeck: this.state.myDeck.concat([])});
     this.state.myDeckFinal.splice(index, 1);
     this.setState({myDeckFinal: this.state.myDeckFinal.concat([])});
+    this.setState({cardCounter: this.state.cardCounter - 1});
   },
-
 
   handleSubmit(event) {
     event.preventDefault();
@@ -270,32 +311,44 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var height = 8;
     var row = 0;
 
-    this.setState({
-      decks: this.state.decks.concat({
-        i: i.toString(),
-        x: i % 3,
-        y: row,
-        w: width,
-        h: height,
-        minH: 8,
-        maxH: 8,
-        minW: 1,
-        maxW: 1,
-        static: true,
-        hero:this.state.selectclass,
-        title:this.state.title,
-        description:this.state.description,
-        decks:this.state.myDeckFinal,
-      }),
-      showDeckBuilder:false,
-      showAddDeck:true,
-      myDeck:[],
-      selectclass:'',
-      title:'',
-      description:'',
-      classCards:[],
-      myDeckFinal:[],
-    });
+    if (this.state.cardCounter > 30) {
+      $("#hsmsg").html("Deck is not complete. Please add 30 cards to the deck.");
+      $("#hsmsg").addClass('label warning');
+      $("#hsmsg").addClass("shake");
+      $("#hsmsg").show();
+      setTimeout(function () {
+        $("#hsmsg").removeClass("shake");
+      },200);
+    } else {
+      this.setState({
+        decks: this.state.decks.concat({
+          i: i.toString(),
+          x: i % 3,
+          y: row,
+          w: width,
+          h: height,
+          minH: 8,
+          maxH: 8,
+          minW: 1,
+          maxW: 1,
+          static: true,
+          hero:this.state.selectclass,
+          title:this.state.title,
+          description:this.state.description,
+          decks:this.state.myDeckFinal,
+          heroCard:this.state.heroCard
+        }),
+        showDeckBuilder:false,
+        showAddDeck:true,
+        myDeck:[],
+        selectclass:'',
+        title:'',
+        description:'',
+        classCards:[],
+        myDeckFinal:[],
+        heroCard:[]
+      });
+    }
   },
 
   deckBuilder(el) {
@@ -303,12 +356,14 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var hero = el.hero;
     var title = el.title;
     var description = el.description;
+    var heroCard = el.heroCard;
 
     return (
       <div key={i} data-grid={el} className="hearthstone_scroll">
-        <h3>{hero}</h3>
-        <h4>{title}</h4>
-        <h6>{description}</h6>
+        <center><h1>{hero}</h1></center>
+        <center><img src={heroCard} height="250" width="250"/></center>
+        <h3>{title}</h3>
+        <h4>{description}</h4>
         <ul>
           {el.decks}
         </ul>
@@ -371,7 +426,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
               </ul>
             </div>
             <div key="c" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll" style={{left: '66.66%'}}>
-              <h4>Deck</h4>
+              <h4>Deck {this.state.cardCounter}/30</h4>
               <ul id="deck_list">
                 {this.state.myDeck}
               </ul>
@@ -381,6 +436,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         <div className="row dropFade" style={{display: this.state.showDeckBuilder ? 'block' : 'none'}}>
           <form onSubmit={this.handleSubmit}>
             <button className="button" type="submit" value="Submit">Submit</button>
+            <center><div className="input-group-field" id="hsmsg"></div></center>
           </form>
         </div>
 
