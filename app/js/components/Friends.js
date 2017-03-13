@@ -67,7 +67,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
   if (!this.state.friends[i].avatar ){
     var avatar = '<img width="75" src="./../app/img/user.jpg" />';
   }else{
-    var avatar = '<img width="75" src="http://gamempire.net/img/avatars/'+this.state.friends[i].id+'.jpg" />';
+    var avatar = '<img width="75" src="http://gamempire.net/img/avatars/'+this.state.friends[i].id+'.jpg?'+ new Date().getTime()+'" />';
   }
 
 
