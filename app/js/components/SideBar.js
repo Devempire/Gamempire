@@ -56,6 +56,7 @@ module.exports = global.Bar = React.createClass({
 		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
           <a href="#"onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
+					<a href="#"onClick={this._Friends} id="_Friends">Friends</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 					<a id="8" >Add custom page</a>
@@ -144,6 +145,15 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
 		ReactDOM.render(
 		  	<Dashboard />,
 	  	document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
+
+	},
+	_Friends(){
+		ReactDOM.render(
+				<Friends />,
+			document.getElementById('content')
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
