@@ -86,6 +86,46 @@ module.exports = global.Dashboard = React.createClass({
 
   },
 
+  reRender(widgetID) {
+    this.setState({games: _.reject(this.state.games, {i: widgetID})});
+
+
+    $.get(api_server+'/widget/find/'+ widgetID + '/info').done((res2)=>{
+      console.log(res2.widgetname+' widget was reset.');
+    var i=this.state.games.length;
+
+    if (i == 0) {
+      var x=0;
+      var y = 0;
+    } else {
+      var y = 4*(i/2);
+      var x = (i%2) *12;
+    }
+
+    this.setState({
+          games: this.state.games.concat({
+            i: widgetID,
+            widgettype:res2.widgettype,
+            widgetname:res2.widgetname,
+            x: x,
+            y: y,
+            w: res2.w,
+            h: res2.h,
+            gamename:'',
+            minH: res2.minH,
+            maxH: res2.maxH,
+            minW: res2.minW,
+            maxW: res2.maxW,
+          }),
+          widgets: _.reject(this.state.widgets, {value: widgetID}),
+          showStore:false,
+          selectwidget:'',
+
+        });
+    });
+    //this.setState({selectwidget: widgetID});
+    //this.handleSubmit(widgetID);
+  },
 
   loadLayout(){
     var mdl =this.state.layouts.md;
@@ -193,9 +233,11 @@ module.exports = global.Dashboard = React.createClass({
   },
 
 
+
   handleSubmit(event) {
-    event.preventDefault();
-    // avoid dup checking in widget, it should never happen again with current option selection. 
+      event.preventDefault();
+
+    // avoid dup checking in widget, it should never happen again with current option selection.
  // var L = this.state.games.length;
  //     for (var h = 0; h < L; h++) {
  //       if(this.state.selectwidget === this.state.games[h].i){
@@ -268,7 +310,6 @@ module.exports = global.Dashboard = React.createClass({
                              alert("opps!");
                           });
 
-
   },
 
 
@@ -277,17 +318,15 @@ module.exports = global.Dashboard = React.createClass({
     var widgettype = el.widgettype;
     var widgetID =el.i;
     var widgetTitle=el.widgetname;
-    var removeStyle = {
-      position: 'absolute',
-      right: '2px',
-      top: 0,
-      cursor: 'pointer'
-    };
+    var el = el;
 
     if (widgettype == 'game') {
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
-            <p className="widgetTitle noselect">{widgetTitle} <span title="Remove widget" className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+          <p className="widgetTitle noselect">{widgetTitle}
+            <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
+            <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID)}>✖</span>
+          </p>
             <div className="widget">
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
               <div className="row">
@@ -295,13 +334,12 @@ module.exports = global.Dashboard = React.createClass({
                 {el.gamename !='' ? (<p> {el.gamename} </p>):(<div>
                   <label>Enter Name </label>
                   <input className="input-group-field noselect" type="text" onChange={(event)=> {this.setState({Name: event.target.value})}}/>
-                  <button className="button"  onClick={this.submitname.bind(this,i)}>Submit</button> </div>)
+                  <button className="button"  onClick={this.submitname.bind(this,widgetID)}>Submit</button> </div>)
                 }
 
                 </div>
               </div>
             </div>
-            <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span>
             <ul className="menu horizontal">
             <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
             <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
@@ -323,15 +361,21 @@ module.exports = global.Dashboard = React.createClass({
     //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
     //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
       return (
-        <div key={widgetID} data-grid={el} className="widgetFrame">
-          <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          {listWidgets.loadwid(widgetID)}
+        <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
+        <p className="widgetTitle noselect">{widgetTitle}
+          <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID)}>✖</span>
+        </p>
+        {listWidgets.loadwid(widgetID)}
         </div>
       );
     } else if (widgettype == 'other') {
       return (
       <div key={widgetID} data-grid={el} className="widgetFrame">
-        <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+        <p className="widgetTitle noselect">{widgetTitle}
+          <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID)}>✖</span>
+        </p>
         {listWidgets.loadjsx(widgetID)}
       </div>
     );
@@ -346,6 +390,7 @@ module.exports = global.Dashboard = React.createClass({
       <option key={item.value} id={item.text} value={item.value} name={item.widgettype}>{item.text}</option>
     );
   },
+
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});

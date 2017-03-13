@@ -12,20 +12,20 @@ const soundcloudapp = '58be7102884985c454420bbd';
 const notepad ='58c32d942ca0d464773a4dbb';
 
 class listWidgets {
-  loadwid(i) {
+  loadwid(widgetID) {
 
-    if ( i == soundcloud) { return ( <webview className='widget' src='https://soundcloud.com/charts/top'></webview> ); }
-    if ( i == discord) { return ( <webview className='widget' src='https://discordapp.com/login'></webview> ); }
-    if ( i == messenger) { return ( <webview className='widget' src='https://www.messenger.com/login/'></webview> ); }
-    if ( i == steamchat) { return ( <webview className='widget' src='https://steamcommunity.com/chat'></webview> ); }
-    if ( i == googleplaymusic) { return ( <webview className='widget' src='https://play.google.com/music/listen?authuser#/home'></webview> ); }
+    if ( widgetID == soundcloud) { return ( <webview id={widgetID+'webview'} className='widget' src='https://soundcloud.com/charts/top'></webview> ); }
+    if ( widgetID == discord) { return ( <webview id={widgetID} className='widget' src='https://discordapp.com/login'></webview> ); }
+    if ( widgetID == messenger) { return ( <webview id={widgetID} className='widget' src='https://www.messenger.com/login/'></webview> ); }
+    if ( widgetID == steamchat) { return ( <webview id={widgetID} className='widget' src='https://steamcommunity.com/chat'></webview> ); }
+    if ( widgetID == googleplaymusic) { return ( <webview id={widgetID} className='widget' src='https://play.google.com/music/listen?authuser#/home'></webview> ); }
     return false;
   }
 
-  loadjsx(i) {
-    if ( i == heathstonebuilder) { return ( <div className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
-    if ( i == soundcloudapp) { return ( <div className="hearthstone_scroll widget jsx"><Soundcloud /></div> ); }
-    if ( i == notepad) { return ( <div className="hearthstone_scroll widget jsx"><form> <textarea rows="4" wrap="virtual" cols="20"></textarea><br/><input type="reset" value="Clear"/></form></div> ); }
+  loadjsx(widgetID) {
+    if ( widgetID == heathstonebuilder) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
+    if ( widgetID == soundcloudapp) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><Soundcloud /></div> ); }
+    if ( widgetID == notepad) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><form> <textarea rows="4" wrap="virtual" cols="20"></textarea><br/><input type="reset" value="Clear"/></form></div> ); }
   }
 }
 

@@ -129,7 +129,7 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
           <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
-					<a href="#" title="Logout" onClick={this._Logout} id="logout">☒</a>
+					<a href="#" title="Logout" onClick={this._Logout} id="logout">🔐</a>
         </div>
   		);
 
