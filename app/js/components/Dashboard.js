@@ -453,7 +453,6 @@ module.exports = global.Dashboard = React.createClass({
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
               {_.map(this.state.games, this.onGame)}
-              <div key="1" data-grid={{x: 0, y: 0, w: 4, h: 4}} className="widgetFrame"><form> <textarea rows="4" wrap="virtual" cols="20"></textarea><br/><input type="reset" value="Clear"/></form></div>
           </ResponsiveReactGridLayout>
 
           <div className="row dropFade" style={{display: this.state.showStore ? 'block' : 'none'}}>

@@ -25,6 +25,7 @@ global.Dashboard = require('./components/Dashboard.js')
 global.ProfileEdit = require('./components/ProfileEdit.js')
 global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
 global.Soundcloud = require('./components/Soundcloud.js')
+global.Notepad = require('./components/Notepad.js')
 
 injectTapEventPlugin();
 

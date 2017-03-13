@@ -25,7 +25,7 @@ class listWidgets {
   loadjsx(widgetID) {
     if ( widgetID == heathstonebuilder) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
     if ( widgetID == soundcloudapp) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><Soundcloud /></div> ); }
-    if ( widgetID == notepad) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><form> <textarea rows="4" wrap="virtual" cols="20"></textarea><br/><input type="reset" value="Clear"/></form></div> ); }
+    if ( widgetID == notepad) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><Notepad /></div>); }
   }
 }
 
