@@ -55,7 +55,8 @@ module.exports = global.Bar = React.createClass({
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
-          <a href="#"onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
+					<a href="#"onClick={this._Profile} id="_Profile">My Profile</a>
+          			<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#"onClick={this._Friends} id="_Friends">Friends</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
@@ -179,6 +180,15 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
 		$( "#_Playground" ).addClass('active');
 	},
 
+	_Profile(){
+		ReactDOM.render(
+			<Profile />,
+			document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
+	},
+
 	_Logout(){
     $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
 		document.getElementById('top_bar').innerHTML = "";
@@ -188,6 +198,8 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
 		electron.remote.getGlobal('sharedObject').token=null;
 		electron.remote.getGlobal('sharedObject').id=null;
 		electron.remote.getGlobal('sharedObject').layout=null;
+		electron.remote.getGlobal('sharedObject').avatar=null;
+		electron.remote.getGlobal('sharedObject').data=null;
 		//console.log(electron.remote.getGlobal('sharedObject'));
 
 		ipc.sendSync('loggedOut')
