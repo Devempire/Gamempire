@@ -14,8 +14,9 @@ module.exports = global.Notepad = React.createClass({
 
   getInitialState() {
     var id = electron.remote.getGlobal('sharedObject').id;
+    var data = electron.remote.getGlobal('sharedObject').data;
     return {
-      data:"text here",
+      data:data,
       id:id,
 
     };

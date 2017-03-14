@@ -20,6 +20,8 @@ global.sharedObject = {
   widget:null,
   id:null,
   layout:null,
+  avatar:null,
+  data:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will
