@@ -33,7 +33,7 @@ module.exports = class Soundcloud extends React.Component {
             <SoundPlayerContainer
                 clientId={clientId}
                 resolveUrl={resolveUrl}
-                onReady={this.trackReady}
+                onReady={this.trackReady()}
             >
                 {/* your custom player components */}
             </SoundPlayerContainer>

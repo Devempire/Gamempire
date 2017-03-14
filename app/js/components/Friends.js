@@ -10,7 +10,7 @@ module.exports = global.Friends = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 3, md: 3, sm: 3, xs: 3, xxs: 3},
+      cols: 3,
       isDraggable: false,
       rowHeight: 50,
       verticalCompact: true
