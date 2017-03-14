@@ -701,6 +701,7 @@ label {
 }
 
 #title-bar-btns {
+    display: flex;
     user-select: none;
     -webkit-app-region: no-drag;
     position: fixed;
@@ -1245,7 +1246,11 @@ input[type=checkbox]:checked:after {
     width: auto;
 
 }
-#top_bar #logout:hover, h5:hover, span:hover{
+#top_bar #logout:hover, h5:hover {
+color: lighten( $background-color, 55%);
+}
+
+#top_bar span:hover{
 color: lighten( $background-color, 55%);
 }
 
