@@ -37,7 +37,7 @@ module.exports = global.Notepad = React.createClass({
             data:this.state.data
             })
             }).done((res)=>{
-              console.log("done");
+              electron.remote.getGlobal('sharedObject').data=this.state.data;
             }).fail((res)=>{
               console.log("fail");
             });
