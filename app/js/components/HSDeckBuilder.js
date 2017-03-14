@@ -75,7 +75,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     //   while (i < result.body.length) {
     //     this.setState({neutral: this.state.neutral.concat(<li key={i}>
     //       <a href="#" name={result.body[i].name} value={result.body[i].rarity}
-    //       onClick={this.putCardToDeck}>{result.body[i].name}</a></li>)});
+    //       onClick={this.putCardToDeck}>Mana({result.body[i].cost}) {result.body[i].name}</a></li>)});
     //     i++;
     //   };
     //   console.log(this.state.neutral);
@@ -84,7 +84,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Druid?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        //console.log(result.body);
+        console.log(result.body);
         //increment the value if a new hero is added or decrement if a hero is removed
         var i = 1;
         this.putClassCards(i, result.body);
@@ -98,7 +98,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        this.setState({heroCard: result.body[0].img});
+        this.setState({heroCard: result.body[1].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Mage') {
@@ -118,7 +118,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        this.setState({heroCard: result.body[0].img});
+        this.setState({heroCard: result.body[1].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Priest') {
@@ -148,7 +148,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         //console.log(result.body);
         var i = 2;
         this.putClassCards(i, result.body);
-        this.setState({heroCard: result.body[0].img});
+        this.setState({heroCard: result.body[1].img});
         //console.log(this.state.classCards);
       }.bind(this));
     } else if (event.target.value == 'Warlock') {
@@ -178,11 +178,11 @@ module.exports = global.HSDeckBuilder = React.createClass({
   putClassCards(i, deck) {
     while (i < deck.length) {
       this.setState({classCards: this.state.classCards.concat(<li key={i}>
-        <a href="#" name={deck[i].name} value={deck[i].rarity}
-        onClick={this.putCardToDeck}>{deck[i].name}</a></li>)});
+        <a href="#" id={deck[i].cost} name={deck[i].name} value={deck[i].rarity}
+        onClick={this.putCardToDeck}>Mana({deck[i].cost}) {deck[i].name}</a></li>)});
       i++;
-
     };
+    console.log(this.state.classCards);
   },
 
   searchClassCards() {
@@ -224,11 +224,11 @@ module.exports = global.HSDeckBuilder = React.createClass({
   putCardToDeck(event) {
     var card_name = event.target.getAttribute('name');
     var card_rarity = event.target.getAttribute('value');
+    var card_cost = event.target.getAttribute('id');
     var i = this.state.myDeck.length;
     var count = 0;
 
     for (var j = 0; j < this.state.myDeckFinal.length; j++) {
-      console.log(this.state.myDeckFinal[j].props.children);
       if (this.state.myDeckFinal[j].props.children == card_name) {
         count++;
       } else if (this.state.myDeckFinal[j].props.children == card_name+' x2') {
@@ -249,16 +249,16 @@ module.exports = global.HSDeckBuilder = React.createClass({
         this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
             {card_name}</li>)});
       } else {
-        //if a card already exists and the user wants to add the same card,
+        //If a card already exists and the user wants to add the same card,
         //remove the original card from the list and add in the card with x2
-        //to indicate there are 2 cards. otherwise, just add the card normally.
+        //to indicate there are 2 cards. Otherwise, just add the card normally.
         for (j = 0; j < i; j++) {
           if (this.state.myDeckFinal[j].props.children == card_name) {
-            this.state.myDeck.splice(j, j+1, <li key={j}>
+            this.state.myDeck.splice(j, 1, <li key={j}>
                 <a href="#" name={card_name} value={card_rarity}
                 onClick={this.removeCard}>{card_name+' x2'}</a></li>)
             this.setState({myDeck: this.state.myDeck});
-            this.state.myDeckFinal.splice(j, j+1, <li key={j}>
+            this.state.myDeckFinal.splice(j, 1, <li key={j}>
                 {card_name+' x2'}</li>)
             this.setState({myDeckFinal: this.state.myDeckFinal});
           } else {
@@ -284,24 +284,38 @@ module.exports = global.HSDeckBuilder = React.createClass({
   removeCard(event) {
     var deck_list = [];
     var card_name = event.target.getAttribute('name');
+    var card_rarity = event.target.getAttribute('value');
+    var card_cost = event.target.getAttribute('id');
 
     //First, put all card names in the deck into a list
     for (var i = 0; i < this.state.myDeck.length; i++) {
-      deck_list.push(this.state.myDeck[i].props.children.props.children);
+      deck_list.push(this.state.myDeckFinal[i].props.children);
     }
 
     //Second, find the index of the card to be removed
     for (var j = 0; j < deck_list.length; j++) {
-      if (deck_list[j] == card_name) {
+      //If card_name has ' x2' in its name, remove that and replace it
+      //with the original name without the ' x2'. Otherwise, remove the
+      //card as normal.
+      if (deck_list[j] == card_name + ' x2') {
         var index = j;
+        this.state.myDeck.splice(j, 1, <li key={j}>
+            <a href="#" name={card_name} value={card_rarity}
+            onClick={this.removeCard}>{card_name}</a></li>)
+        this.setState({myDeck: this.state.myDeck});
+        this.state.myDeckFinal.splice(j, 1, <li key={j}>
+            {card_name}</li>)
+        this.setState({myDeckFinal: this.state.myDeckFinal});
+        this.setState({cardCounter: this.state.cardCounter - 1});
+      } else if (deck_list[j] == card_name) {
+        var index = j;
+        this.state.myDeck.splice(index, 1);
+        this.setState({myDeck: this.state.myDeck.concat([])});
+        this.state.myDeckFinal.splice(index, 1);
+        this.setState({myDeckFinal: this.state.myDeckFinal.concat([])});
+        this.setState({cardCounter: this.state.cardCounter - 1});
       }
     }
-
-    this.state.myDeck.splice(index, 1);
-    this.setState({myDeck: this.state.myDeck.concat([])});
-    this.state.myDeckFinal.splice(index, 1);
-    this.setState({myDeckFinal: this.state.myDeckFinal.concat([])});
-    this.setState({cardCounter: this.state.cardCounter - 1});
   },
 
   handleSubmit(event) {
@@ -311,8 +325,9 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var height = 8;
     var row = 0;
 
+    //Put < during release/testing phases. Put > during development.
     if (this.state.cardCounter > 30) {
-      $("#hsmsg").html("Deck is not complete. Please add 30 cards to the deck.");
+      $("#hsmsg").html("Deck is not complete. Please add 30 cards to the deck.<button id='close' onclick='$(this).parent().hide();' ></button>");
       $("#hsmsg").addClass('label warning');
       $("#hsmsg").addClass("shake");
       $("#hsmsg").show();
@@ -346,7 +361,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
         description:'',
         classCards:[],
         myDeckFinal:[],
-        heroCard:[]
+        heroCard:[],
+        cardCounter:0
       });
     }
   },
@@ -428,6 +444,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
             <div key="c" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll" style={{left: '66.66%'}}>
               <h4>Deck {this.state.cardCounter}/30</h4>
               <ul id="deck_list">
+                <center><img src={this.state.heroCard} height="250" width="250"/></center>
                 {this.state.myDeck}
               </ul>
             </div>
