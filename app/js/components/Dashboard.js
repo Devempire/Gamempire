@@ -59,7 +59,6 @@ module.exports = global.Dashboard = React.createClass({
 
   loadWidgets(){
     $.get(api_server+"/widget/show").done((res)=>{
-
         var i = res.length;
         while (i--) {
           for(var j=0; j<this.state.widget.length;j++){
@@ -111,7 +110,6 @@ module.exports = global.Dashboard = React.createClass({
             y: y,
             w: res2.w,
             h: res2.h,
-            gamename:'',
             minH: res2.minH,
             maxH: res2.maxH,
             minW: res2.minW,
@@ -132,8 +130,6 @@ module.exports = global.Dashboard = React.createClass({
 
     var g =this.state.widget.length;
     for (var h = 0; h < g; h++) {
-      var gamename =this.state.widget[h].name || '';
-      console.log(gamename);
         $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
             var xx=res2.x;
             var yy=res2.y;
@@ -161,7 +157,6 @@ module.exports = global.Dashboard = React.createClass({
                     i: res2._id,
                     widgettype:res2.widgettype,
                     widgetname:res2.widgetname,
-                    gamename:gamename,
                     x:xx,
                     y:yy,
                     h:hh,
@@ -213,24 +208,7 @@ module.exports = global.Dashboard = React.createClass({
   },
 
 
-  submitname(id){
-    $.ajax({
-          url:api_server+"/user/profile/updatewidget",
-          type:"PUT",
-          contentType: 'application/json; charset=utf-8',
-          data:JSON.stringify({
-            _id:this.state.id,
-            widgetid:id,
-            name:this.state.Name
-            })
-            }).done((res)=>{
-              console.log("done");
-            }).fail((res)=>{
-              console.log("fail");
-            });
-
-
-  },
+  
 
 
 
@@ -276,7 +254,6 @@ module.exports = global.Dashboard = React.createClass({
                                 y: Infinity,
                                 w: res2.w,
                                 h: res2.h,
-                                gamename:'',
                                 minH: res2.minH,
                                 maxH: res2.maxH,
                                 minW: res2.minW,
@@ -325,11 +302,12 @@ module.exports = global.Dashboard = React.createClass({
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
               <div className="row">
                 <div className="overlay">
-                {el.gamename !='' ? (<p> {el.gamename} </p>):(<div>
+                <div>
                   <label>Enter Name </label>
                   <input className="input-group-field noselect" type="text" onChange={(event)=> {this.setState({Name: event.target.value})}}/>
-                  <button className="button"  onClick={this.submitname.bind(this,widgetID)}>Submit</button> </div>)
-                }
+                  <button className="button"  >Submit</button> 
+                </div>
+
 
                 </div>
               </div>

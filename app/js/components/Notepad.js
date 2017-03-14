@@ -1,23 +1,10 @@
-var WidthProvider = require('react-grid-layout').WidthProvider;
-var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
-ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
 
-const originalLayouts = getFromLS('layouts') || {};
-
-var unirest = require('unirest');
-
-//Hearthstone Deck Builder
 module.exports = global.Notepad = React.createClass({
-  mixins: [PureRenderMixin],
+
 
   getDefaultProps() {
-    return {
-      className: "layout",
-      cols: {lg: 3, md: 3, sm: 3, xs: 3, xxs: 3},
-      isDraggable: false,
-      verticalCompact: true
-    };
+    return {};
   },
 
 
@@ -26,50 +13,41 @@ module.exports = global.Notepad = React.createClass({
     },
 
   getInitialState() {
-
+    var id = electron.remote.getGlobal('sharedObject').id;
     return {
+      data:"text here",
+      id:id,
 
     };
 
   },
 
-  resetLayout() {
-    this.setState({layouts: {}});
+  edit(event){
+    this.setState({data:event.target.value});
   },
 
-  onBreakpointChange(breakpoint, cols) {
-    this.setState({
-      breakpoint: breakpoint,
-      cols: cols
-    });
-  },
+  updatedata(){
+    $.ajax({
+          url:api_server+"/user/profile/dataupload",
+          type:"PUT",
+          contentType: 'application/json; charset=utf-8',
+          data:JSON.stringify({
+            _id:this.state.id,
+            data:this.state.data
+            })
+            }).done((res)=>{
+              console.log("done");
+            }).fail((res)=>{
+              console.log("fail");
+            });
 
-  onLayoutChange(layout, layouts) {
-    saveToLS('layouts', layouts);
-    this.setState({layouts});
+
   },
 
   render() {
     return (
-<textarea rows="4" wrap="virtual" cols="20"></textarea>
+    <textarea rows="4" value={this.state.data} onChange={this.edit} onBlur={this.updatedata} wrap="virtual" cols="20"></textarea>
     );
   }
 });
 
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-    } catch(e) {/*Ignore*/}
-  }
-  return ls[key];
-}
-
-function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem('rgl-8', JSON.stringify({
-      [key]: value
-    }));
-  }
-}
