@@ -67,19 +67,19 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({showDeckBuilder: true});
     this.setState({showStore: false});
     // Uncomment the below code during release/testing phases. Comment it during development.
-    // unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
-    // .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
-    // .end(function (result) {
-    //   console.log(result.body);
-    //   var i = 0;
-    //   while (i < result.body.length) {
-    //     this.setState({neutral: this.state.neutral.concat(<li key={i}>
-    //       <a href="#" name={result.body[i].name} value={result.body[i].rarity}
-    //       onClick={this.putCardToDeck}>Mana({result.body[i].cost}) {result.body[i].name}</a></li>)});
-    //     i++;
-    //   };
-    //   console.log(this.state.neutral);
-    // }.bind(this));
+    unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
+    .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
+    .end(function (result) {
+      console.log(result.body);
+      var i = 0;
+      while (i < result.body.length) {
+        this.setState({neutral: this.state.neutral.concat(<li key={i}>
+          <a href="#" id={result.body[i].cost} name={result.body[i].name} value={result.body[i].rarity}
+          onClick={this.putCardToDeck}>{result.body[i].cost} {result.body[i].name}</a></li>)});
+        i++;
+      };
+      console.log(this.state.neutral);
+    }.bind(this));
     if (event.target.value == 'Druid') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Druid?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
@@ -179,7 +179,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     while (i < deck.length) {
       this.setState({classCards: this.state.classCards.concat(<li key={i}>
         <a href="#" id={deck[i].cost} name={deck[i].name} value={deck[i].rarity}
-        onClick={this.putCardToDeck}>Mana({deck[i].cost}) {deck[i].name}</a></li>)});
+        onClick={this.putCardToDeck}>{deck[i].cost} {deck[i].name}</a></li>)});
       i++;
     };
     console.log(this.state.classCards);
@@ -225,58 +225,62 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var card_name = event.target.getAttribute('name');
     var card_rarity = event.target.getAttribute('value');
     var card_cost = event.target.getAttribute('id');
+    var card_picked = "";
     var i = this.state.myDeck.length;
     var count = 0;
 
     for (var j = 0; j < this.state.myDeckFinal.length; j++) {
-      if (this.state.myDeckFinal[j].props.children == card_name) {
+      //have to do this for loop to put the elements inside the 
+      //this.state.myDeckFinal[j].props.children array into one
+      //string
+      for (let k of this.state.myDeckFinal[j].props.children) {
+        card_picked = card_picked + k
+      }
+      if (card_picked == card_cost + " " + card_name) {
         count++;
-      } else if (this.state.myDeckFinal[j].props.children == card_name+' x2') {
+      } else if (card_picked == card_cost + " " + card_name + ' x2') {
         count = 2;
       }
+      card_picked = "";
     }
 
     //myDeck is for during deck creation, the deck names need to be clickable
     //to call removeCard function to remove a desired card.
     //myDeckFinal is for publishing the deck, the deck names are not clickable
     //and only for display.
-    if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count < 2) {
-      //base case, add a card if myDeck list is empty.
-      if (i == 0) {
-        this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
-            <a href="#" name={card_name} value={card_rarity}
-            onClick={this.removeCard}>{card_name}</a></li>)});
-        this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
-            {card_name}</li>)});
-      } else {
-        //If a card already exists and the user wants to add the same card,
-        //remove the original card from the list and add in the card with x2
-        //to indicate there are 2 cards. Otherwise, just add the card normally.
-        for (j = 0; j < i; j++) {
-          if (this.state.myDeckFinal[j].props.children == card_name) {
-            this.state.myDeck.splice(j, 1, <li key={j}>
-                <a href="#" name={card_name} value={card_rarity}
-                onClick={this.removeCard}>{card_name+' x2'}</a></li>)
-            this.setState({myDeck: this.state.myDeck});
-            this.state.myDeckFinal.splice(j, 1, <li key={j}>
-                {card_name+' x2'}</li>)
-            this.setState({myDeckFinal: this.state.myDeckFinal});
-          } else {
-            this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
-                <a href="#" name={card_name} value={card_rarity}
-                onClick={this.removeCard}>{card_name}</a></li>)});
-            this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
-                {card_name}</li>)});
-          }
-        }
-      }
-      this.setState({cardCounter: this.state.cardCounter + 1});
-    } else if (this.state.cardCounter < 30 && card_rarity == 'Legendary' && count < 1) {
+    if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count == 0) {
       this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
-          <a href="#" name={card_name} value={card_rarity}
-          onClick={this.removeCard}>{card_name}</a></li>)});
+          <a href="#" id={card_cost} name={card_name} value={card_rarity}
+          onClick={this.removeCard}>{card_cost} {card_name}</a></li>)});
       this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
-          {card_name}</li>)});
+          {card_cost} {card_name}</li>)});
+      this.setState({cardCounter: this.state.cardCounter + 1});
+    } else if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count == 1) {
+      //If a card already exists and the user wants to add the same card,
+      //remove the original card from the list and add in the card with x2
+      //to indicate there are 2 cards. Otherwise, just add the card normally.
+      for (var j = 0; j < i; j++) {
+        for (let k of this.state.myDeckFinal[j].props.children) {
+          card_picked = card_picked + k
+        }
+        if (card_picked == card_cost + " " + card_name) {
+          this.state.myDeck.splice(j, 1, <li key={j}>
+              <a href="#" id={card_cost} name={card_name} value={card_rarity}
+              onClick={this.removeCard}>{card_cost} {card_name+' x2'}</a></li>)
+          this.setState({myDeck: this.state.myDeck});
+          this.state.myDeckFinal.splice(j, 1, <li key={j}>
+              {card_cost} {card_name+' x2'}</li>)
+          this.setState({myDeckFinal: this.state.myDeckFinal});
+          this.setState({cardCounter: this.state.cardCounter + 1});
+        }
+        card_picked = "";
+      }
+    } else if (this.state.cardCounter < 30 && card_rarity == 'Legendary' && count == 0) {
+      this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
+          <a href="#" id={card_cost} name={card_name} value={card_rarity}
+          onClick={this.removeCard}>{card_cost} {card_name}</a></li>)});
+      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
+          {card_cost} {card_name}</li>)});
       this.setState({cardCounter: this.state.cardCounter + 1});
     }
   },
@@ -286,10 +290,15 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var card_name = event.target.getAttribute('name');
     var card_rarity = event.target.getAttribute('value');
     var card_cost = event.target.getAttribute('id');
+    var card_picked = '';
 
     //First, put all card names in the deck into a list
     for (var i = 0; i < this.state.myDeck.length; i++) {
-      deck_list.push(this.state.myDeckFinal[i].props.children);
+      for (let k of this.state.myDeckFinal[i].props.children) {
+        card_picked = card_picked + k
+      }
+      deck_list.push(card_picked);
+      card_picked = '';
     }
 
     //Second, find the index of the card to be removed
@@ -297,17 +306,17 @@ module.exports = global.HSDeckBuilder = React.createClass({
       //If card_name has ' x2' in its name, remove that and replace it
       //with the original name without the ' x2'. Otherwise, remove the
       //card as normal.
-      if (deck_list[j] == card_name + ' x2') {
+      if (deck_list[j] == card_cost + " " + card_name + ' x2') {
         var index = j;
         this.state.myDeck.splice(j, 1, <li key={j}>
-            <a href="#" name={card_name} value={card_rarity}
-            onClick={this.removeCard}>{card_name}</a></li>)
+            <a href="#" id={card_cost} name={card_name} value={card_rarity}
+            onClick={this.removeCard}>{card_cost} {card_name}</a></li>)
         this.setState({myDeck: this.state.myDeck});
         this.state.myDeckFinal.splice(j, 1, <li key={j}>
-            {card_name}</li>)
+            {card_cost} {card_name}</li>)
         this.setState({myDeckFinal: this.state.myDeckFinal});
         this.setState({cardCounter: this.state.cardCounter - 1});
-      } else if (deck_list[j] == card_name) {
+      } else if (deck_list[j] == card_cost + " " + card_name) {
         var index = j;
         this.state.myDeck.splice(index, 1);
         this.setState({myDeck: this.state.myDeck.concat([])});
@@ -326,7 +335,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
     var row = 0;
 
     //Put < during release/testing phases. Put > during development.
-    if (this.state.cardCounter > 30) {
+    if (this.state.cardCounter < 30) {
       $("#hsmsg").html("Deck is not complete. Please add 30 cards to the deck.<button id='close' onclick='$(this).parent().hide();' ></button>");
       $("#hsmsg").addClass('label warning');
       $("#hsmsg").addClass("shake");
@@ -360,6 +369,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
         title:'',
         description:'',
         classCards:[],
+        neutral:[],
         myDeckFinal:[],
         heroCard:[],
         cardCounter:0
