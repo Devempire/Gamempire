@@ -36,7 +36,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
       heroCard:'',
       title:'',
       description:'',
-      cardCounter:0
+      cardCounter:0,
+      hsCardKey:0
     };
 
   },
@@ -67,19 +68,19 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({showDeckBuilder: true});
     this.setState({showStore: false});
     // Uncomment the below code during release/testing phases. Comment it during development.
-    unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
-    .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
-    .end(function (result) {
-      console.log(result.body);
-      var i = 0;
-      while (i < result.body.length) {
-        this.setState({neutral: this.state.neutral.concat(<li key={i}>
-          <a href="#" id={result.body[i].cost} name={result.body[i].name} value={result.body[i].rarity}
-          onClick={this.putCardToDeck}>{result.body[i].cost} {result.body[i].name}</a></li>)});
-        i++;
-      };
-      console.log(this.state.neutral);
-    }.bind(this));
+    // unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
+    // .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
+    // .end(function (result) {
+    //   console.log(result.body);
+    //   var i = 0;
+    //   while (i < result.body.length) {
+    //     this.setState({neutral: this.state.neutral.concat(<li key={i}>
+    //       <a href="#" id={result.body[i].cost} name={result.body[i].name} value={result.body[i].rarity}
+    //       onClick={this.putCardToDeck}>{result.body[i].cost} {result.body[i].name}</a></li>)});
+    //     i++;
+    //   };
+    //   console.log(this.state.neutral);
+    // }.bind(this));
     if (event.target.value == 'Druid') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Druid?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
@@ -249,12 +250,13 @@ module.exports = global.HSDeckBuilder = React.createClass({
     //myDeckFinal is for publishing the deck, the deck names are not clickable
     //and only for display.
     if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count == 0) {
-      this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
+      this.setState({myDeck: this.state.myDeck.concat(<li key={this.state.hsCardKey}>
           <a href="#" id={card_cost} name={card_name} value={card_rarity}
           onClick={this.removeCard}>{card_cost} {card_name}</a></li>)});
-      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
+      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={this.state.hsCardKey}>
           {card_cost} {card_name}</li>)});
       this.setState({cardCounter: this.state.cardCounter + 1});
+      this.setState({hsCardKey: this.state.hsCardKey + 1});
     } else if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count == 1) {
       //If a card already exists and the user wants to add the same card,
       //remove the original card from the list and add in the card with x2
@@ -264,24 +266,26 @@ module.exports = global.HSDeckBuilder = React.createClass({
           card_picked = card_picked + k
         }
         if (card_picked == card_cost + " " + card_name) {
-          this.state.myDeck.splice(j, 1, <li key={j}>
+          this.state.myDeck.splice(j, 1, <li key={this.state.hsCardKey}>
               <a href="#" id={card_cost} name={card_name} value={card_rarity}
               onClick={this.removeCard}>{card_cost} {card_name+' x2'}</a></li>)
           this.setState({myDeck: this.state.myDeck});
-          this.state.myDeckFinal.splice(j, 1, <li key={j}>
+          this.state.myDeckFinal.splice(j, 1, <li key={this.state.hsCardKey}>
               {card_cost} {card_name+' x2'}</li>)
           this.setState({myDeckFinal: this.state.myDeckFinal});
           this.setState({cardCounter: this.state.cardCounter + 1});
+          this.setState({hsCardKey: this.state.hsCardKey + 1});
         }
         card_picked = "";
       }
     } else if (this.state.cardCounter < 30 && card_rarity == 'Legendary' && count == 0) {
-      this.setState({myDeck: this.state.myDeck.concat(<li key={i}>
+      this.setState({myDeck: this.state.myDeck.concat(<li key={this.state.hsCardKey}>
           <a href="#" id={card_cost} name={card_name} value={card_rarity}
           onClick={this.removeCard}>{card_cost} {card_name}</a></li>)});
-      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={i}>
+      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={this.state.hsCardKey}>
           {card_cost} {card_name}</li>)});
       this.setState({cardCounter: this.state.cardCounter + 1});
+      this.setState({hsCardKey: this.state.hsCardKey + 1});
     }
   },
 
@@ -307,21 +311,21 @@ module.exports = global.HSDeckBuilder = React.createClass({
       //with the original name without the ' x2'. Otherwise, remove the
       //card as normal.
       if (deck_list[j] == card_cost + " " + card_name + ' x2') {
-        var index = j;
-        this.state.myDeck.splice(j, 1, <li key={j}>
+        this.state.myDeck.splice(j, 1, <li key={this.state.hsCardKey}>
             <a href="#" id={card_cost} name={card_name} value={card_rarity}
             onClick={this.removeCard}>{card_cost} {card_name}</a></li>)
         this.setState({myDeck: this.state.myDeck});
-        this.state.myDeckFinal.splice(j, 1, <li key={j}>
+        this.state.myDeckFinal.splice(j, 1, <li key={this.state.hsCardKey}>
             {card_cost} {card_name}</li>)
         this.setState({myDeckFinal: this.state.myDeckFinal});
         this.setState({cardCounter: this.state.cardCounter - 1});
+        this.setState({hsCardKey: this.state.hsCardKey + 1});
       } else if (deck_list[j] == card_cost + " " + card_name) {
         var index = j;
         this.state.myDeck.splice(index, 1);
-        this.setState({myDeck: this.state.myDeck.concat([])});
+        this.setState({myDeck: this.state.myDeck});
         this.state.myDeckFinal.splice(index, 1);
-        this.setState({myDeckFinal: this.state.myDeckFinal.concat([])});
+        this.setState({myDeckFinal: this.state.myDeckFinal});
         this.setState({cardCounter: this.state.cardCounter - 1});
       }
     }
@@ -372,7 +376,8 @@ module.exports = global.HSDeckBuilder = React.createClass({
         neutral:[],
         myDeckFinal:[],
         heroCard:[],
-        cardCounter:0
+        cardCounter:0,
+        hsCardKey:0
       });
     }
   },
