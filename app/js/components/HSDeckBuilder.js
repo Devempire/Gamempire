@@ -68,24 +68,24 @@ module.exports = global.HSDeckBuilder = React.createClass({
     this.setState({showDeckBuilder: true});
     this.setState({showStore: false});
     // Uncomment the below code during release/testing phases. Comment it during development.
-    // unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
-    // .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
-    // .end(function (result) {
-    //   console.log(result.body);
-    //   var i = 0;
-    //   while (i < result.body.length) {
-    //     this.setState({neutral: this.state.neutral.concat(<li key={i}>
-    //       <a href="#" id={result.body[i].cost} name={result.body[i].name} value={result.body[i].rarity}
-    //       onClick={this.putCardToDeck}>{result.body[i].cost} {result.body[i].name}</a></li>)});
-    //     i++;
-    //   };
-    //   console.log(this.state.neutral);
-    // }.bind(this));
+    unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Neutral?collectible=1")
+    .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
+    .end(function (result) {
+      //console.log(result.body);
+      var i = 0;
+      while (i < result.body.length) {
+        this.setState({neutral: this.state.neutral.concat(<li key={i}>
+          <a href="#" id={result.body[i].cost} name={result.body[i].name} value={result.body[i].rarity}
+          onClick={this.putCardToDeck}>{result.body[i].cost} {result.body[i].name}</a></li>)});
+        i++;
+      };
+      //console.log(this.state.neutral);
+    }.bind(this));
     if (event.target.value == 'Druid') {
       unirest.get("https://omgvamp-hearthstone-v1.p.mashape.com/cards/classes/Druid?collectible=1")
       .header("X-Mashape-Key", "Y9iQPzINlFmshaXFeSThXj9Pj1ADp1SpHN4jsnHLjKJ1v2rjJ1")
       .end(function (result) {
-        console.log(result.body);
+        //console.log(result.body);
         //increment the value if a new hero is added or decrement if a hero is removed
         var i = 1;
         this.putClassCards(i, result.body);
