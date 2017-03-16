@@ -17,13 +17,14 @@ window.moment = moment
 window.PureRenderMixin = PureRenderMixin
 window.ReactGridLayout = ReactGridLayout
 global.api_server = "http://gamempire.net";
+//global.api_server = "http://localhost:8080";
 
 global.Login = require('./components/Login.js')
 global.Registration = require('./components/Registration.js')
 global.SideBar = require('./components/SideBar.js')
 global.Dashboard = require('./components/Dashboard.js')
 global.ProfileEdit = require('./components/ProfileEdit.js')
-global.Profile = require('./components/MyProfile.js')
+global.Profile = require('./components/Profile.js')
 global.Friends = require('./components/Friends.js')
 global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
 global.Soundcloud = require('./components/Soundcloud.js')

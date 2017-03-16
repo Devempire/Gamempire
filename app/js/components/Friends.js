@@ -60,23 +60,65 @@ module.exports = global.Friends = React.createClass({
 
   },
 
+  viewprofile(event) {
+    var id = event.target.parentNode.dataset.tag;
+    electron.remote.getGlobal('sharedObject').viewProfileID = id;
+    ReactDOM.render(
+			<Profile />,
+			document.getElementById('content')
+		);
+
+  },
 
   renderFriends(){
+
+var allUsers = [];
+for (var i = 0; i < this.state.friends.length; i++) {
+  if (!this.state.friends[i].avatar ){
+    allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
+  }else{
+    var id = [api_server+'/img/avatars/'+this.state.friends[i].id+'.jpg?'+new Date().getTime()];
+    allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src={id[0]} /></div>);
+  }
+
+allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><a data-tag={this.state.friends[i].id} onClick={this.viewprofile} ><b>{this.state.friends[i].username}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{this.state.friends[i].aboutme}</div>);
+}
+
+
+    ReactDOM.render(
+      <div key={Math.random().toString(36).substr(2, 5)}>{allUsers}</div>,
+      document.getElementById('targat')
+    );
+
+    {/*
 var targat = '';
+
 for (var i = 0; i < this.state.friends.length; i++) {
   if (!this.state.friends[i].avatar ){
     var avatar = '<img width="75" src="./../app/img/user.jpg" />';
   }else{
-    var avatar = '<img width="75" src="http://gamempire.net/img/avatars/'+this.state.friends[i].id+'.jpg?'+ new Date().getTime()+'" />';
+    var avatar = '<img width="75" src="'+api_server+'/img/avatars/'+this.state.friends[i].id+'.jpg?'+ new Date().getTime()+'" />';
   }
+
+  var userlink ='<a href="#"><b>'+this.state.friends[i].username+'</b></a>'
 
 
   targat = targat+
-    '<p>'+avatar+'&nbsp;&nbsp;&nbsp;<b>'+this.state.friends[i].username+'</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>'+this.state.friends[i].aboutme+'</i></p><br>';
+    '<p >'+avatar+'&nbsp;&nbsp;&nbsp;&nbsp;'+userlink+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>'+this.state.friends[i].aboutme+'</i></p><br>';
+
 
 }
-document.getElementById('targat').innerHTML = targat;
 
+
+ReactDOM.render(
+  {targat},
+  document.getElementById('targat')
+);
+
+//document.getElementById('targat').innerHTML = targat;
+
+
+*/}
 
 
 },

@@ -16,12 +16,12 @@ module.exports = global.Profile = React.createClass({
 
 
   loadProfile(){
-    var id = electron.remote.getGlobal('sharedObject').id;
-    $.get(api_server+'/user/profile/'+ id + '/info').done((res)=>{
+    var viewProfileID = electron.remote.getGlobal('sharedObject').viewProfileID;
+    $.get(api_server+'/user/profile/'+ viewProfileID + '/info').done((res)=>{
     	if (!res.avatar) {
     		var avatar = './../app/img/user.jpg';
         } else {
-        	var avatar = 'http://gamempire.net/img/avatars/'+id+'.jpg?' + new Date().getTime();
+        	var avatar = api_server+'/img/avatars/'+viewProfileID+'.jpg?' + new Date().getTime();
           	this.setState({showImageDelete:true});
         }
         this.setState({
@@ -60,7 +60,6 @@ module.exports = global.Profile = React.createClass({
      	</div>
      	)
 
- 
+
   },
 });
-

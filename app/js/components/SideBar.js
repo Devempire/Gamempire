@@ -36,7 +36,7 @@ module.exports = global.Bar = React.createClass({
 		if (avatar == false) {
 			avatar = './../app/img/user.jpg';
 		} else {
-			avatar = 'http://gamempire.net/img/avatars/'+id+'.jpg?' + new Date().getTime();
+			avatar = api_server+'/img/avatars/'+id+'.jpg?' + new Date().getTime();
 		}
 
 		return {
@@ -181,6 +181,7 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
 	},
 
 	_Profile(){
+		electron.remote.getGlobal('sharedObject').viewProfileID = electron.remote.getGlobal('sharedObject').id;
 		ReactDOM.render(
 			<Profile />,
 			document.getElementById('content')

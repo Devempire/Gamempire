@@ -67,7 +67,7 @@ module.exports = global.ProfileEdit = React.createClass({
                 if (!res.avatar) {
                   var avatar = './../app/img/user.jpg';
                 } else {
-                  var avatar = 'http://gamempire.net/img/avatars/'+d._id+'.jpg?' + new Date().getTime();
+                  var avatar = api_server+'/img/avatars/'+d._id+'.jpg?' + new Date().getTime();
                   this.setState({showImageDelete:true});
                 }
 
