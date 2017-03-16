@@ -55,7 +55,7 @@ module.exports = global.Bar = React.createClass({
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
-					<a href="#"onClick={this._Profile} id="_Profile">My Profile</a>
+					<a href="#"onClick={this._Profile} id="_Profile">Profile</a>
           			<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#"onClick={this._Friends} id="_Friends">Friends</a>
 	{/*
