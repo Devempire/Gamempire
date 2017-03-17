@@ -296,7 +296,7 @@ module.exports = global.Dashboard = React.createClass({
           <div key={widgetID} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle}
             <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
-            <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID)}>✖</span>
+            <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID, widgetTitle)}>✖</span>
           </p>
             <div className="widget">
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
@@ -336,7 +336,7 @@ module.exports = global.Dashboard = React.createClass({
         <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
           <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
-          <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID)}>✖</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID, widgetTitle)}>✖</span>
         </p>
         {listWidgets.loadwid(widgetID)}
         </div>
@@ -363,8 +363,7 @@ module.exports = global.Dashboard = React.createClass({
     );
   },
 
-
-  removeWidget(i) {
+  removeWidget(i, name) {
     this.setState({games: _.reject(this.state.games, {i: i})});
 
                  $.ajax({
@@ -396,8 +395,6 @@ module.exports = global.Dashboard = React.createClass({
                      }).fail((res)=>{
                       console.log("fail to remove");
                      });
-
-
   },
 
   goToProfileEdit() {

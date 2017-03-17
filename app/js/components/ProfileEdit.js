@@ -4,6 +4,7 @@ ReactGridLayout = WidthProvider(ReactGridLayout);
 import AvatarEditor from 'react-avatar-editor'
 
 const originalLayouts = getFromLS('layouts') || {};
+import Popup from 'react-popup';
 var fs = require('fs')
 
 module.exports = global.ProfileEdit = React.createClass({
@@ -150,6 +151,27 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   deleteAvatar(){
+    ReactDOM.render(
+        <Popup
+            className="mm-popup"
+            btnClass="mm-popup__btn"
+            closeBtn={true}
+            closeHtml={null}
+            defaultOk="Ok"
+            defaultCancel="Cancel"
+            wildClasses={false} />,
+        document.getElementById('popupContainer')
+    );
+
+    Popup.create({
+        title: null,
+        content: 'Hello, look at me',
+        className: 'alert',
+        buttons: {
+            right: ['ok']
+        }
+    });
+
     var token = electron.remote.getGlobal('sharedObject').token;
     var avatar = './../app/img/user.jpg';
     $.post(api_server+"/user/load",
@@ -179,6 +201,7 @@ module.exports = global.ProfileEdit = React.createClass({
       <div key={i} data-grid={el} className="noselect profileedit">
         <h3>Edit Profile</h3>
         <hr/>
+          <div id="popupContainer"></div>
           <div id='userAvatar'><img src={this.state.avatar} /></div>
           <div id='avatarEditor'></div>
 
