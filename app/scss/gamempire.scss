@@ -1,6 +1,8 @@
 
 @import './_settings.scss';
 @import '../../node_modules/foundation-sites/assets/foundation.scss';
+@import '../../node_modules/vex-js/dist/css/vex.css';
+@import '../../node_modules/vex-js/dist/css/vex-theme-os.css';
 @include foundation-everything(true);
 
 

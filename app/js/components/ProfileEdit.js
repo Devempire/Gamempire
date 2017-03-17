@@ -1,11 +1,15 @@
+var fs = require('fs')
 var WidthProvider = require('react-grid-layout').WidthProvider;
 var ReactGridLayout = require('react-grid-layout');
 ReactGridLayout = WidthProvider(ReactGridLayout);
 import AvatarEditor from 'react-avatar-editor'
 
+var vex = require('vex-js')
+vex.registerPlugin(require('vex-dialog'))
+vex.defaultOptions.className = 'vex-theme-os'
+
+
 const originalLayouts = getFromLS('layouts') || {};
-import Popup from 'react-popup';
-var fs = require('fs')
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
@@ -150,50 +154,51 @@ module.exports = global.ProfileEdit = React.createClass({
     document.getElementById('upload').style.display = "block";
   },
 
-  deleteAvatar(){
-    ReactDOM.render(
-        <Popup
-            className="mm-popup"
-            btnClass="mm-popup__btn"
-            closeBtn={true}
-            closeHtml={null}
-            defaultOk="Ok"
-            defaultCancel="Cancel"
-            wildClasses={false} />,
-        document.getElementById('popupContainer')
-    );
+  deleteAvatarConfirm(){
 
-    Popup.create({
-        title: null,
-        content: 'Hello, look at me',
-        className: 'alert',
-        buttons: {
-            right: ['ok']
+    vex.dialog.confirm({
+        overlayClosesOnClick: false,
+        message: 'Are you sure you want to remove your current avatar?',
+        callback: function (value){
+            if (value) {
+              //YES
+              console.log("YES REMOVE");
+              //The problem here is that `this.` referes to the functino created in line 162 "callback: function...". I need to somehow get `this.` from the parent. I tried 4 ways to call the function and I'm stuck.
+              this.deleteAvatar();
+            } else {
+              //NO
+                return;
+            }
         }
-    });
+    })
 
-    var token = electron.remote.getGlobal('sharedObject').token;
-    var avatar = './../app/img/user.jpg';
-    $.post(api_server+"/user/load",
-        {
-            'token' :token
-        }).done((d)=> {
-            $.ajax({
-                    url:api_server+"/user/profile/deleteAvatar",
-                    type:"PUT",
-                    data:{
-                        _id:d._id,
-                    }
-                }).done((res)=>{
-                    console.log('Avatar deleted.');
-                }).fail((err)=>{
-                    console.log('Avatar deletion failed.');
-                });
-            });
-    this.resetimage(avatar);
-    this.setState({showImageDelete:false});
-    global.rotate = 0;
   },
+
+  deleteAvatar(){
+     console.log("delete ran");
+               var token = electron.remote.getGlobal('sharedObject').token;
+               var avatar = './../app/img/user.jpg';
+               $.post(api_server+"/user/load",
+                   {
+                       'token' :token
+                   }).done((d)=> {
+                       $.ajax({
+                               url:api_server+"/user/profile/deleteAvatar",
+                               type:"PUT",
+                               data:{
+                                   _id:d._id,
+                               }
+                           }).done((res)=>{
+                               console.log('Avatar deleted.');
+                           }).fail((err)=>{
+                               console.log('Avatar deletion failed.');
+                           });
+                       });
+               global.ProfileEdit.resetimage(avatar);
+               this.setState({showImageDelete:false});
+               global.rotate = 0;
+
+   },
 
   createProfile(el) {
     var i = el.i;
@@ -201,7 +206,7 @@ module.exports = global.ProfileEdit = React.createClass({
       <div key={i} data-grid={el} className="noselect profileedit">
         <h3>Edit Profile</h3>
         <hr/>
-          <div id="popupContainer"></div>
+        <div id='popupContainer'></div>
           <div id='userAvatar'><img src={this.state.avatar} /></div>
           <div id='avatarEditor'></div>
 
@@ -209,7 +214,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <br/>
             <label htmlFor='profilepic' className='custom-file-upload'>Upload Profile Picture</label>
             <input id='profilepic' onChange={this.uploadPic} type='file' accept='image/*'/>
-            <label style={{display: this.state.showImageDelete ? 'inline-block' : 'none'}} onClick={this.deleteAvatar} className="custom-file-upload removepic">X</label>
+            <label style={{display: this.state.showImageDelete ? 'inline-block' : 'none'}} onClick={this.deleteAvatarConfirm} className="custom-file-upload removepic">X</label>
           </div>
 
           <div id='save_cancel'>
