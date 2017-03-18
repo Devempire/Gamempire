@@ -1,3 +1,6 @@
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
+
 module.exports = global.Bar = React.createClass({
 
 	editAboutMe(event) {
@@ -55,15 +58,15 @@ module.exports = global.Bar = React.createClass({
 		return <div>
 		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
-					<a href="#"onClick={this._Profile} id="_Profile">Profile</a>
-          			<a href="#"onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
-					<a href="#"onClick={this._Friends} id="_Friends">Friends</a>
+					<a href="#" onClick={this._Profile} id="_Profile">Profile</a>
+          			<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
+					<a href="#" onClick={this._Friends} id="_Friends">Friends</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 					<a id="8" >Add custom page</a>
 	*/}
 
-					<a href="#" id="_Logout" onClick={this._Logout}>Logout </a>
+					<a id="_Logout" onClick={this._LogoutConfirm}>Logout </a>
 					<div className="toggleNav" onClick={this.toggleNav}></div>
 				</div>
 
@@ -81,7 +84,7 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	toggleNav(){
-global.$('#usertopbar').width(global.$('#top_bar').width());
+		global.$('#usertopbar').width(global.$('#top_bar').width());
 		$("#mySidenav, #top_bar, #content, #playgroundFrame").toggleClass("navOpen");
 		if ( $("#mySidenav").hasClass("navOpen") ) {
 				//do something it does have the protected class!
@@ -131,7 +134,7 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
           <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
-					<a href="#" title="Logout" onClick={this._Logout} id="logout">🔐</a>
+					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
         </div>
   		);
 
@@ -188,6 +191,20 @@ global.$('#usertopbar').width(global.$('#top_bar').width());
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
+	},
+
+	_LogoutConfirm(){
+	    vex.dialog.confirm({
+	        overlayClosesOnClick: false,
+	        message: 'Are you sure you want to logout?',
+	        callback: function (value){
+	            if (value) {
+	              this._Logout();
+	            } else {
+	              return;
+	            }
+	        }.bind(this)
+	    })
 	},
 
 	_Logout(){

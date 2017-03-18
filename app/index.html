@@ -18,7 +18,25 @@ var ipc = electron.ipcRenderer;
     <div id="title-bar-btns"> <!-- close, minimize, maximize buttons -->
       <button id="min-btn" title="Minimize" onclick="ipc.sendSync('Minimize')"></button>
       <button id="max-btn" title="Maximize" onclick="ipc.sendSync('Maximize')"></button>
-      <button id="close-btn" title="Close" onclick="ipc.sendSync('closeWindow')"></button>
+      <button id="close-btn" title="Close" onclick="closeWindowConfirm()"></button>
+      <script>
+      var vex = require('vex-js')
+      vex.registerPlugin(require('vex-dialog'))
+      vex.defaultOptions.className = 'vex-theme-os'
+      function closeWindowConfirm(){
+        vex.dialog.confirm({
+            overlayClosesOnClick: false,
+            message: 'Are you sure you want to exit Gamempire?',
+            callback: function (value){
+                if (value) {
+                  ipc.sendSync('closeWindow')
+                } else {
+                  return;
+                }
+            }
+        })
+      }
+      </script>
     </div><!-- title bar buttons -->
   </div><!-- title bar -->
   <div id="top_bar" class="noselect"></div>

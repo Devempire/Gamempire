@@ -8,7 +8,6 @@ var vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
 
-
 const originalLayouts = getFromLS('layouts') || {};
 
 module.exports = global.ProfileEdit = React.createClass({
@@ -155,50 +154,42 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   deleteAvatarConfirm(){
-
     vex.dialog.confirm({
         overlayClosesOnClick: false,
         message: 'Are you sure you want to remove your current avatar?',
         callback: function (value){
             if (value) {
-              //YES
-              console.log("YES REMOVE");
-              //The problem here is that `this.` referes to the functino created in line 162 "callback: function...". I need to somehow get `this.` from the parent. I tried 4 ways to call the function and I'm stuck.
               this.deleteAvatar();
             } else {
-              //NO
-                return;
+              return;
             }
-        }
+        }.bind(this)
     })
-
   },
 
   deleteAvatar(){
-     console.log("delete ran");
-               var token = electron.remote.getGlobal('sharedObject').token;
-               var avatar = './../app/img/user.jpg';
-               $.post(api_server+"/user/load",
-                   {
-                       'token' :token
-                   }).done((d)=> {
-                       $.ajax({
-                               url:api_server+"/user/profile/deleteAvatar",
-                               type:"PUT",
-                               data:{
-                                   _id:d._id,
-                               }
-                           }).done((res)=>{
-                               console.log('Avatar deleted.');
-                           }).fail((err)=>{
-                               console.log('Avatar deletion failed.');
-                           });
-                       });
-               global.ProfileEdit.resetimage(avatar);
-               this.setState({showImageDelete:false});
-               global.rotate = 0;
-
-   },
+      var token = electron.remote.getGlobal('sharedObject').token;
+      var avatar = './../app/img/user.jpg';
+      $.post(api_server+"/user/load",
+      {
+         'token' :token
+      }).done((d)=> {
+         $.ajax({
+                 url:api_server+"/user/profile/deleteAvatar",
+                 type:"PUT",
+                 data:{
+                     _id:d._id,
+                 }
+             }).done((res)=>{
+                 console.log('Avatar deleted.');
+             }).fail((err)=>{
+                 console.log('Avatar deletion failed.');
+             });
+         });
+      this.resetimage(avatar);
+      this.setState({showImageDelete:false});
+      global.rotate = 0;
+  },
 
   createProfile(el) {
     var i = el.i;

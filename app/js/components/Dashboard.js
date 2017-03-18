@@ -4,6 +4,9 @@ ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
 const listWidgets = require('./listWidgets.js');
 
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
+
 module.exports = global.Dashboard = React.createClass({
 
   getDefaultProps() {
@@ -14,7 +17,6 @@ module.exports = global.Dashboard = React.createClass({
       rowHeight: 20,
     };
   },
-
 
   getInitialState() {
     var widget = electron.remote.getGlobal('sharedObject').widget;
@@ -29,33 +31,31 @@ module.exports = global.Dashboard = React.createClass({
       showStore:false,
       selectwidget:'',
     };
-
   },
 
+  onLayoutChange(layout, layouts) {
 
-    onLayoutChange(layout, layouts) {
+    this.setState({layouts});
+    if(JSON.stringify(layouts.md)=="[]") {
+            //console.log('Just stopped a unnecessary API request on blank layouts.');
+    }else{
+      $.ajax({
+        url:api_server+"/user/profile/updatelayout",
+        type:"PUT",
+        contentType: 'application/json; charset=utf-8',
+        data:JSON.stringify({
+                             _id:this.state.id,
+                             layout:layouts
+                         })
+                     }).done((res)=>{
+                      electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
 
-      this.setState({layouts});
-      if(JSON.stringify(layouts.md)=="[]") {
-              //console.log('Just stopped a unnecessary API request on blank layouts.');
-      }else{
-        $.ajax({
-          url:api_server+"/user/profile/updatelayout",
-          type:"PUT",
-          contentType: 'application/json; charset=utf-8',
-          data:JSON.stringify({
-                               _id:this.state.id,
-                               layout:layouts
-                           })
-                       }).done((res)=>{
-                        electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
+                    }).fail((err)=>{
+                      console.log("layout fail to update to server!")
 
-                      }).fail((err)=>{
-                        console.log("layout fail to update to server!")
-
-                      })
-      }
-    },
+                    })
+    }
+  },
 
   loadWidgets(){
     $.get(api_server+"/widget/show").done((res)=>{
@@ -207,11 +207,6 @@ module.exports = global.Dashboard = React.createClass({
     this.setState({showStore: true});
   },
 
-
-  
-
-
-
   handleSubmit(event) {
       event.preventDefault();
 
@@ -283,7 +278,6 @@ module.exports = global.Dashboard = React.createClass({
 
   },
 
-
   onGame(el){
     var i =el.i;
     var widgettype = el.widgettype;
@@ -296,7 +290,7 @@ module.exports = global.Dashboard = React.createClass({
           <div key={widgetID} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle}
             <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
-            <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID, widgetTitle)}>✖</span>
+            <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
           </p>
             <div className="widget">
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
@@ -336,7 +330,7 @@ module.exports = global.Dashboard = React.createClass({
         <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
           <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
-          <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID, widgetTitle)}>✖</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
         </p>
         {listWidgets.loadwid(widgetID)}
         </div>
@@ -346,15 +340,13 @@ module.exports = global.Dashboard = React.createClass({
       <div key={widgetID} data-grid={el} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
           <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
-          <span title="Remove widget" className="remove" onClick={this.removeWidget.bind(this, widgetID)}>✖</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
         </p>
         {listWidgets.loadjsx(widgetID)}
       </div>
     );
     }
     //console.log(widgetTitle + ' Loaded.');
-
-
   },
 
   onwidget(item){
@@ -363,7 +355,21 @@ module.exports = global.Dashboard = React.createClass({
     );
   },
 
-  removeWidget(i, name) {
+  removeWidgetConfirm(i, name){
+    vex.dialog.confirm({
+        overlayClosesOnClick: false,
+        message: 'Are you sure you want to remove the ' + name + ' Widget?',
+        callback: function (value){
+            if (value) {
+              this.removeWidget(i);
+            } else {
+              return;
+            }
+        }.bind(this)
+    })
+  },
+
+  removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
 
                  $.ajax({
