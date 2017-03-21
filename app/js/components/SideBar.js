@@ -199,9 +199,9 @@ module.exports = global.Bar = React.createClass({
 	        message: 'Are you sure you want to logout?',
 	        callback: function (value){
 	            if (value) {
-	              this._Logout();
+	              	this._Logout();
 	            } else {
-	              return;
+	            	return;
 	            }
 	        }.bind(this)
 	    })

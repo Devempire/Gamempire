@@ -1,3 +1,6 @@
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
+
 module.exports = class Registration extends React.Component {
 
     constructor(props) {
@@ -184,7 +187,7 @@ module.exports = class Registration extends React.Component {
 
     }
 
-     _register(){
+    _register(){
 
         $.post(api_server+'/user/add',
 
@@ -202,7 +205,7 @@ module.exports = class Registration extends React.Component {
         )
             .done((res) =>{
 
-                this._backToLogin();
+                this._registerConfirm();
             })
             .fail((res)=>{
                     $("#signupmsg").html("Username or email already exists !<button id='close' onclick='$(this).parent().hide();' >");
@@ -215,6 +218,17 @@ module.exports = class Registration extends React.Component {
                     console.log("i am in trouble");
                         });
 
+    }
+
+    _registerConfirm(){
+        vex.dialog.alert({
+            message: 'A verification email has been sent to your registered email. Please check it to verify your account.',
+            callback: function (value){
+                if (value) {
+                    this._backToLogin();
+                }
+            }.bind(this)
+        })
     }
 
     _backToLogin() {
