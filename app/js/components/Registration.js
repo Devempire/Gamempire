@@ -205,7 +205,7 @@ module.exports = class Registration extends React.Component {
         )
             .done((res) =>{
 
-                this._registerConfirm();
+                this._registerConfirm(this.state.email);
             })
             .fail((res)=>{
                     $("#signupmsg").html("Username or email already exists !<button id='close' onclick='$(this).parent().hide();' >");
@@ -220,9 +220,9 @@ module.exports = class Registration extends React.Component {
 
     }
 
-    _registerConfirm(){
+    _registerConfirm(email){
         vex.dialog.alert({
-            message: 'A verification email has been sent to your registered email. Please check it to verify your account.',
+            message: 'We have sent an email to ' + email + ' to verify your email address. Please click the link in that email to get verified.',
             callback: function (value){
                 if (value) {
                     this._backToLogin();
