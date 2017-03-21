@@ -8,7 +8,6 @@ var vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
 
-const originalLayouts = getFromLS('layouts') || {};
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
@@ -23,10 +22,10 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   getInitialState() {
-    var layout = this.generateLayout();
+;
     return {
 
-      layout: layout,
+      layout: {},
       items:{i:"edit",x:0,y:0,w:12,h:27,static: true},
       pw:[],
       email:[],
@@ -42,13 +41,6 @@ module.exports = global.ProfileEdit = React.createClass({
     };
   },
 
-  generateLayout() {
-    var p = this.props;
-    return _.map(new Array(p.items), function(item, i) {
-      var y = _.result(p, 'y') || Math.ceil(Math.random() * 4) + 1;
-      return {x: i * 2 % 12, y: Math.floor(i / 6) * y, w: 2, h: y, i: i.toString()};
-    });
-  },
 
   // We're using the cols coming back from this to calculate where to add new items.
   onBreakpointChange(breakpoint, cols) {
@@ -80,7 +72,9 @@ module.exports = global.ProfileEdit = React.createClass({
                                 firstname:res.firstname,
                                 lastname:res.lastname,
                                 birthday:res.dateofbirth,
-                                avatar:avatar
+                                Email:res.email,
+                                avatar:avatar,
+                                is_verified:res.is_verified,
                 });
         });
     });
@@ -234,10 +228,29 @@ module.exports = global.ProfileEdit = React.createClass({
           <button className="button" onClick={this.checkValid}> Submit </button>
           <button className="button" onClick={this.onAddchangepw}>Change Password</button>
           <button className="button" onClick={this.onAddchangeEmail}>Change Email</button>
+          <button className="button" onClick={this.resend} style={{display: this.state.is_verified?  'none':'block' }}>Resend Email Verification</button>
           <button className="button secondary" onClick={this.backToDashboard}>Back to Dashboard</button>
         </div>
       </div>
     );
+  },
+
+  resend(){
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+          $.post( api_server+"/profile/resend",
+                        {
+                          _id :d._id,
+                        email:this.state.Email
+
+                          }
+                        ).done(function(res){
+                          
+                        });
+                      });
   },
 
   handleScale(){
@@ -306,7 +319,7 @@ module.exports = global.ProfileEdit = React.createClass({
         x: 0,
         y: 16,
         w: 4,
-        h: 10
+        h: 15
       })
     });
     }
@@ -320,7 +333,7 @@ module.exports = global.ProfileEdit = React.createClass({
         x: 4,
         y: 16,
         w: 4,
-        h: 10
+        h: 15
       })
     });
   }
@@ -356,7 +369,7 @@ module.exports = global.ProfileEdit = React.createClass({
         </label>
         <br/>
         </form>
-        <button onClick={this.checkPw}> Submit </button>
+        <button className="button" onClick={this.checkPw}> Submit </button>
       </div>
     );
   },
@@ -374,7 +387,7 @@ module.exports = global.ProfileEdit = React.createClass({
         <font id='newemail' color='red'></font>
         </label>
         </form>
-        <button onClick={this.checkEmail}> Submit </button>
+        <button className="button" onClick={this.checkEmail}> Submit </button>
       </div>
     );
   },
@@ -551,9 +564,16 @@ module.exports = global.ProfileEdit = React.createClass({
                         "email":email
                         }
                     }).done((res)=>{
-                        errornewemail.innerHTML = "";
-                        this.onRemoveItem1();
+                      $.post( api_server+"/profile/resend",
+                        {_id :d._id,
+                        email:email
 
+                          }
+                        ).done(function(res){
+                          this.setState({is_verified:false});
+                        });
+                      errornewemail.innerHTML = "";
+                        this.onRemoveItem1();
                     }).fail((res)=>{
                         errornewemail.innerHTML = "The Email already exist!";
                     });
@@ -562,20 +582,4 @@ module.exports = global.ProfileEdit = React.createClass({
   }
 });
 
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-    } catch(e) {/*Ignore*/}
-  }
-  return ls[key];
-}
 
-function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem('rgl-8', JSON.stringify({
-      key: value
-    }));
-  }
-}
