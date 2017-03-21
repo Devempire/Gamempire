@@ -6,7 +6,10 @@ const _ = require('lodash')
 const moment = require('moment')
 const PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin.js')
 const ReactGridLayout = require('react-grid-layout');
+const os = require('os');
 
+
+global.jquery = $
 window.React = React
 window.ReactDOM = ReactDOM
 window.injectTapEventPlugin = injectTapEventPlugin
@@ -16,6 +19,7 @@ window._ = _
 window.moment = moment
 window.PureRenderMixin = PureRenderMixin
 window.ReactGridLayout = ReactGridLayout
+window.os = os
 global.api_server = "http://gamempire.net";
 //global.api_server = "http://localhost:8080";
 
