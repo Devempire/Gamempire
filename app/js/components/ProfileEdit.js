@@ -22,7 +22,6 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   getInitialState() {
-;
     return {
 
       layout: {},
@@ -214,7 +213,16 @@ module.exports = global.ProfileEdit = React.createClass({
             Username: <br/>
             <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
             <font id='uname' color='red'></font>
-            First Name: <br/>
+            First Name:
+
+            <div className="onoffswitch" style={{display : 'inline-block'}}>
+                <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
+
             <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
             <font id='fname' color='red'></font>
             Last Name: <br/>
@@ -248,7 +256,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
                           }
                         ).done(function(res){
-                          
+
                         });
                       });
   },
@@ -581,5 +589,3 @@ module.exports = global.ProfileEdit = React.createClass({
     }
   }
 });
-
-
