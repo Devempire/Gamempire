@@ -570,7 +570,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
                           }
                         ).done(function(res){
-                          this.setState({is_verified:false});
+                          //
                         });
                       errornewemail.innerHTML = "";
                         this.onRemoveItem1();
