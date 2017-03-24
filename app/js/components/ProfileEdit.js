@@ -86,6 +86,10 @@ module.exports = global.ProfileEdit = React.createClass({
                       var toggleEle = document.getElementById('toggle_privacy_first_name');
                       toggleEle.setAttribute('checked', 'checked');
                     }
+                    setTimeout(function () {
+                           document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
+                    }, 270);
+
                   }
                 }
         });
@@ -239,7 +243,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <label className="aboutmelabel">{this.state.aboutme}</label>
             First Name:
 
-            <div className="onoffswitch" style={{display : 'inline-block'}}>
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
                 <input type="checkbox" onClick={this.toggleFName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
                 <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
                     <span className="onoffswitch-inner"></span>
