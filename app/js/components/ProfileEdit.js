@@ -37,6 +37,7 @@ module.exports = global.ProfileEdit = React.createClass({
       scale: 1.2,
       showImageDelete:false,
       check:false,
+      aboutme:null
 
     };
   },
@@ -74,6 +75,7 @@ module.exports = global.ProfileEdit = React.createClass({
                                 Email:res.email,
                                 avatar:avatar,
                                 is_verified:res.is_verified,
+                                aboutme:res.aboutme
                 });
 
                 console.log(res.privacy);
@@ -224,6 +226,17 @@ module.exports = global.ProfileEdit = React.createClass({
             Username: <br/>
             <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
             <font id='uname' color='red'></font>
+            About Me: 
+
+            <div className="onoffswitch" style={{display : 'inline-block'}}>
+                <input type="checkbox" onClick={this.toggleAboutMe} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_about_me"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_about_me">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
+
+            <label className="aboutmelabel">{this.state.aboutme}</label>
             First Name:
 
             <div className="onoffswitch" style={{display : 'inline-block'}}>
@@ -261,6 +274,10 @@ module.exports = global.ProfileEdit = React.createClass({
         </div>
       </div>
     );
+  },
+
+  toggleAboutMe() {
+    var toggleEle = document.getElementById('toggle_privacy_about_me');
   },
 
   toggleFName() {
