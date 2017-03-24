@@ -35,11 +35,11 @@ module.exports = global.ProfileEdit = React.createClass({
       birthday:null,
       avatar:null,
       scale: 1.2,
-      showImageDelete:false
+      showImageDelete:false,
+      check:false,
 
     };
   },
-
 
   // We're using the cols coming back from this to calculate where to add new items.
   onBreakpointChange(breakpoint, cols) {
@@ -75,6 +75,17 @@ module.exports = global.ProfileEdit = React.createClass({
                                 avatar:avatar,
                                 is_verified:res.is_verified,
                 });
+
+                console.log(res.privacy);
+
+                for (var i in res.privacy) {
+                  if (i == 'firstname') {
+                    if (res.privacy[i] == false || res.privacy[i] == 'false') {
+                      var toggleEle = document.getElementById('toggle_privacy_first_name');
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                  }
+                }
         });
     });
   },
@@ -216,7 +227,7 @@ module.exports = global.ProfileEdit = React.createClass({
             First Name:
 
             <div className="onoffswitch" style={{display : 'inline-block'}}>
-                <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
+                <input type="checkbox" onClick={this.toggleFName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
                 <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
                     <span className="onoffswitch-inner"></span>
                     <span className="onoffswitch-switch"></span>
@@ -225,7 +236,16 @@ module.exports = global.ProfileEdit = React.createClass({
 
             <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
             <font id='fname' color='red'></font>
-            Last Name: <br/>
+            Last Name:
+
+            <div className="onoffswitch" style={{display : 'inline-block'}}>
+                <input type="checkbox" onClick={this.toggleLName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_last_name"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_last_name">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
+
             <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
             <font id='lname' color='red'></font>
             Birthday: <br/>
@@ -241,6 +261,47 @@ module.exports = global.ProfileEdit = React.createClass({
         </div>
       </div>
     );
+  },
+
+  toggleFName() {
+    var toggleEle = document.getElementById('toggle_privacy_first_name');
+    //If at the time you clicked the toggle was public, it means you
+    //want to make the field private and vise versa.
+    //removeAttribute('checked') = true = private
+    //setAttribute('checked', 'checked') = false = public
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      console.log('one');
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      console.log('two');
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    //toggleEle.setAttribute('checked', 'checked');
+    //console.log(toggleEle);
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/user/profile/toggleFirstName",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("firstname's publicity is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
+  },
+
+  toggleLName() {
+    var toggleEle = document.getElementById('toggle_privacy_last_name');
   },
 
   resend(){

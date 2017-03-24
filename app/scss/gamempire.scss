@@ -1297,7 +1297,7 @@ color: lighten( $background-color, 55%);
 /* Toggled buttons used in Playground */
 
 .onoffswitch {
-    position: relative; width: 90px;
+    position: relative; width: 110px;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-checkbox {
@@ -1317,12 +1317,12 @@ color: lighten( $background-color, 55%);
     box-sizing: border-box;
 }
 .onoffswitch-inner:before {
-    content: "ON";
+    content: "Public";
     padding-left: 10px;
     background-color: #E65768; color: #FFFFFF;
 }
 .onoffswitch-inner:after {
-    content: "OFF";
+    content: "Private";
     padding-right: 6px;
     background-color: #EEEEEE; color: #999999;
     text-align: right;
@@ -1331,7 +1331,7 @@ color: lighten( $background-color, 55%);
     display: block; width: 18px; margin: 3px;
     background: #FFFFFF;
     position: absolute; top: -3px; bottom: 4px;
-    right: 52px;
+    right: 72px;
     border: 2px solid #999999; border-radius: 20px;
     transition: all 0.3s ease-in 0s;
 }

@@ -56,6 +56,9 @@ module.exports = global.Profile = React.createClass({
      return (<div>
      	<img src={this.state.avatar} /><br/>
      	<h3>{this.state.username}</h3>
+      <h4>{this.state.firstname}</h4>
+      <h5>{this.state.lastname}</h5>
+      <h6>{this.state.birthday}</h6>
      	<p>{this.state.aboutme}</p> <br/>
      	</div>
      	)
