@@ -8,7 +8,6 @@ var vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
 
-
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
 
@@ -25,7 +24,7 @@ module.exports = global.ProfileEdit = React.createClass({
     return {
 
       layout: {},
-      items:{i:"edit",x:0,y:0,w:12,h:27,static: true},
+      items:{i:"edit",x:0,y:0,w:12,h:58,static: true},
       pw:[],
       email:[],
       response:undefined,
@@ -37,7 +36,7 @@ module.exports = global.ProfileEdit = React.createClass({
       scale: 1.2,
       showImageDelete:false,
       check:false,
-      aboutme:null
+      aboutme:null,
 
     };
   },
@@ -78,19 +77,62 @@ module.exports = global.ProfileEdit = React.createClass({
                                 aboutme:res.aboutme
                 });
 
-                console.log(res.privacy);
+
 
                 for (var i in res.privacy) {
                   if (i == 'firstname') {
-                    if (res.privacy[i] == false || res.privacy[i] == 'false') {
+                    if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_first_name');
                       toggleEle.setAttribute('checked', 'checked');
                     }
                     setTimeout(function () {
-                           document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
+                      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
                     }, 270);
-
-                  }
+                  } else if (i == 'lastname') {
+                    if (res.privacy[i] == 'false') {
+                      var toggleEle = document.getElementById('toggle_privacy_last_name');
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
+                    }, 270);
+                  } else if (i == 'dateofbirth') {
+                    if (res.privacy[i] == 'false') {
+                      var toggleEle = document.getElementById('toggle_privacy_birthday');
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_birthday').parentNode.style.visibility = "visible";
+                    }, 270);
+                  } else if (i == 'email') {
+                    if (res.privacy[i] == 'false') {
+                      var toggleEle = document.getElementById('toggle_privacy_email');
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_email').parentNode.style.visibility = "visible";
+                    }, 270);
+                  } else if (i == 'aboutme') {
+                    var toggleEle = document.getElementById('toggle_privacy_about_me');
+                    if (res.privacy[i] == 'true') {
+                      toggleEle.removeAttribute('checked');
+                    } else if (res.privacy[i] == 'false' || res.privacy[i] == false) {
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_about_me').parentNode.style.visibility = "visible";
+                    }, 270);
+                  } else if (i == 'avatar') {
+                    var toggleEle = document.getElementById('toggle_privacy_avatar');
+                    if (res.privacy[i] == 'true') {
+                      toggleEle.removeAttribute('checked');
+                    } else if (res.privacy[i] == 'false' || res.privacy[i] == false) {
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_avatar').parentNode.style.visibility = "visible";
+                    }, 270);
+                  } 
                 }
         });
     });
@@ -148,7 +190,6 @@ module.exports = global.ProfileEdit = React.createClass({
       <img src={imgData.toDataURL('image/jpeg')}/>,
     document.getElementById('topbar_avatar')
     );
-
 
   },
 
@@ -211,6 +252,14 @@ module.exports = global.ProfileEdit = React.createClass({
           <div id='userAvatar'><img src={this.state.avatar} /></div>
           <div id='avatarEditor'></div>
 
+          <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
+              <input type="checkbox" onClick={this.toggleAvatar} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_avatar"/>
+              <label className="onoffswitch-label" htmlFor="toggle_privacy_avatar">
+                  <span className="onoffswitch-inner"></span>
+                  <span className="onoffswitch-switch"></span>
+              </label>
+          </div>
+
           <div id='upload'>
             <br/>
             <label htmlFor='profilepic' className='custom-file-upload'>Upload Profile Picture</label>
@@ -232,7 +281,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <font id='uname' color='red'></font>
             About Me: 
 
-            <div className="onoffswitch" style={{display : 'inline-block'}}>
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
                 <input type="checkbox" onClick={this.toggleAboutMe} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_about_me"/>
                 <label className="onoffswitch-label" htmlFor="toggle_privacy_about_me">
                     <span className="onoffswitch-inner"></span>
@@ -255,7 +304,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <font id='fname' color='red'></font>
             Last Name:
 
-            <div className="onoffswitch" style={{display : 'inline-block'}}>
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
                 <input type="checkbox" onClick={this.toggleLName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_last_name"/>
                 <label className="onoffswitch-label" htmlFor="toggle_privacy_last_name">
                     <span className="onoffswitch-inner"></span>
@@ -265,14 +314,75 @@ module.exports = global.ProfileEdit = React.createClass({
 
             <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
             <font id='lname' color='red'></font>
-            Birthday: <br/>
+            Birthday: 
+
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
+                <input type="checkbox" onClick={this.toggleBday} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_birthday"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_birthday">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
+
             <input type="date" id="birthday" value={this.state.birthday} onChange={(event) => {this.setState({birthday: moment(event.target.value).format('YYYY-MM-DD')})}}/>
         </form>
 
+        <button className="button" onClick={this.onAddchangeEmail}>Change Email</button>
+        <div key={'changeEmail'} id='emailEdit' data-grid={el} style={{display : 'none'}}>
+          <h3> Edit Your Email</h3>
+          <hr/>
+          <form>
+          <label>
+          New Email:
+
+          <div className="onoffswitch" style={{display : 'inline-block'}}>
+              <input type="checkbox" onClick={this.toggleEmail} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_email"/>
+              <label className="onoffswitch-label" htmlFor="toggle_privacy_email">
+                  <span className="onoffswitch-inner"></span>
+                  <span className="onoffswitch-switch"></span>
+              </label>
+          </div>
+
+          <input type="text" id="email" />
+          <font id='newemail' color='red'></font>
+          </label>
+          </form>
+          <div className="row expanded button-group">
+            <button className="button" onClick={this.checkEmail}> Submit </button>
+            <button className="button secondary" onClick={this.cancelChangeEmail}>Cancel</button>
+          </div>
+        </div>
+
+        <button className="button" onClick={this.onAddchangepw}>Change Password</button>
+        <div key={'changePassword'} id='passwordEdit' data-grid={el} style={{display : 'none'}}>
+          <h3> Edit Your Password</h3>
+          <hr/>
+          <form>
+          <label>
+          Old Password:
+          <input type="password" id="oldpw" />
+          <font id='oldpass' color='red'></font>
+          </label>
+          <label>
+          New Password:
+          <input type="password" id="newpw" />
+          <font id='newpass' color='red'></font>
+          </label>
+          <label>
+          Confirm Password:
+          <input type="password" id="cnewpw" />
+          <font id='cnewpass' color='red'></font>
+          </label>
+          <br/>
+          </form>
+          <div className="row expanded button-group">
+            <button className="button" onClick={this.checkPw}> Submit </button>
+            <button className="button secondary" onClick={this.cancelChangePw}>Cancel</button>
+          </div>
+        </div>
+
         <div className="row expanded button-group">
           <button className="button" onClick={this.checkValid}> Submit </button>
-          <button className="button" onClick={this.onAddchangepw}>Change Password</button>
-          <button className="button" onClick={this.onAddchangeEmail}>Change Email</button>
           <button className="button" onClick={this.resend} style={{display: this.state.is_verified?  'none':'block' }}>Resend Email Verification</button>
           <button className="button secondary" onClick={this.backToDashboard}>Back to Dashboard</button>
         </div>
@@ -280,8 +390,62 @@ module.exports = global.ProfileEdit = React.createClass({
     );
   },
 
+  toggleAvatar() {
+    var toggleEle = document.getElementById('toggle_privacy_avatar');
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/user/profile/toggleAvatar",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("avatar's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
+  },
+
   toggleAboutMe() {
     var toggleEle = document.getElementById('toggle_privacy_about_me');
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/user/profile/toggleAboutMe",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("aboutme's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
   },
 
   toggleFName() {
@@ -291,16 +455,12 @@ module.exports = global.ProfileEdit = React.createClass({
     //removeAttribute('checked') = true = private
     //setAttribute('checked', 'checked') = false = public
     if (toggleEle.getAttribute('checked') == 'checked') {
-      console.log('one');
       toggleEle.removeAttribute('checked');
       this.setState({check: true});
     } else {
-      console.log('two');
       toggleEle.setAttribute('checked', 'checked');
       this.setState({check: false});
     }
-    //toggleEle.setAttribute('checked', 'checked');
-    //console.log(toggleEle);
     var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/user/load",
          {
@@ -314,7 +474,7 @@ module.exports = global.ProfileEdit = React.createClass({
                        privacy:this.state.check
                    }
                }).done((res)=>{
-                   console.log("firstname's publicity is updated");
+                   console.log("firstname's privacy is updated");
                }).fail((err)=>{
                    console.log("failed");
                });
@@ -323,6 +483,89 @@ module.exports = global.ProfileEdit = React.createClass({
 
   toggleLName() {
     var toggleEle = document.getElementById('toggle_privacy_last_name');
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/user/profile/toggleLastName",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("lastname's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
+  },
+
+  toggleBday() {
+    var toggleEle = document.getElementById('toggle_privacy_birthday');
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/user/profile/toggleBirthday",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("birthday's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
+  },
+
+  toggleEmail() {
+    var toggleEle = document.getElementById('toggle_privacy_email');
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/user/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/user/profile/toggleEmail",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("email's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
   },
 
   resend(){
@@ -401,7 +644,30 @@ module.exports = global.ProfileEdit = React.createClass({
     this.setState({email: _.reject(this.state.email, {i: "change email"})});
   },
 
+  onAddchangeEmail() {
+    var emailEdit = document.getElementById('emailEdit');
+    emailEdit.removeAttribute('style');
+    if(this.state.email.length==0){
+      this.setState({
+        email: this.state.email.concat({
+          i: "change email",
+          x: 4,
+          y: 16,
+          w: 4,
+          h: 15
+        })
+      });
+    }
+  },
+
+  cancelChangeEmail() {
+    var emailEdit = document.getElementById('emailEdit');
+    emailEdit.setAttribute('style', 'display: none');
+  },
+
   onAddchangepw() {
+    var passwordEdit = document.getElementById('passwordEdit');
+    passwordEdit.removeAttribute('style');
     if(this.state.pw.length==0){
     this.setState({
       pw: this.state.pw.concat({
@@ -415,18 +681,9 @@ module.exports = global.ProfileEdit = React.createClass({
     }
   },
 
-  onAddchangeEmail() {
-  if(this.state.email.length==0){
-    this.setState({
-      email: this.state.email.concat({
-        i: "change email",
-        x: 4,
-        y: 16,
-        w: 4,
-        h: 15
-      })
-    });
-  }
+  cancelChangePw() {
+    var passwordEdit = document.getElementById('passwordEdit');
+    passwordEdit.setAttribute('style', 'display: none');
   },
 
   backToDashboard() {
@@ -435,52 +692,74 @@ module.exports = global.ProfileEdit = React.createClass({
         document.getElementById('content'));
   },
 
-  changePW(el) {
-    var i = el.i;
-    return (
-      <div key={i} data-grid={el}>
-        <h3> Edit Your password</h3>
-        <hr/>
-        <form>
-        <label>
-        Old password:
-        <input type="password" id="oldpw" />
-        <font id='oldpass' color='red'></font>
-        </label>
-        <label>
-        New password:
-        <input type="password" id="newpw" />
-        <font id='newpass' color='red'></font>
-        </label>
-        <label>
-        Confirm password:
-        <input type="password" id="cnewpw" />
-        <font id='cnewpass' color='red'></font>
-        </label>
-        <br/>
-        </form>
-        <button className="button" onClick={this.checkPw}> Submit </button>
-      </div>
-    );
-  },
+  // changePW(el) {
+  //   var i = el.i;
+  //   return (
+  //     <div key={i} data-grid={el}>
+  //       <h3> Edit Your Password</h3>
+  //       <hr/>
+  //       <form>
+  //       <label>
+  //       Old Password:
+  //       <input type="password" id="oldpw" />
+  //       <font id='oldpass' color='red'></font>
+  //       </label>
+  //       <label>
+  //       New Password:
+  //       <input type="password" id="newpw" />
+  //       <font id='newpass' color='red'></font>
+  //       </label>
+  //       <label>
+  //       Confirm Password:
+  //       <input type="password" id="cnewpw" />
+  //       <font id='cnewpass' color='red'></font>
+  //       </label>
+  //       <br/>
+  //       </form>
+  //       <button className="button" onClick={this.checkPw}> Submit </button>
+  //     </div>
+  //   );
+  // },
 
-  changeEmail(el) {
-    var i = el.i;
-    return (
-      <div key={i} data-grid={el}>
-        <h3> Edit Your Email</h3>
-        <hr/>
-        <form>
-        <label>
-        New email
-        <input type="text" id="email" />
-        <font id='newemail' color='red'></font>
-        </label>
-        </form>
-        <button className="button" onClick={this.checkEmail}> Submit </button>
-      </div>
-    );
-  },
+  // changeEmail(el) {
+  //   var i = el.i;
+  //   return (
+  //     <div key={i} data-grid={el}>
+  //       <h3> Edit Your Email</h3>
+  //       <hr/>
+  //       <form>
+  //       <label>
+  //       New Email:
+
+  //       <div className="onoffswitch" style={{display : 'inline-block'}}>
+  //           <input type="checkbox" onClick={this.toggleEmail} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_email"/>
+  //           <label className="onoffswitch-label" htmlFor="toggle_privacy_email">
+  //               <span className="onoffswitch-inner"></span>
+  //               <span className="onoffswitch-switch"></span>
+  //           </label>
+  //       </div>
+
+  //       <input type="text" id="email" />
+  //       <font id='newemail' color='red'></font>
+  //       </label>
+  //       </form>
+  //       <button className="button" onClick={this.checkEmail}> Submit </button>
+  //     </div>
+  //   );
+  // },
+
+  // add this code to the above code below input type checkbox:
+  // <iframe style="display:none" onClick={this.emailToggleChk()}></iframe>
+  // emailToggleChk() {
+  //   if (this.state.emailPrivacy == "false") {
+  //     var toggleEle = document.getElementById('toggle_privacy_email');
+  //     toggleEle.setAttribute('checked', 'checked');
+                    
+  //     setTimeout(function () {
+  //       document.getElementById('toggle_privacy_email').parentNode.style.visibility = "visible";
+  //     }, 270);
+  //   }
+  // },
 
   render() {
     var title = "Profile Edit \u2014 Gamempire"
@@ -499,8 +778,6 @@ module.exports = global.ProfileEdit = React.createClass({
           <ReactGridLayout onLayoutChange={this.onLayoutChange} onBreakpointChange={this.onBreakpointChange}
               {...this.props}>
               { this.createProfile(this.state.items)}
-              {_.map(this.state.pw, this.changePW)}
-              {_.map(this.state.email, this.changeEmail)}
           </ReactGridLayout>
 
       );
@@ -578,6 +855,8 @@ module.exports = global.ProfileEdit = React.createClass({
     var errornewpass = document.getElementById('newpass');
     var erroroldpass = document.getElementById('oldpass');
     var errorcnewpass = document.getElementById('cnewpass');
+    var passwordEdit = document.getElementById('passwordEdit');
+
     if (newpw == "") {
         errornewpass.innerHTML = "The field is empty.";
     } else if (newpw.length <6) {
@@ -605,6 +884,7 @@ module.exports = global.ProfileEdit = React.createClass({
                 _id:d._id,
                 "password":oldpw
             }).done( (res) =>{
+                passwordEdit.setAttribute('style', 'display: none');
                 erroroldpass.innerHTML ="";
                 $.ajax({
 
@@ -629,6 +909,7 @@ module.exports = global.ProfileEdit = React.createClass({
     var emailPattern = new RegExp('^[a-zA-Z0-9]{1,}@[a-zA-Z]{1,}[.]{1}[a-zA-Z]{1,}$');
     var email = $('#email').val();
     var errornewemail = document.getElementById('newemail');
+    var emailEdit = document.getElementById('emailEdit');
 
     if (email == "") {
         errornewemail.innerHTML = "The field is empty.";
@@ -654,6 +935,7 @@ module.exports = global.ProfileEdit = React.createClass({
                         "email":email
                         }
                     }).done((res)=>{
+                      emailEdit.setAttribute('style', 'display: none');
                       $.post( api_server+"/profile/resend",
                         {_id :d._id,
                         email:email
