@@ -29,7 +29,7 @@ module.exports = global.Notepad = React.createClass({
 
   updatedata(){
     $.ajax({
-          url:api_server+"/user/profile/dataupload",
+          url:api_server+"/login/profile/dataupload",
           type:"PUT",
           contentType: 'application/json; charset=utf-8',
           data:JSON.stringify({

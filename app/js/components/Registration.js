@@ -189,7 +189,7 @@ module.exports = class Registration extends React.Component {
 
     _register(){
 
-        $.post(api_server+'/user/add',
+        $.post(api_server+'/login/add',
 
                 {
 

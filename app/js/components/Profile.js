@@ -17,7 +17,7 @@ module.exports = global.Profile = React.createClass({
 
   loadProfile(){
     var viewProfileID = electron.remote.getGlobal('sharedObject').viewProfileID;
-    $.get(api_server+'/user/profile/'+ viewProfileID + '/info').done((res)=>{
+    $.get(api_server+'/login/profile/'+ viewProfileID + '/info').done((res)=>{
     	if (!res.avatar) {
     		var avatar = './../app/img/user.jpg';
         } else {

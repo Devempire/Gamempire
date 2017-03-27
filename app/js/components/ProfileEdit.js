@@ -55,10 +55,10 @@ module.exports = global.ProfileEdit = React.createClass({
 
   loadProfile(){
     var token = electron.remote.getGlobal('sharedObject').token;
-     $.post(api_server+"/user/load",{
+     $.post(api_server+"/login/load",{
         'token': token
          }).done((d)=> {
-             $.get(api_server+'/user/profile/'+ d._id + '/info').done((res)=>{
+             $.get(api_server+'/login/profile/'+ d._id + '/info').done((res)=>{
                 if (!res.avatar) {
                   var avatar = './../app/img/user.jpg';
                 } else {
@@ -166,12 +166,12 @@ module.exports = global.ProfileEdit = React.createClass({
       avatar: imgData.toDataURL('image/jpeg')
     })
 
-    $.post(api_server+"/user/load",
+    $.post(api_server+"/login/load",
         {
             'token' :token
         }).done((d)=> {
             $.ajax({
-                    url:api_server+"/user/profile/updateAvatar",
+                    url:api_server+"/login/profile/updateAvatar",
                     type:"POST",
                     data:{
                         _id:d._id,
@@ -221,12 +221,12 @@ module.exports = global.ProfileEdit = React.createClass({
   deleteAvatar(){
       var token = electron.remote.getGlobal('sharedObject').token;
       var avatar = './../app/img/user.jpg';
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
       {
          'token' :token
       }).done((d)=> {
          $.ajax({
-                 url:api_server+"/user/profile/deleteAvatar",
+                 url:api_server+"/login/profile/deleteAvatar",
                  type:"PUT",
                  data:{
                      _id:d._id,
@@ -400,12 +400,12 @@ module.exports = global.ProfileEdit = React.createClass({
       this.setState({check: false});
     }
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
            $.ajax({
-                   url:api_server+"/user/profile/toggleAvatar",
+                   url:api_server+"/login/profile/toggleAvatar",
                    type:"PUT",
                    data:{
                        _id:d._id,
@@ -429,12 +429,12 @@ module.exports = global.ProfileEdit = React.createClass({
       this.setState({check: false});
     }
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
            $.ajax({
-                   url:api_server+"/user/profile/toggleAboutMe",
+                   url:api_server+"/login/profile/toggleAboutMe",
                    type:"PUT",
                    data:{
                        _id:d._id,
@@ -462,12 +462,12 @@ module.exports = global.ProfileEdit = React.createClass({
       this.setState({check: false});
     }
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
            $.ajax({
-                   url:api_server+"/user/profile/toggleFirstName",
+                   url:api_server+"/login/profile/toggleFirstName",
                    type:"PUT",
                    data:{
                        _id:d._id,
@@ -491,12 +491,12 @@ module.exports = global.ProfileEdit = React.createClass({
       this.setState({check: false});
     }
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
            $.ajax({
-                   url:api_server+"/user/profile/toggleLastName",
+                   url:api_server+"/login/profile/toggleLastName",
                    type:"PUT",
                    data:{
                        _id:d._id,
@@ -520,12 +520,12 @@ module.exports = global.ProfileEdit = React.createClass({
       this.setState({check: false});
     }
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
            $.ajax({
-                   url:api_server+"/user/profile/toggleBirthday",
+                   url:api_server+"/login/profile/toggleBirthday",
                    type:"PUT",
                    data:{
                        _id:d._id,
@@ -549,12 +549,12 @@ module.exports = global.ProfileEdit = React.createClass({
       this.setState({check: false});
     }
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
            $.ajax({
-                   url:api_server+"/user/profile/toggleEmail",
+                   url:api_server+"/login/profile/toggleEmail",
                    type:"PUT",
                    data:{
                        _id:d._id,
@@ -570,7 +570,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
   resend(){
     var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
@@ -822,13 +822,13 @@ module.exports = global.ProfileEdit = React.createClass({
 
     if (errorfname.innerHTML == "" && errorlname.innerHTML == "" && erroruname.innerHTML == "") {
         var token = electron.remote.getGlobal('sharedObject').token;
-        $.post(api_server+"/user/load",
+        $.post(api_server+"/login/load",
 
             {
                 'token' :token
             }).done((d)=> {
                 $.ajax({
-                        url:api_server+"/user/profile/update",
+                        url:api_server+"/login/profile/update",
                         type:"PUT",
                         data:{
                             _id:d._id,
@@ -876,11 +876,11 @@ module.exports = global.ProfileEdit = React.createClass({
 
     if(errornewpass.innerHTML == "" && errorcnewpass.innerHTML == ""){
       var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/user/load",
+      $.post(api_server+"/login/load",
          {
              'token' :token
          }).done((d) => {
-             $.post(api_server+"/user/profile/checkold", {
+             $.post(api_server+"/login/profile/checkold", {
                 _id:d._id,
                 "password":oldpw
             }).done( (res) =>{
@@ -888,7 +888,7 @@ module.exports = global.ProfileEdit = React.createClass({
                 erroroldpass.innerHTML ="";
                 $.ajax({
 
-                    url:api_server+"/user/profile/updatePW",
+                    url:api_server+"/login/profile/updatePW",
                     type:"PUT",
                     data:{
                         _id:d._id,
@@ -922,12 +922,12 @@ module.exports = global.ProfileEdit = React.createClass({
     if(errornewemail.innerHTML == ""){
          var token = electron.remote.getGlobal('sharedObject').token;
 
-        $.post(api_server+"/user/load",
+        $.post(api_server+"/login/load",
             {
                 'token' :token
             }).done((d) => {
                 $.ajax({
-                   url:api_server+"/user/profile/updateEmail",
+                   url:api_server+"/login/profile/updateEmail",
 
                     type:"PUT",
                     data:{

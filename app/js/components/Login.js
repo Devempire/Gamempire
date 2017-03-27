@@ -126,7 +126,7 @@ module.exports = class Login extends React.Component {
       $( ".content-loading" ).css("display:block;");
         $( ".content-loading" ).show();
 
-        $.post(api_server+'/user/find',
+        $.post(api_server+'/login/find',
         {
             username:this.state.userName,
             password:this.state.password
@@ -136,12 +136,12 @@ module.exports = class Login extends React.Component {
 
               $( ".content-loading" ).fadeOut( "slow" );
               var token =electron.remote.getGlobal('sharedObject').token = res;
-              $.post(api_server+"/user/load",{
+              $.post(api_server+"/login/load",{
                 'token': token
               }).done((d)=> {
                 electron.remote.getGlobal('sharedObject').id=d._id;
                 $.ajax({
-                  url:api_server+'/user/profile/'+ d._id + '/info',
+                  url:api_server+'/login/profile/'+ d._id + '/info',
                   type:"GET"
                         }).done((res2)=>{
 

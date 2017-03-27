@@ -17,7 +17,7 @@ module.exports = global.Bar = React.createClass({
 			global.$('#span_about').text(this.state.aboutMe);
 		}
 	    $.ajax({
-			url:api_server+"/user/profile/updateaboutme",
+			url:api_server+"/login/profile/updateaboutme",
 			type:"PUT",
 			contentType: 'application/json; charset=utf-8',
 			data:JSON.stringify({

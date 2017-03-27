@@ -40,7 +40,7 @@ module.exports = global.Dashboard = React.createClass({
             //console.log('Just stopped a unnecessary API request on blank layouts.');
     }else{
       $.ajax({
-        url:api_server+"/user/profile/updatelayout",
+        url:api_server+"/login/profile/updatelayout",
         type:"PUT",
         contentType: 'application/json; charset=utf-8',
         data:JSON.stringify({
@@ -226,7 +226,7 @@ module.exports = global.Dashboard = React.createClass({
  //     }
 
                  $.ajax({
-                         url:api_server+"/user/profile/addwidget",
+                         url:api_server+"/login/profile/addwidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
@@ -260,7 +260,7 @@ module.exports = global.Dashboard = React.createClass({
 
                             });
                         $.ajax({
-                              url:api_server+'/user/profile/'+ this.state.id + '/info',
+                              url:api_server+'/login/profile/'+ this.state.id + '/info',
                               type:"GET"
                              }).done((res3)=>{
                             electron.remote.getGlobal('sharedObject').widget=res3.widgets;
@@ -373,7 +373,7 @@ module.exports = global.Dashboard = React.createClass({
     this.setState({games: _.reject(this.state.games, {i: i})});
 
                  $.ajax({
-                         url:api_server+"/user/profile/removewidget",
+                         url:api_server+"/login/profile/removewidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
@@ -391,7 +391,7 @@ module.exports = global.Dashboard = React.createClass({
                             });
                           });
                       $.ajax({
-                              url:api_server+'/user/profile/'+ this.state.id + '/info',
+                              url:api_server+'/login/profile/'+ this.state.id + '/info',
                               type:"GET"
                              }).done((res3)=>{
                             electron.remote.getGlobal('sharedObject').widget=res3.widgets;

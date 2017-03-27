@@ -39,7 +39,7 @@ module.exports = global.Friends = React.createClass({
 
   loadFriends() {
 
-    $.get(api_server+"/user/show").done((res)=>{
+    $.get(api_server+"/login/show").done((res)=>{
       for (var i = 0; i < res.length; i++) {
 
         this.setState({
