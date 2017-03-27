@@ -245,7 +245,7 @@ module.exports = global.ProfileEdit = React.createClass({
   createProfile(el) {
     var i = el.i;
     return (
-      <div key={i} data-grid={el} className="noselect profileedit">
+      <div key={i} data-grid={el} className="noselect profileedit row columns">
         <h3>Edit Profile</h3>
         <hr/>
         <div id='popupContainer'></div>
@@ -290,44 +290,44 @@ module.exports = global.ProfileEdit = React.createClass({
             </div>
 
             <label className="aboutmelabel">{this.state.aboutme}</label>
-            First Name:
+            <div className="button-group">
 
-            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
-                <input type="checkbox" onClick={this.toggleFName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
-                <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
-                    <span className="onoffswitch-inner"></span>
-                    <span className="onoffswitch-switch"></span>
-                </label>
-            </div>
+                <div className="onoffswitch" style={{display : 'none', visibility : 'hidden'}}>
+                    <input type="checkbox" onClick={this.toggleFName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
+                    <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
+                        <span className="onoffswitch-inner"></span>
+                        <span className="onoffswitch-switch"></span>
+                    </label>
+                </div>
 
-            <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
-            <font id='fname' color='red'></font>
-            Last Name:
+                <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
+                <font id='fname' color='red'></font>
 
-            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
-                <input type="checkbox" onClick={this.toggleLName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_last_name"/>
-                <label className="onoffswitch-label" htmlFor="toggle_privacy_last_name">
-                    <span className="onoffswitch-inner"></span>
-                    <span className="onoffswitch-switch"></span>
-                </label>
-            </div>
+                <div className="onoffswitch" style={{display : 'none', visibility : 'hidden'}}>
+                    <input type="checkbox" onClick={this.toggleLName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_last_name"/>
+                    <label className="onoffswitch-label" htmlFor="toggle_privacy_last_name">
+                        <span className="onoffswitch-inner"></span>
+                        <span className="onoffswitch-switch"></span>
+                    </label>
+                </div>
 
-            <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
-            <font id='lname' color='red'></font>
-            Birthday: 
+                <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
+                <font id='lname' color='red'></font>
+                Birthday: 
 
-            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
-                <input type="checkbox" onClick={this.toggleBday} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_birthday"/>
-                <label className="onoffswitch-label" htmlFor="toggle_privacy_birthday">
-                    <span className="onoffswitch-inner"></span>
-                    <span className="onoffswitch-switch"></span>
-                </label>
+                <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
+                    <input type="checkbox" onClick={this.toggleBday} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_birthday"/>
+                    <label className="onoffswitch-label" htmlFor="toggle_privacy_birthday">
+                        <span className="onoffswitch-inner"></span>
+                        <span className="onoffswitch-switch"></span>
+                    </label>
+                </div>
             </div>
 
             <input type="date" id="birthday" value={this.state.birthday} onChange={(event) => {this.setState({birthday: moment(event.target.value).format('YYYY-MM-DD')})}}/>
         </form>
 
-        <button className="button" onClick={this.onAddchangeEmail}>Change Email</button>
+        <button className="button secondary" onClick={this.onAddchangeEmail}>Change Email</button>
         <div key={'changeEmail'} id='emailEdit' data-grid={el} style={{display : 'none'}}>
           <h3> Edit Your Email</h3>
           <hr/>
@@ -347,13 +347,13 @@ module.exports = global.ProfileEdit = React.createClass({
           <font id='newemail' color='red'></font>
           </label>
           </form>
-          <div className="row expanded button-group">
+          <div className="button-group">
             <button className="button" onClick={this.checkEmail}> Submit </button>
             <button className="button secondary" onClick={this.cancelChangeEmail}>Cancel</button>
           </div>
         </div>
 
-        <button className="button" onClick={this.onAddchangepw}>Change Password</button>
+        <button className="button secondary" onClick={this.onAddchangepw}>Change Password</button>
         <div key={'changePassword'} id='passwordEdit' data-grid={el} style={{display : 'none'}}>
           <h3> Edit Your Password</h3>
           <hr/>
@@ -375,10 +375,22 @@ module.exports = global.ProfileEdit = React.createClass({
           </label>
           <br/>
           </form>
-          <div className="row expanded button-group">
+          <div className="row column button-group">
             <button className="button" onClick={this.checkPw}> Submit </button>
             <button className="button secondary" onClick={this.cancelChangePw}>Cancel</button>
           </div>
+        </div>
+        <div className="row expanded button-group">
+        <label>Primary Colour
+            <input id="Primary" type="color" />
+        </label>
+        <label>Background Colour
+            <input id="Background" type="color" />
+        </label>
+        <label>Secondary Colour
+            <input id="Secondary" type="color" />
+        </label>
+        <button className="button" onClick={this.themeColour}> Submit </button>
         </div>
 
         <div className="row expanded button-group">
@@ -388,6 +400,50 @@ module.exports = global.ProfileEdit = React.createClass({
         </div>
       </div>
     );
+  },
+
+  themeColour() {
+      var Primary = $("#Primary").val();
+      var Background = $("#Background").val();
+      var Secondary = $("#Secondary").val();
+      var primaryElements = [
+          ".button",
+          "::selection",
+          "react-grid-item:hover",
+          ".react-grid-item:hover h2",
+          ".sidenav .active",
+          ".react-grid-placeholder",
+          ".validationError",
+          ".custom-file-upload"
+
+      ];
+      var backgroundElements = [
+          "body",
+          "html",
+          ".react-grid-item",
+          ".react-grid-item h2",
+          ".overlay",
+          "table tbody",
+          "table tfoot",
+          "table thead"
+      ];
+      var secondaryElements = [
+          ".secondary",
+          "table thead",
+          ".widgetTitle",
+          "#top_bar",
+          ".sidenav",
+          "input"
+      ];
+      $.each(primaryElements, function(index, value) {
+          $(value).css("background-color", Primary);
+      });
+      $.each(secondaryElements, function(index, value) {
+          $(value).css("background-color", Secondary);
+      });
+      $.each(backgroundElements, function(index, value) {
+          $(value).css("background-color", Background);
+      });
   },
 
   toggleAvatar() {
