@@ -1,10 +1,8 @@
-
 @import './_settings.scss';
 @import '../../node_modules/foundation-sites/assets/foundation.scss';
 @import '../../node_modules/vex-js/dist/css/vex.css';
 @import '../../node_modules/vex-js/dist/css/vex-theme-os.css';
 @include foundation-everything(true);
-
 
 /*
 
@@ -89,6 +87,7 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     height: calc(100% - 35px);
+    width: 100%;
 }
 
 body * {
@@ -257,7 +256,9 @@ hr {
 }
 
 .sidenav .active {
-    color: $primary-color;
+    background-color: $primary-color;
+    color: $primary-font;
+    border-radius: 0px $global-radius $global-radius 0px;
 }
 
 .gameImage {
@@ -425,7 +426,7 @@ hr {
 #content.navOpen {
     padding-left: 25px;
     padding-right: 8px;
-    transform: translateX(192px);
+    transform: translateX(202px);
     width: calc(100% - 192px);
 }
 
@@ -464,7 +465,7 @@ hr {
     top: 0;
     padding-right: 10px;
     /* To make the clicable area of a little larger than the visible area so users can easily click it */
-    cursor: url("../../app/img/arrow_out.png"), auto;
+    cursor: col-resize;
 }
 
 .toggleNav:hover {
@@ -911,12 +912,11 @@ label {
     -webkit-box-shadow: none;
 }
 
-
 .button:focus,
 .button:hover {
     transform: translateZ(99);
     transform: scale(1.02);
-    box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
     /*box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45);
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.45), 0 0px 0px 5px rgb(33, 41, 45);*/
 }
@@ -1153,6 +1153,7 @@ input[type="file"] {
 #userAvatar img {
     width: 256px;
     height: 256px;
+    border-radius: 50%;
 }
 
 .custom-file-upload.removepic {
@@ -1207,37 +1208,39 @@ input[type=checkbox]:checked:after {
 }
 
 .custom-file-upload.rotate {
-  width: 67px;
-  margin-left: 20px;
-  padding: 10px 0 0 0;
-  margin-bottom: 0rem;
-  line-height: 0;
+    width: 67px;
+    margin-left: 20px;
+    padding: 10px 0 0 0;
+    margin-bottom: 0rem;
+    line-height: 0;
 }
 
-#top_bar{
-      background-color: $secondary-color;
-      display: flex;
-      transition: 0.5s;
-      animation-name: dropFade;
-      animation-duration: 1s;
-      animation-timing-function: ease-in-out;
-      padding-top: 5px;
-      padding-bottom: 5px;
-      padding-left: 20px;
-      margin-right:25;
-      transform: translate(10px, 0px);
-      width: calc(100% - 10px);
+#top_bar {
+    background-color: $secondary-color;
+    display: flex;
+    transition: 0.5s;
+    animation-name: dropFade;
+    animation-duration: 1s;
+    animation-timing-function: ease-in-out;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 20px;
+    margin-right: 25;
+    transform: translate(10px, 0px);
+    width: calc(100% - 10px);
 }
-#top_bar img{
-  width: 30px;
-  height: 30px;
-  display:inline-block;
-  margin-right: 5px;
-  margin-bottom: 0px;
 
+#top_bar img {
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-bottom: 0px;
+    border-radius: 50%;
 }
-#top_bar input[type=text]{
-    display:none;
+
+#top_bar input[type=text] {
+    display: none;
     margin-left: 15px;
     margin-bottom: 0px;
     padding-top: 0px;
@@ -1246,101 +1249,142 @@ input[type=checkbox]:checked:after {
     padding-left: 0px;
     height: 30px;
     width: auto;
-
-}
-#top_bar #logout:hover, h5:hover {
-color: lighten( $background-color, 55%);
 }
 
-#top_bar span:hover{
-color: lighten( $background-color, 55%);
+#top_bar #logout:hover,
+h5:hover {
+    color: lighten( $background-color, 55%);
 }
 
-#top_bar span{
-  display: inline-block;
-  padding-left: 15px;
-  padding-top: 3px;
+#top_bar span:hover {
+    color: lighten( $background-color, 55%);
 }
-#top_bar h5{
-  margin-bottom: 0px;
-  display:inline-block;
+
+#top_bar span {
+    display: inline-block;
+    padding-left: 15px;
+    padding-top: 3px;
 }
-#top_bar #usertopbar{
-  display:flex;
+
+#top_bar h5 {
+    margin-bottom: 0px;
+    display: inline-block;
 }
-#top_bar #logout{
-  display: block;
-  padding-left: 15px;
-  padding-top: 3px;
-  float: right;
-  color: #8b0000;
-  font-weight: 900;
-  margin-top: -6px;
-  font-size: x-large;
-  right: 10px;
+
+#top_bar #usertopbar {
+    display: flex;
+}
+
+#top_bar #logout {
+    display: block;
+    padding-left: 15px;
+    padding-top: 3px;
+    float: right;
+    color: #8b0000;
+    font-weight: 900;
+    margin-top: -6px;
+    font-size: x-large;
+    right: 10px;
     position: fixed;
 }
+
 .remove {
-  position:absolute;
-  right:5px;
-  top:0;
-  cursor: pointer;
+    position: absolute;
+    right: 5px;
+    top: 0;
+    cursor: pointer;
 }
+
 .rerender {
-  position:absolute;
-  left:5px;
-  top:0;
-  cursor: pointer;
+    position: absolute;
+    left: 5px;
+    top: 0;
+    cursor: pointer;
 }
 
 
 /* Toggled buttons used in Playground */
 
 .onoffswitch {
-    position: relative; width: 110px;
-    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+    position: relative;
+    width: 110px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
 }
+
 .onoffswitch-checkbox {
     display: none;
 }
+
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 2px solid #999999; border-radius: 20px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid #999999;
+    border-radius: 20px;
 }
+
 .onoffswitch-inner {
-    display: block; width: 200%; margin-left: -100%;
+    display: block;
+    width: 200%;
+    margin-left: -100%;
     transition: margin 0.3s ease-in 0s;
 }
-.onoffswitch-inner:before, .onoffswitch-inner:after {
-    display: block; float: left; width: 50%; height: 30px; padding: 0; line-height: 30px;
-    font-size: 14px; color: white; font-family: Trebuchet, Arial, sans-serif; font-weight: bold;
+
+.onoffswitch-inner:before,
+.onoffswitch-inner:after {
+    display: block;
+    float: left;
+    width: 50%;
+    height: 30px;
+    padding: 0;
+    line-height: 30px;
+    font-size: 14px;
+    color: white;
+    font-family: Trebuchet, Arial, sans-serif;
+    font-weight: bold;
     box-sizing: border-box;
 }
+
 .onoffswitch-inner:before {
     content: "Public";
     padding-left: 10px;
-    background-color: #E65768; color: #FFFFFF;
+    background-color: #E65768;
+    color: #FFFFFF;
 }
+
 .onoffswitch-inner:after {
     content: "Private";
     padding-right: 6px;
-    background-color: #EEEEEE; color: #999999;
+    background-color: #EEEEEE;
+    color: #999999;
     text-align: right;
 }
+
 .onoffswitch-switch {
-    display: block; width: 18px; margin: 3px;
+    display: block;
+    width: 18px;
+    margin: 3px;
     background: #FFFFFF;
-    position: absolute; top: -3px; bottom: 4px;
+    position: absolute;
+    top: -3px;
+    bottom: 4px;
     right: 72px;
-    border: 2px solid #999999; border-radius: 20px;
+    border: 2px solid #999999;
+    border-radius: 20px;
     transition: all 0.3s ease-in 0s;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
     margin-left: 0;
 }
+
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 19px;
 }
+
+
 /* End Playground CSS*/
 
 .aboutmelabel {
