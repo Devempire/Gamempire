@@ -519,8 +519,10 @@ module.exports = global.ProfileEdit = React.createClass({
     if (toggleEle.getAttribute('checked') == 'checked' && toggleLNEle.getAttribute('checked') == 'checked') {
       //private and auto toggle last name's toggler
       toggleEle.removeAttribute('checked');
+      toggleEle.checked = false;
       this.setState({FNCheck: true});
-      toggleLNEle.removeAttribute('checked', 'checked');
+      toggleLNEle.removeAttribute('checked');
+      toggleLNEle.checked = false;
       this.setState({LNCheck: true});
       $.post(api_server+"/login/load",
          {
@@ -544,10 +546,13 @@ module.exports = global.ProfileEdit = React.createClass({
       //private
       console.log(toggleEle);
       toggleEle.removeAttribute('checked');
+      toggleEle.checked = false;
       this.setState({FNCheck: true});
     } else if (toggleEle.getAttribute('checked') == null) {
+      console.log(toggleEle);
       //public
       toggleEle.setAttribute('checked', 'checked');
+      toggleEle.checked = true;
       this.setState({FNCheck: false});
     }
       $.post(api_server+"/login/load",
@@ -577,12 +582,15 @@ module.exports = global.ProfileEdit = React.createClass({
     if (toggleEle.getAttribute('checked') == 'checked') {
       //private
       toggleEle.removeAttribute('checked');
+      toggleEle.checked = false;
       this.setState({LNCheck: true});
     } else if (toggleEle.getAttribute('checked') == null && toggleFNEle.getAttribute('checked') == null) {
       //public and auto toggling first name's toggler
       toggleEle.setAttribute('checked', 'checked');
+      toggleEle.checked = true;
       this.setState({LNCheck: false});
       toggleFNEle.setAttribute('checked', 'checked');
+      toggleFNEle.checked = true;
       this.setState({FNCheck: false});
       $.post(api_server+"/login/load",
          {
@@ -604,6 +612,7 @@ module.exports = global.ProfileEdit = React.createClass({
     } else if (toggleEle.getAttribute('checked') == null) {
       //public
       toggleEle.setAttribute('checked', 'checked');
+      toggleEle.checked = true;
       this.setState({LNCheck: false});
     }
       $.post(api_server+"/login/load",
