@@ -24,7 +24,7 @@ module.exports = global.ProfileEdit = React.createClass({
     return {
 
       layout: {},
-      items:{i:"edit",x:0,y:0,w:12,h:58,static: true},
+      items:{i:"edit",x:0,y:0,w:12,h:63,static: true},
       pw:[],
       email:[],
       response:undefined,
@@ -77,25 +77,31 @@ module.exports = global.ProfileEdit = React.createClass({
                                 aboutme:res.aboutme
                 });
 
-
-
                 for (var i in res.privacy) {
                   if (i == 'firstname') {
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_first_name');
                       toggleEle.setAttribute('checked', 'checked');
+                      setTimeout(function () {
+                        document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
+                      }, 270);
+                    } else {
+                      setTimeout(function () {
+                        document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
+                      }, 270);
                     }
-                    setTimeout(function () {
-                      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
-                    }, 270);
                   } else if (i == 'lastname') {
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_last_name');
                       toggleEle.setAttribute('checked', 'checked');
+                      setTimeout(function () {
+                        document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
+                      }, 270);
+                    } else {
+                      setTimeout(function () {
+                        document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
+                      }, 270);
                     }
-                    setTimeout(function () {
-                      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
-                    }, 270);
                   } else if (i == 'dateofbirth') {
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_birthday');
@@ -279,6 +285,7 @@ module.exports = global.ProfileEdit = React.createClass({
             Username: <br/>
             <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
             <font id='uname' color='red'></font>
+
             About Me: 
 
             <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
@@ -290,44 +297,47 @@ module.exports = global.ProfileEdit = React.createClass({
             </div>
 
             <label className="aboutmelabel">{this.state.aboutme}</label>
-            <div className="button-group">
 
-                <div className="onoffswitch" style={{display : 'none', visibility : 'hidden'}}>
-                    <input type="checkbox" onClick={this.toggleFName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
-                    <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
-                        <span className="onoffswitch-inner"></span>
-                        <span className="onoffswitch-switch"></span>
-                    </label>
-                </div>
+            First Name:
 
-                <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
-                <font id='fname' color='red'></font>
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
+                <input type="checkbox" onClick={this.toggleFName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_first_name"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_first_name">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
 
-                <div className="onoffswitch" style={{display : 'none', visibility : 'hidden'}}>
-                    <input type="checkbox" onClick={this.toggleLName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_last_name"/>
-                    <label className="onoffswitch-label" htmlFor="toggle_privacy_last_name">
-                        <span className="onoffswitch-inner"></span>
-                        <span className="onoffswitch-switch"></span>
-                    </label>
-                </div>
+            <input type="text" id="firstName" value={this.state.firstname} onChange={(event) => {this.setState({firstname: event.target.value})}} />
+            <font id='fname' color='red'></font>
 
-                <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
-                <font id='lname' color='red'></font>
-                Birthday: 
+            Last Name:
 
-                <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
-                    <input type="checkbox" onClick={this.toggleBday} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_birthday"/>
-                    <label className="onoffswitch-label" htmlFor="toggle_privacy_birthday">
-                        <span className="onoffswitch-inner"></span>
-                        <span className="onoffswitch-switch"></span>
-                    </label>
-                </div>
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
+                <input type="checkbox" onClick={this.toggleLName} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_last_name"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_last_name">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
+
+            <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
+            <font id='lname' color='red'></font>
+
+            Birthday: 
+
+            <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
+                <input type="checkbox" onClick={this.toggleBday} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_birthday"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_birthday">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
             </div>
 
             <input type="date" id="birthday" value={this.state.birthday} onChange={(event) => {this.setState({birthday: moment(event.target.value).format('YYYY-MM-DD')})}}/>
         </form>
 
-        <button className="button secondary" onClick={this.onAddchangeEmail}>Change Email</button>
+        <button className="button secondary" id='emailButton' onClick={this.onAddchangeEmail}>Change Email</button>
         <div key={'changeEmail'} id='emailEdit' data-grid={el} style={{display : 'none'}}>
           <h3> Edit Your Email</h3>
           <hr/>
@@ -347,13 +357,13 @@ module.exports = global.ProfileEdit = React.createClass({
           <font id='newemail' color='red'></font>
           </label>
           </form>
-          <div className="button-group">
+          <div className="row column button-group">
             <button className="button" onClick={this.checkEmail}> Submit </button>
             <button className="button secondary" onClick={this.cancelChangeEmail}>Cancel</button>
           </div>
         </div>
 
-        <button className="button secondary" onClick={this.onAddchangepw}>Change Password</button>
+        <button className="button secondary" id='passwordButton' onClick={this.onAddchangepw}>Change Password</button>
         <div key={'changePassword'} id='passwordEdit' data-grid={el} style={{display : 'none'}}>
           <h3> Edit Your Password</h3>
           <hr/>
@@ -511,9 +521,11 @@ module.exports = global.ProfileEdit = React.createClass({
     //removeAttribute('checked') = true = private
     //setAttribute('checked', 'checked') = false = public
     if (toggleEle.getAttribute('checked') == 'checked') {
+      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "hidden";
       toggleEle.removeAttribute('checked');
       this.setState({check: true});
     } else {
+      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
       toggleEle.setAttribute('checked', 'checked');
       this.setState({check: false});
     }
@@ -540,9 +552,11 @@ module.exports = global.ProfileEdit = React.createClass({
   toggleLName() {
     var toggleEle = document.getElementById('toggle_privacy_last_name');
     if (toggleEle.getAttribute('checked') == 'checked') {
+      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
       toggleEle.removeAttribute('checked');
       this.setState({check: true});
     } else {
+      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "hidden";
       toggleEle.setAttribute('checked', 'checked');
       this.setState({check: false});
     }
@@ -703,6 +717,8 @@ module.exports = global.ProfileEdit = React.createClass({
   onAddchangeEmail() {
     var emailEdit = document.getElementById('emailEdit');
     emailEdit.removeAttribute('style');
+    var emailButton = document.getElementById('emailButton');
+    emailButton.setAttribute('style', 'display: none');
     if(this.state.email.length==0){
       this.setState({
         email: this.state.email.concat({
@@ -719,11 +735,15 @@ module.exports = global.ProfileEdit = React.createClass({
   cancelChangeEmail() {
     var emailEdit = document.getElementById('emailEdit');
     emailEdit.setAttribute('style', 'display: none');
+    var emailButton = document.getElementById('emailButton');
+    emailButton.removeAttribute('style');
   },
 
   onAddchangepw() {
     var passwordEdit = document.getElementById('passwordEdit');
     passwordEdit.removeAttribute('style');
+    var passwordButton = document.getElementById('passwordButton');
+    passwordButton.setAttribute('style', 'display: none');
     if(this.state.pw.length==0){
     this.setState({
       pw: this.state.pw.concat({
@@ -740,6 +760,8 @@ module.exports = global.ProfileEdit = React.createClass({
   cancelChangePw() {
     var passwordEdit = document.getElementById('passwordEdit');
     passwordEdit.setAttribute('style', 'display: none');
+    var passwordButton = document.getElementById('passwordButton');
+    passwordButton.removeAttribute('style');
   },
 
   backToDashboard() {
@@ -747,75 +769,6 @@ module.exports = global.ProfileEdit = React.createClass({
         <Dashboard />,
         document.getElementById('content'));
   },
-
-  // changePW(el) {
-  //   var i = el.i;
-  //   return (
-  //     <div key={i} data-grid={el}>
-  //       <h3> Edit Your Password</h3>
-  //       <hr/>
-  //       <form>
-  //       <label>
-  //       Old Password:
-  //       <input type="password" id="oldpw" />
-  //       <font id='oldpass' color='red'></font>
-  //       </label>
-  //       <label>
-  //       New Password:
-  //       <input type="password" id="newpw" />
-  //       <font id='newpass' color='red'></font>
-  //       </label>
-  //       <label>
-  //       Confirm Password:
-  //       <input type="password" id="cnewpw" />
-  //       <font id='cnewpass' color='red'></font>
-  //       </label>
-  //       <br/>
-  //       </form>
-  //       <button className="button" onClick={this.checkPw}> Submit </button>
-  //     </div>
-  //   );
-  // },
-
-  // changeEmail(el) {
-  //   var i = el.i;
-  //   return (
-  //     <div key={i} data-grid={el}>
-  //       <h3> Edit Your Email</h3>
-  //       <hr/>
-  //       <form>
-  //       <label>
-  //       New Email:
-
-  //       <div className="onoffswitch" style={{display : 'inline-block'}}>
-  //           <input type="checkbox" onClick={this.toggleEmail} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_email"/>
-  //           <label className="onoffswitch-label" htmlFor="toggle_privacy_email">
-  //               <span className="onoffswitch-inner"></span>
-  //               <span className="onoffswitch-switch"></span>
-  //           </label>
-  //       </div>
-
-  //       <input type="text" id="email" />
-  //       <font id='newemail' color='red'></font>
-  //       </label>
-  //       </form>
-  //       <button className="button" onClick={this.checkEmail}> Submit </button>
-  //     </div>
-  //   );
-  // },
-
-  // add this code to the above code below input type checkbox:
-  // <iframe style="display:none" onClick={this.emailToggleChk()}></iframe>
-  // emailToggleChk() {
-  //   if (this.state.emailPrivacy == "false") {
-  //     var toggleEle = document.getElementById('toggle_privacy_email');
-  //     toggleEle.setAttribute('checked', 'checked');
-                    
-  //     setTimeout(function () {
-  //       document.getElementById('toggle_privacy_email').parentNode.style.visibility = "visible";
-  //     }, 270);
-  //   }
-  // },
 
   render() {
     var title = "Profile Edit \u2014 Gamempire"
@@ -912,6 +865,7 @@ module.exports = global.ProfileEdit = React.createClass({
     var erroroldpass = document.getElementById('oldpass');
     var errorcnewpass = document.getElementById('cnewpass');
     var passwordEdit = document.getElementById('passwordEdit');
+    var passwordButton = document.getElementById('passwordButton');
 
     if (newpw == "") {
         errornewpass.innerHTML = "The field is empty.";
@@ -941,6 +895,7 @@ module.exports = global.ProfileEdit = React.createClass({
                 "password":oldpw
             }).done( (res) =>{
                 passwordEdit.setAttribute('style', 'display: none');
+                passwordButton.removeAttribute('style');
                 erroroldpass.innerHTML ="";
                 $.ajax({
 
@@ -966,6 +921,7 @@ module.exports = global.ProfileEdit = React.createClass({
     var email = $('#email').val();
     var errornewemail = document.getElementById('newemail');
     var emailEdit = document.getElementById('emailEdit');
+    var emailButton = document.getElementById('emailButton');
 
     if (email == "") {
         errornewemail.innerHTML = "The field is empty.";
@@ -992,6 +948,7 @@ module.exports = global.ProfileEdit = React.createClass({
                         }
                     }).done((res)=>{
                       emailEdit.setAttribute('style', 'display: none');
+                      emailButton.removeAttribute('style');
                       $.post( api_server+"/profile/resend",
                         {_id :d._id,
                         email:email

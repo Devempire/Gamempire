@@ -47,7 +47,8 @@ module.exports = global.Friends = React.createClass({
             id:res[i]._id,
             username:res[i].username,
             aboutme:res[i].aboutme,
-            avatar:res[i].avatar
+            avatar:res[i].avatar,
+            privacy:res[i].privacy
           })
         });
 
@@ -74,7 +75,7 @@ module.exports = global.Friends = React.createClass({
 
 var allUsers = [];
 for (var i = 0; i < this.state.friends.length; i++) {
-  if (!this.state.friends[i].avatar ){
+  if (!this.state.friends[i].avatar || this.state.friends[i].privacy.avatar == true || this.state.friends[i].privacy.avatar == 'true'){
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
   }else{
     var id = [api_server+'/img/avatars/'+this.state.friends[i].id+'.jpg?'+new Date().getTime()];
