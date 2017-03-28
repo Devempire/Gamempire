@@ -1,59 +1,35 @@
-var WidthProvider = require('react-grid-layout').WidthProvider;
-var ReactGridLayout = require('react-grid-layout');
-ReactGridLayout = WidthProvider(ReactGridLayout);
 
-const originalLayouts = getFromLS('layouts') || {};
+
 
 module.exports = global.Friends = React.createClass({
-  mixins: [PureRenderMixin],
 
   getDefaultProps() {
-    return {
-      className: "layout",
-      cols: 3,
-      isDraggable: false,
-      rowHeight: 50,
-      verticalCompact: true
-    };
+    return {};
   },
 
   getInitialState() {
     return {
-      layouts: JSON.parse(JSON.stringify(originalLayouts)),
-      friends: []
+      friends: [],
+      result:'',
     };
   },
 
 
-  // We're using the cols coming back from this to calculate where to add new items.
-  onBreakpointChange(breakpoint, cols) {
-    this.setState({
-      breakpoint: breakpoint,
-      cols: cols
-    });
-  },
-
-  onLayoutChange(layout, layouts) {
-    this.setState({layouts});
-  },
-
   loadFriends() {
+    var id =electron.remote.getGlobal('sharedObject').id;
+    $.get(api_server+"/friend/"+id+ "/show").done((res)=>{
+       for (var i = 0; i < res.length; i++) {
 
-    $.get(api_server+"/login/show").done((res)=>{
-      for (var i = 0; i < res.length; i++) {
+         this.setState({
+           friends: this.state.friends.concat({
+             id:res[i]._id,
+             status:res[i].status,
+           })
+         });
 
-        this.setState({
-          friends: this.state.friends.concat({
-            id:res[i]._id,
-            username:res[i].username,
-            aboutme:res[i].aboutme,
-            avatar:res[i].avatar
-          })
-        });
-
-      }
+       }
       this.renderFriends();
-
+      
     }).fail((err)=>{
       console.log("Couldn't load friends.");
     });
@@ -74,14 +50,31 @@ module.exports = global.Friends = React.createClass({
 
 var allUsers = [];
 for (var i = 0; i < this.state.friends.length; i++) {
-  if (!this.state.friends[i].avatar ){
+  var id =this.state.friends[i].id;
+  // if (!this.state.friends[i].avatar ){
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
+  // }else{
+  //   var id = [api_server+'/img/avatars/'+id+'.jpg?'+new Date().getTime()];
+  //   allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src={id[0]} /></div>);
+  // }
+  if (this.state.friends[i].status == "pending") {
+    allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
+    <a data-tag={id} onClick={this.viewprofile} >
+    <b>{this.state.friends[i].status}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <a><b>{id}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button onClick={()=>{this.acceptfriend(id)}}> Accept </button>
+    <button onClick={()=>{this.removefriend(id)}}> Decline</button>
+    </div>
+   );
   }else{
-    var id = [api_server+'/img/avatars/'+this.state.friends[i].id+'.jpg?'+new Date().getTime()];
-    allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src={id[0]} /></div>);
+allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
+<a data-tag={id} onClick={this.viewprofile} >
+<b>{this.state.friends[i].status}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>{id}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<button onClick={()=>{this.removefriend(id)}}> Remove</button>
+</div>
+);
   }
-
-allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><a data-tag={this.state.friends[i].id} onClick={this.viewprofile} ><b>{this.state.friends[i].username}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{this.state.friends[i].aboutme}</div>);
 }
 
 
@@ -90,41 +83,85 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
       document.getElementById('targat')
     );
 
-    {/*
-var targat = '';
-
-for (var i = 0; i < this.state.friends.length; i++) {
-  if (!this.state.friends[i].avatar ){
-    var avatar = '<img width="75" src="./../app/img/user.jpg" />';
-  }else{
-    var avatar = '<img width="75" src="'+api_server+'/img/avatars/'+this.state.friends[i].id+'.jpg?'+ new Date().getTime()+'" />';
-  }
-
-  var userlink ='<a href="#"><b>'+this.state.friends[i].username+'</b></a>'
-
-
-  targat = targat+
-    '<p >'+avatar+'&nbsp;&nbsp;&nbsp;&nbsp;'+userlink+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i>'+this.state.friends[i].aboutme+'</i></p><br>';
-
-
-}
-
-
-ReactDOM.render(
-  {targat},
-  document.getElementById('targat')
-);
-
-//document.getElementById('targat').innerHTML = targat;
-
-
-*/}
+   
 
 
 },
 
   componentWillMount: function(){
     this.loadFriends();
+  },
+
+  username(event){
+    this.setState({username:event.target.value});
+   
+  },
+
+  search(){
+    var name =this.state.username;
+    $.post(api_server+"/friend/info",
+    {
+            username:name
+        }).done((res)=>{
+      this.setState({result:res._id});
+    });
+  },
+
+  addfriend(){
+    var id =electron.remote.getGlobal('sharedObject').id;
+    $.ajax({
+        url:api_server+"/friend/addFriend",
+        type:"PUT",
+        data:{
+          user1:id,
+          user2:this.state.result
+            }
+                     }).done((res)=>{
+                      console.log(res);
+
+                    }).fail((err)=>{
+                      console.log("friend add fail");
+
+                    });
+  },
+
+  acceptfriend(requestid){
+    var id =electron.remote.getGlobal('sharedObject').id;
+    $.ajax({
+        url:api_server+"/friend/acceptFriend",
+        type:"PUT",
+        data:{
+          user1:id,
+          user2:requestid
+            }
+                     }).done((res)=>{
+                      console.log(res);
+
+                    }).fail((err)=>{
+                      console.log("friend accept fail");
+
+                    });
+
+  },
+
+  removefriend(removeid){
+
+    var id =electron.remote.getGlobal('sharedObject').id;
+    $.ajax({
+        url:api_server+"/friend/removeFriend",
+        type:"PUT",
+        data:{
+          user1:id,
+          user2:removeid
+            }
+                     }).done((res)=>{
+                      console.log(res);
+
+                    }).fail((err)=>{
+                      console.log("friend remove fail");
+
+                    });
+
   },
 
 
@@ -141,11 +178,15 @@ ReactDOM.render(
     $( "#_Friends" ).addClass('active');
 
       return (
+        <div>
+        <div>
+        <input type="text" onChange={this.username}/>
+        <button onClick={this.search} >Search</button>
+        <p><a onClick={this.addfriend}>{this.state.result}</a></p>
+        </div>
 
-        <ReactGridLayout className="layout" layouts={this.state.layouts} onLayoutChange={this.onLayoutChange} onBreakpointChange={this.onBreakpointChange} {...this.props}>
-
-        <div key={"1"} data-grid={{x: 0, y: 0, w: 3, h: 20, static: true}} className="widgetFrame noselect hearthstone_scroll" id="targat">Loading friends...</div>
-        </ReactGridLayout>
+        <div key={"1"} id="targat">Loading friends...</div>
+        </div>
 
       );
 
@@ -153,20 +194,4 @@ ReactDOM.render(
 
 });
 
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-    } catch(e) {/*Ignore*/}
-  }
-  return ls[key];
-}
 
-function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem('rgl-8', JSON.stringify({
-      key: value
-    }));
-  }
-}
