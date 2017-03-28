@@ -544,12 +544,10 @@ module.exports = global.ProfileEdit = React.createClass({
     }
     else if (toggleEle.getAttribute('checked') == 'checked') {
       //private
-      console.log(toggleEle);
       toggleEle.removeAttribute('checked');
       toggleEle.checked = false;
       this.setState({FNCheck: true});
     } else if (toggleEle.getAttribute('checked') == null) {
-      console.log(toggleEle);
       //public
       toggleEle.setAttribute('checked', 'checked');
       toggleEle.checked = true;
@@ -578,7 +576,6 @@ module.exports = global.ProfileEdit = React.createClass({
     var toggleEle = document.getElementById('toggle_privacy_last_name');
     var toggleFNEle = document.getElementById('toggle_privacy_first_name');
     var token = electron.remote.getGlobal('sharedObject').token;
-    console.log(toggleFNEle);
     if (toggleEle.getAttribute('checked') == 'checked') {
       //private
       toggleEle.removeAttribute('checked');
