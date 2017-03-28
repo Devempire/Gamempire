@@ -36,6 +36,8 @@ module.exports = global.ProfileEdit = React.createClass({
       scale: 1.2,
       showImageDelete:false,
       check:false,
+      FNCheck:true,
+      LNCheck:true,
       aboutme:null,
 
     };
@@ -82,26 +84,18 @@ module.exports = global.ProfileEdit = React.createClass({
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_first_name');
                       toggleEle.setAttribute('checked', 'checked');
-                      setTimeout(function () {
-                        document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
-                      }, 270);
-                    } else {
-                      setTimeout(function () {
-                        document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
-                      }, 270);
                     }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
+                    }, 270);
                   } else if (i == 'lastname') {
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_last_name');
                       toggleEle.setAttribute('checked', 'checked');
-                      setTimeout(function () {
-                        document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
-                      }, 270);
-                    } else {
-                      setTimeout(function () {
-                        document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
-                      }, 270);
-                    }
+                    } 
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
+                    }, 270);
                   } else if (i == 'dateofbirth') {
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_birthday');
@@ -516,20 +510,46 @@ module.exports = global.ProfileEdit = React.createClass({
 
   toggleFName() {
     var toggleEle = document.getElementById('toggle_privacy_first_name');
+    var toggleLNEle = document.getElementById('toggle_privacy_last_name');
+    var token = electron.remote.getGlobal('sharedObject').token;
     //If at the time you clicked the toggle was public, it means you
     //want to make the field private and vise versa.
     //removeAttribute('checked') = true = private
     //setAttribute('checked', 'checked') = false = public
-    if (toggleEle.getAttribute('checked') == 'checked') {
-      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "hidden";
+    if (toggleEle.getAttribute('checked') == 'checked' && toggleLNEle.getAttribute('checked') == 'checked') {
+      //private and auto toggle last name's toggler
       toggleEle.removeAttribute('checked');
-      this.setState({check: true});
-    } else {
-      document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
-      toggleEle.setAttribute('checked', 'checked');
-      this.setState({check: false});
+      this.setState({FNCheck: true});
+      toggleLNEle.removeAttribute('checked', 'checked');
+      this.setState({LNCheck: true});
+      $.post(api_server+"/login/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/login/profile/toggleLastName",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.LNCheck
+                   }
+               }).done((res)=>{
+                   console.log("lastname's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
     }
-    var token = electron.remote.getGlobal('sharedObject').token;
+    else if (toggleEle.getAttribute('checked') == 'checked') {
+      //private
+      console.log(toggleEle);
+      toggleEle.removeAttribute('checked');
+      this.setState({FNCheck: true});
+    } else if (toggleEle.getAttribute('checked') == null) {
+      //public
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({FNCheck: false});
+    }
       $.post(api_server+"/login/load",
          {
              'token' :token
@@ -539,7 +559,7 @@ module.exports = global.ProfileEdit = React.createClass({
                    type:"PUT",
                    data:{
                        _id:d._id,
-                       privacy:this.state.check
+                       privacy:this.state.FNCheck
                    }
                }).done((res)=>{
                    console.log("firstname's privacy is updated");
@@ -551,16 +571,41 @@ module.exports = global.ProfileEdit = React.createClass({
 
   toggleLName() {
     var toggleEle = document.getElementById('toggle_privacy_last_name');
-    if (toggleEle.getAttribute('checked') == 'checked') {
-      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "visible";
-      toggleEle.removeAttribute('checked');
-      this.setState({check: true});
-    } else {
-      document.getElementById('toggle_privacy_first_name').parentNode.style.visibility = "hidden";
-      toggleEle.setAttribute('checked', 'checked');
-      this.setState({check: false});
-    }
+    var toggleFNEle = document.getElementById('toggle_privacy_first_name');
     var token = electron.remote.getGlobal('sharedObject').token;
+    console.log(toggleFNEle);
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      //private
+      toggleEle.removeAttribute('checked');
+      this.setState({LNCheck: true});
+    } else if (toggleEle.getAttribute('checked') == null && toggleFNEle.getAttribute('checked') == null) {
+      //public and auto toggling first name's toggler
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({LNCheck: false});
+      toggleFNEle.setAttribute('checked', 'checked');
+      this.setState({FNCheck: false});
+      $.post(api_server+"/login/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/login/profile/toggleFirstName",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.FNCheck
+                   }
+               }).done((res)=>{
+                   console.log("firstname's privacy is updated");
+               }).fail((err)=>{
+                   console.log("failed");
+               });
+           });
+    } else if (toggleEle.getAttribute('checked') == null) {
+      //public
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({LNCheck: false});
+    }
       $.post(api_server+"/login/load",
          {
              'token' :token
@@ -570,7 +615,7 @@ module.exports = global.ProfileEdit = React.createClass({
                    type:"PUT",
                    data:{
                        _id:d._id,
-                       privacy:this.state.check
+                       privacy:this.state.LNCheck
                    }
                }).done((res)=>{
                    console.log("lastname's privacy is updated");
