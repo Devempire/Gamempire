@@ -16,6 +16,7 @@ module.exports = global.Friends = React.createClass({
 
 
   loadFriends() {
+
     var id =electron.remote.getGlobal('sharedObject').id;
     $.get(api_server+"/friend/"+id+ "/show").done((res)=>{
        for (var i = 0; i < res.length; i++) {
@@ -28,6 +29,7 @@ module.exports = global.Friends = React.createClass({
          });
 
        }
+
       this.renderFriends();
       
     }).fail((err)=>{
@@ -51,7 +53,9 @@ module.exports = global.Friends = React.createClass({
 var allUsers = [];
 for (var i = 0; i < this.state.friends.length; i++) {
   var id =this.state.friends[i].id;
-  // if (!this.state.friends[i].avatar ){
+
+  //if (!this.state.friends[i].avatar || this.state.friends[i].privacy.avatar == true || this.state.friends[i].privacy.avatar == 'true'){
+
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
   // }else{
   //   var id = [api_server+'/img/avatars/'+id+'.jpg?'+new Date().getTime()];
@@ -61,7 +65,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
     <a data-tag={id} onClick={this.viewprofile} >
     <b>{this.state.friends[i].status}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <a><b>{id}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>{id}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button onClick={()=>{this.acceptfriend(id)}}> Accept </button>
     <button onClick={()=>{this.removefriend(id)}}> Decline</button>
     </div>
