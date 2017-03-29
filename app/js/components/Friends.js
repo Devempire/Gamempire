@@ -1,6 +1,7 @@
 
 
-
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
 module.exports = global.Friends = React.createClass({
 
   getDefaultProps() {
@@ -25,6 +26,9 @@ module.exports = global.Friends = React.createClass({
            friends: this.state.friends.concat({
              id:res[i]._id,
              status:res[i].status,
+             username:res[i].friend.username,
+             avatar:res[i].friend.avatar,
+             privacy:res[i].friend.privacy,
            })
          });
 
@@ -53,29 +57,29 @@ module.exports = global.Friends = React.createClass({
 var allUsers = [];
 for (var i = 0; i < this.state.friends.length; i++) {
   var id =this.state.friends[i].id;
-
-  //if (!this.state.friends[i].avatar || this.state.friends[i].privacy.avatar == true || this.state.friends[i].privacy.avatar == 'true'){
+  var username=this.state.friends[i].username;
+  if (!this.state.friends[i].avatar || this.state.friends[i].privacy.avatar == true || this.state.friends[i].privacy.avatar == 'true'){
 
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
-  // }else{
-  //   var id = [api_server+'/img/avatars/'+id+'.jpg?'+new Date().getTime()];
-  //   allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src={id[0]} /></div>);
-  // }
+   }else{
+     var img = [api_server+'/img/avatars/'+id+'.jpg?'+new Date().getTime()];
+     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src={img[0]} /></div>);
+   }
   if (this.state.friends[i].status == "pending") {
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
     <a data-tag={id} onClick={this.viewprofile} >
-    <b>{this.state.friends[i].status}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <b>{id}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button onClick={()=>{this.acceptfriend(id)}}> Accept </button>
-    <button onClick={()=>{this.removefriend(id)}}> Decline</button>
+    <b>{username}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button className="button" onClick={()=>{this.acceptfriend(id)}}> Accept </button>
+    <button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Decline</button>
     </div>
    );
   }else{
 allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
 <a data-tag={id} onClick={this.viewprofile} >
-<b>{this.state.friends[i].status}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<b>{id}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-<button onClick={()=>{this.removefriend(id)}}> Remove</button>
+<b>{username}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Remove</button>
 </div>
 );
   }
@@ -107,26 +111,31 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
     {
             username:name
         }).done((res)=>{
-      this.setState({result:res._id});
+      this.setState({result:res});
     });
   },
 
   addfriend(){
+    if(this.state.result.msg =="no result found !"){
+      return ;
+    }else{
     var id =electron.remote.getGlobal('sharedObject').id;
     $.ajax({
         url:api_server+"/friend/addFriend",
         type:"PUT",
         data:{
           user1:id,
-          user2:this.state.result
+          user2:this.state.result._id
             }
                      }).done((res)=>{
-                      console.log(res);
+                      this.setState({friends:[]});
+                      this.loadFriends();
 
                     }).fail((err)=>{
                       console.log("friend add fail");
 
                     });
+                  }
   },
 
   acceptfriend(requestid){
@@ -139,7 +148,8 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
           user2:requestid
             }
                      }).done((res)=>{
-                      console.log(res);
+                      this.setState({friends:[]});
+                      this.loadFriends();
 
                     }).fail((err)=>{
                       console.log("friend accept fail");
@@ -150,22 +160,36 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
 
   removefriend(removeid){
 
-    var id =electron.remote.getGlobal('sharedObject').id;
-    $.ajax({
-        url:api_server+"/friend/removeFriend",
-        type:"PUT",
-        data:{
-          user1:id,
-          user2:removeid
+     var ownerid =electron.remote.getGlobal('sharedObject').id;
+     $.ajax({
+         url:api_server+"/friend/removeFriend",
+         type:"PUT",
+         data:{
+           user1:ownerid,
+           user2:removeid
             }
-                     }).done((res)=>{
-                      console.log(res);
+                      }).done((res)=>{
+                       console.log(res);
+                     }).fail((err)=>{
+                       console.log("friend remove fail");
 
-                    }).fail((err)=>{
-                      console.log("friend remove fail");
+                     });
+    this.setState({friends: _.reject(this.state.friends, {id: removeid})});
 
-                    });
+  },
 
+  removeFriendConfirm(i, name){
+    vex.dialog.confirm({
+        overlayClosesOnClick: false,
+        message: 'Are you sure you want to remove the ' + name + ' ?',
+        callback: function (value){
+            if (value) {
+              this.removefriend(i);
+            } else {
+              return;
+            }
+        }.bind(this)
+    })
   },
 
 
@@ -184,9 +208,9 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
       return (
         <div>
         <div>
-        <input type="text" onChange={this.username}/>
-        <button onClick={this.search} >Search</button>
-        <p><a onClick={this.addfriend}>{this.state.result}</a></p>
+        <input type="text" placeholder=" enter username here" onChange={this.username}/>
+        <button className="button" onClick={this.search} >Search</button>
+        <p>{this.state.result.msg ? this.state.result.msg :<a onClick={this.addfriend}>{this.state.result.user}</a>}  </p>
         </div>
 
         <div key={"1"} id="targat">Loading friends...</div>
