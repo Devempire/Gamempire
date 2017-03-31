@@ -1,3 +1,6 @@
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
+
 module.exports = global.Profile = React.createClass({
 
   getDefaultProps() {
@@ -42,7 +45,17 @@ module.exports = global.Profile = React.createClass({
           username:res.username,
           avatar:avatar
       });
-    });
+    }).fail((res)=>{
+        console.log('Failed to load profile.');
+        vex.dialog.alert({
+            message: 'Failed to load profile.',
+            callback: function (value){
+                if (value) {
+                  return;
+                }
+            }.bind(this)
+        })
+       });
   },
 
   componentWillMount: function(){

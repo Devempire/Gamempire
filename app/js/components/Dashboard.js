@@ -52,7 +52,14 @@ module.exports = global.Dashboard = React.createClass({
 
                     }).fail((err)=>{
                       console.log("layout fail to update to server!")
-
+                      vex.dialog.alert({
+                          message: 'Layout failed to update to the server.',
+                          callback: function (value){
+                              if (value) {
+                                return;
+                              }
+                          }.bind(this)
+                      })
                     })
     }
   },
@@ -81,6 +88,14 @@ module.exports = global.Dashboard = React.createClass({
 
     }).fail((err)=>{
       console.log("something wrong with the load widget");
+      vex.dialog.alert({
+          message: 'Something is wrong with loading widgets.',
+          callback: function (value){
+              if (value) {
+                return;
+              }
+          }.bind(this)
+      })
     });
 
   },
@@ -273,8 +288,16 @@ module.exports = global.Dashboard = React.createClass({
 
                         });
                       }).fail((err)=>{
-                             alert("opps!");
-                          });
+                        alert("opps!");
+                        vex.dialog.alert({
+                            message: 'Adding a new widget failed.',
+                            callback: function (value){
+                                if (value) {
+                                  return;
+                                }
+                            }.bind(this)
+                        })
+                      });
 
   },
 
@@ -400,6 +423,14 @@ module.exports = global.Dashboard = React.createClass({
 
                      }).fail((res)=>{
                       console.log("fail to remove");
+                      vex.dialog.alert({
+                          message: 'Widget failed to remove.',
+                          callback: function (value){
+                              if (value) {
+                                return;
+                              }
+                          }.bind(this)
+                      })
                      });
   },
 

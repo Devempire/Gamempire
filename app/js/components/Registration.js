@@ -215,7 +215,6 @@ module.exports = class Registration extends React.Component {
                     setTimeout(function () {
                         $("#signupmsg").removeClass("shake");
                     },200);
-                    console.log("i am in trouble");
                         });
 
     }

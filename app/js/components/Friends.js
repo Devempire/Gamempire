@@ -1,5 +1,3 @@
-
-
 var vex = require('vex-js')
 vex.defaultOptions.className = 'vex-theme-os'
 module.exports = global.Friends = React.createClass({
@@ -37,8 +35,16 @@ module.exports = global.Friends = React.createClass({
       this.renderFriends();
       
     }).fail((err)=>{
-      console.log("Couldn't load friends.");
-    });
+        console.log('Failed to load friends.');
+        vex.dialog.alert({
+            message: 'Failed to load friends.',
+            callback: function (value){
+                if (value) {
+                  return;
+                }
+            }.bind(this)
+        })
+      });
 
   },
 
@@ -132,9 +138,16 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
                       this.loadFriends();
 
                     }).fail((err)=>{
-                      console.log("friend add fail");
-
-                    });
+                        console.log('Failed to add a friend.');
+                        vex.dialog.alert({
+                            message: 'Failed to add a friend.',
+                            callback: function (value){
+                                if (value) {
+                                  return;
+                                }
+                            }.bind(this)
+                        })
+                       });
                   }
   },
 
@@ -152,9 +165,16 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
                       this.loadFriends();
 
                     }).fail((err)=>{
-                      console.log("friend accept fail");
-
-                    });
+                        console.log('Accepting the friend request failed.');
+                        vex.dialog.alert({
+                            message: 'Accepting the friend request failed.',
+                            callback: function (value){
+                                if (value) {
+                                  return;
+                                }
+                            }.bind(this)
+                        })
+                       });
 
   },
 
@@ -171,9 +191,16 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
                       }).done((res)=>{
                        console.log(res);
                      }).fail((err)=>{
-                       console.log("friend remove fail");
-
-                     });
+                        console.log('Removing your friend failed.');
+                        vex.dialog.alert({
+                            message: 'Removing your friend failed.',
+                            callback: function (value){
+                                if (value) {
+                                  return;
+                                }
+                            }.bind(this)
+                        })
+                       });
     this.setState({friends: _.reject(this.state.friends, {id: removeid})});
 
   },

@@ -1,5 +1,5 @@
-
-
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
 module.exports = global.Notepad = React.createClass({
 
 
@@ -39,7 +39,15 @@ module.exports = global.Notepad = React.createClass({
             }).done((res)=>{
               electron.remote.getGlobal('sharedObject').data=this.state.data;
             }).fail((res)=>{
-              console.log("fail");
+                console.log("Notepad data could not be updated.");
+                vex.dialog.alert({
+                    message: 'Notepad data could not be updated.',
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
             });
 
 
