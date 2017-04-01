@@ -51,7 +51,7 @@ module.exports = global.Dashboard = React.createClass({
                       electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
 
                     }).fail((err)=>{
-                      console.log("layout fail to update to server!")
+                      console.log("Layout failed to update to the server.")
                       vex.dialog.alert({
                           message: 'Layout failed to update to the server.',
                           callback: function (value){
@@ -87,7 +87,7 @@ module.exports = global.Dashboard = React.createClass({
       }
 
     }).fail((err)=>{
-      console.log("something wrong with the load widget");
+      console.log('Something is wrong with loading widgets.');
       vex.dialog.alert({
           message: 'Something is wrong with loading widgets.',
           callback: function (value){
@@ -288,7 +288,7 @@ module.exports = global.Dashboard = React.createClass({
 
                         });
                       }).fail((err)=>{
-                        alert("opps!");
+                        console.log('Adding a new widget failed.');
                         vex.dialog.alert({
                             message: 'Adding a new widget failed.',
                             callback: function (value){
@@ -422,7 +422,7 @@ module.exports = global.Dashboard = React.createClass({
                           });
 
                      }).fail((res)=>{
-                      console.log("fail to remove");
+                      console.log('Widget failed to remove.');
                       vex.dialog.alert({
                           message: 'Widget failed to remove.',
                           callback: function (value){

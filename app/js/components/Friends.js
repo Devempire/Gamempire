@@ -208,7 +208,7 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
   removeFriendConfirm(i, name){
     vex.dialog.confirm({
         overlayClosesOnClick: false,
-        message: 'Are you sure you want to remove the ' + name + ' ?',
+        message: 'Are you sure you want to remove ' + name + '?',
         callback: function (value){
             if (value) {
               this.removefriend(i);

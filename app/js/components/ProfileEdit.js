@@ -134,18 +134,18 @@ module.exports = global.ProfileEdit = React.createClass({
                     }, 270);
                   } 
                 }
-              }).fail((res)=>{
-                  console.log("Profile failed to load.");
-                  vex.dialog.alert({
-                      message: 'Profile failed to load.',
-                      callback: function (value){
-                          if (value) {
-                            return;
-                          }
-                      }.bind(this)
-                  })
-              });
-    });
+              })
+      }).fail((err)=>{
+          console.log("Profile failed to load.");
+          vex.dialog.alert({
+              message: 'Profile failed to load.',
+              callback: function (value){
+                  if (value) {
+                    return;
+                  }
+              }.bind(this)
+          })
+      });
   },
 
   componentWillMount: function(){
@@ -189,17 +189,17 @@ module.exports = global.ProfileEdit = React.createClass({
                     }
                 }).done((res)=>{
                     console.log('New avatar updated.');
-                }).fail((err)=>{
-                    console.log("Avatar update failed.")
-                    vex.dialog.alert({
-                        message: 'Avatar update failed.',
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-                  })
+                })
+            }).fail((err)=>{
+              console.log("Avatar could not be saved to the server.")
+              vex.dialog.alert({
+                  message: 'Avatar could not be saved to the server.',
+                  callback: function (value){
+                      if (value) {
+                        return;
+                      }
+                  }.bind(this)
+              })
             });
 
     this.setState({showImageDelete:true});
@@ -251,18 +251,18 @@ module.exports = global.ProfileEdit = React.createClass({
                  }
              }).done((res)=>{
                  console.log('Avatar deleted.');
-             }).fail((err)=>{
-                  console.log('Avatar deletion failed.');
-                  vex.dialog.alert({
-                  message: 'Avatar deletion failed.',
-                  callback: function (value){
-                      if (value) {
-                        return;
-                      }
-                  }.bind(this)
-              })
-            });
-         });
+             })
+         }).fail((err)=>{
+              console.log('Avatar could not be deleted in the server.');
+              vex.dialog.alert({
+              message: 'Avatar could not be deleted in the server.',
+              callback: function (value){
+                  if (value) {
+                    return;
+                  }
+              }.bind(this)
+          })
+        });;
       this.resetimage(avatar);
       this.setState({showImageDelete:false});
       global.rotate = 0;
@@ -499,18 +499,18 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("avatar's privacy is updated");
-               }).fail((err)=>{
-                  console.log("Avatar's privacy is not updated.");
-                  vex.dialog.alert({
-                        message: "Avatar's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-                  });
-           });
+               })
+           }).fail((err)=>{
+              console.log("Avatar's privacy is not updated in the server.");
+              vex.dialog.alert({
+                    message: "Avatar's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
+              });
   },
 
   toggleAboutMe() {
@@ -536,17 +536,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("aboutme's privacy is updated");
-               }).fail((err)=>{
-                   console.log("About Me's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "About Me's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("About Me's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "About Me's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
   },
 
@@ -579,17 +579,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("lastname's privacy is updated");
-               }).fail((err)=>{
-                   console.log("Last Name's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "Last Name's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("Last Name's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "Last Name's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
     }
     else if (toggleEle.getAttribute('checked') == 'checked') {
@@ -616,17 +616,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("firstname's privacy is updated");
-               }).fail((err)=>{
-                   console.log("First Name's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "First Name's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("First Name's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "First Name's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
   },
 
@@ -660,17 +660,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("firstname's privacy is updated");
-               }).fail((err)=>{
-                   console.log("First Name's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "First Name's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("First Name's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "First Name's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
     } else if (toggleEle.getAttribute('checked') == null) {
       //public
@@ -691,17 +691,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("lastname's privacy is updated");
-               }).fail((err)=>{
-                   console.log("Last Name's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "Last Name's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("Last Name's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "Last Name's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
   },
 
@@ -728,17 +728,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("birthday's privacy is updated");
-               }).fail((err)=>{
-                   console.log("Birthday's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "Birthday's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("Birthday's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "Birthday's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
   },
 
@@ -765,17 +765,17 @@ module.exports = global.ProfileEdit = React.createClass({
                    }
                }).done((res)=>{
                    console.log("email's privacy is updated");
-               }).fail((err)=>{
-                   console.log("Email's privacy is not updated.");
-                   vex.dialog.alert({
-                        message: "Email's privacy is not updated.",
-                        callback: function (value){
-                            if (value) {
-                              return;
-                            }
-                        }.bind(this)
-                    })
-               });
+               })
+           }).fail((err)=>{
+               console.log("Email's privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "Email's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
            });
   },
 

@@ -25,9 +25,17 @@ module.exports = global.Bar = React.createClass({
 				aboutme:this.state.aboutMe
 			})
 		}).done((res)=>{
-	        }).fail((err)=>{
-	          console.log("AboutMe failed to update on server!")
-	        });
+        }).fail((err)=>{
+          console.log("About Me could not be saved to the server.")
+          vex.dialog.alert({
+              message: 'About Me could not be saved to the server.',
+              callback: function (value){
+                  if (value) {
+                    return;
+                  }
+              }.bind(this)
+          })
+        });
 	},
 
 	getInitialState() {
@@ -133,7 +141,7 @@ module.exports = global.Bar = React.createClass({
         <div id="usertopbar">
           <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
-  				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onBlur={this.updateAboutMe}  onKeyPress={this.extendaboutme} />
+  				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
 					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
         </div>
   		);
