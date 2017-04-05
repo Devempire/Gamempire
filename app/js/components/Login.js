@@ -10,8 +10,9 @@ module.exports = class Login extends React.Component {
         };
     }
 
+    
 
-     componentDidMount(){
+    componentDidMount(){
       this.loadCheck();
       this.loadUsername();
       this.loadPassword();
