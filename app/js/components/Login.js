@@ -17,6 +17,20 @@ module.exports = class Login extends React.Component {
       this.loadPassword();
     }
 
+    componentWillMount(){
+      this.setWindowsColours();
+    }
+
+    setWindowsColours(){
+      var accentColour = ipc.sendSync('getAccentColor');
+      const red = accentColour.substr(0, 2);
+      const green = accentColour.substr(2, 2);
+      const blue = accentColour.substr(4, 2);
+      const alpha = accentColour.substr(6, 2);
+      console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    }
+
+
     userSubmit(e) {
        if (e.key == 'Enter') {
          var psw = $("#passsword").val();
