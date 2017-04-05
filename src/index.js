@@ -14,8 +14,6 @@ var ipc = electron.ipcMain;
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
 
-const {systemPreferences} = require('electron')
-
 global.sharedObject = {
   token: null,
   username:null,
@@ -32,15 +30,6 @@ global.sharedObject = {
 let mainWindow
 
 let createWindow = () => {
-  var backgroundElements = [
-      "body",
-      "html",
-      ".overlay",
-      "table tbody",
-      "table tfoot",
-      "table thead"
-  ];
-
   // Create the browser window.
   mainWindow  = new BrowserWindow({
     minHeight: 480,
