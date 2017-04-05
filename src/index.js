@@ -5,8 +5,8 @@ let isDevelopment = true;
 
 const electron = require('electron')
 // Module to control application life.
-global.electron = electron
 const app = electron.app
+const systemPreferences = electron.systemPreferences
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 var ipc = electron.ipcMain;
@@ -84,10 +84,14 @@ app.on('ready', function() {
       delete d.responseHeaders['x-frame-options'];
       delete d.responseHeaders['X-Frame-Options'];
     }
-    c({cancel: false, responseHeaders: d.responseHeaders, statusLine: d.statusLine});
+    ({cancel: false, responseHeaders: d.responseHeaders, statusLine: d.statusLine});
     });
 
   });
+
+  ipc.on('getAccentColor', function(event, arg){
+    event.returnValue=systemPreferences.getAccentColor();
+  });//Return  accent
 
   ipc.on('quicksize', function(event, arg){
     event.returnValue='';
