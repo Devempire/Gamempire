@@ -32,21 +32,19 @@
     "event-stream": "^3.3.4",
     "glob": "^7.1.1",
     "gulp": "^3.9.1",
-    "gulp-atom-electron": "^1.10.0",
     "gulp-babel": "^6.1.2",
     "gulp-eslint": "^3.0.1",
     "gulp-rename": "^1.2.2",
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^3.1.0",
-    "gulp-symdest": "^1.1.0",
     "gulp-useref": "^3.1.2",
-    "gulp-vinyl-zip": "^1.4.0",
     "react-grid-layout": "^0.14.4",
     "react-resizable": "^1.6.0",
     "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
     "auto-updater": "^1.0.2",
+    "electron-packager": "^8.6.0",
     "foundation-sites": "^6.3.1",
     "jquery": "^3.1.1",
     "lodash": "^4.17.4",
@@ -60,5 +58,8 @@
     "unirest": "^0.5.1",
     "vex-dialog": "^1.0.6",
     "vex-js": "^3.1.0"
+  },
+  "scripts": {
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./app/img/logo.ico --prune=true --out=./release/windows --ignore=node_modules"
   }
 }
