@@ -10,12 +10,47 @@ module.exports = class Login extends React.Component {
         };
     }
 
+    
 
-     componentDidMount(){
+    componentDidMount(){
       this.loadCheck();
       this.loadUsername();
       this.loadPassword();
     }
+
+    componentWillMount(){
+      this.setWindowsColours();
+    }
+
+    setWindowsColours(){
+      var backgroundElements = [
+          "body",
+          "html",
+          ".react-grid-item",
+          ".react-grid-item h2",
+          ".overlay",
+          "table tbody",
+          "table tfoot",
+          "table thead"
+      ];
+
+      var accentColour = ipc.sendSync('getAccentColor');
+      const red = accentColour.substr(0, 2);
+      const green = accentColour.substr(2, 2);
+      const blue = accentColour.substr(4, 2);
+      const alpha = accentColour.substr(6, 2);
+      console.log(accentColour);
+      console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+      var red_decimal = parseInt(red, 16);
+      var green_decimal = parseInt(green, 16);
+      var blue_decimal = parseInt(blue, 16);
+      var alpha_percent = ((parseInt(alpha, 16)) / 255) * 100
+
+      $.each(backgroundElements, function(index, value) {
+          $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
+      });
+    }
+
 
     userSubmit(e) {
        if (e.key == 'Enter') {
