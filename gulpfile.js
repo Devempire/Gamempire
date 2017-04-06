@@ -215,11 +215,11 @@ gulp.task('serve', ['build', 'watch'], () => {
 
 gulp.task('wininstall', ['build-production'],()=>{
   var resultPromise = electronInstaller.createWindowsInstaller({
-    appDirectory: './release/windows',
-    outputDirectory: './release/',
+    appDirectory: './release/windows/Gamempire-win32-ia32',
+    outputDirectory: './release',
     authors: 'Gamempire',
     exe: 'Gamempire.exe',
-    iconUrl:'./app/img/logo.ico',
+    //iconUrl:'./app/img/logo.ico',
     setupIcon:'./app/img/logo.ico'
   });
   resultPromise.then();
