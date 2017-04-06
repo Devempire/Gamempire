@@ -1,23 +1,7 @@
-'use strict'
-
-//change the value to false when package, true for developing
-let isDevelopment = true;
-
-const electron = require('electron')
-// Module to control application life.
-const app = electron.app
-const systemPreferences = electron.systemPreferences
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow
-var ipc = electron.ipcMain;
-
-
-if(require('electron-squirrel-startup')) app.quit();
-
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
-  app.quit();
+  return;
 }
 
 function handleSquirrelEvent() {
@@ -81,6 +65,23 @@ function handleSquirrelEvent() {
       return true;
   }
 };
+
+
+//change the value to false when package, true for developing
+let isDevelopment = true;
+
+const electron = require('electron')
+// Module to control application life.
+const app = electron.app
+const systemPreferences = electron.systemPreferences
+// Module to create native browser window.
+const BrowserWindow = electron.BrowserWindow
+var ipc = electron.ipcMain;
+
+
+
+
+
 
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';

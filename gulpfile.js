@@ -221,7 +221,7 @@ gulp.task('package-osx', ['build-production'], () => {
 
 gulp.task('package-windows', ['build-production'], () => {
   return gulp.src('./build/**')
-    .pipe(electronPackager({ version: electronVersion, platform: 'win32' ,arcg:'all'}))
+    .pipe(electronPackager({ version: electronVersion, platform: 'win32' ,arch:'x64'}))
     .pipe(gulp.dest('./release/windows'))
 })
 
@@ -236,10 +236,11 @@ gulp.task('package', ['build-production', 'package-windows', 'package-osx', 'pac
 
 gulp.task('wininstall', ['build-production'],()=>{
   var resultPromise = electronInstaller.createWindowsInstaller({
-    appDirectory: './build/windows',
+    appDirectory: './release/windows',
     outputDirectory: './release/',
     authors: 'Gamempire',
-    exe: 'Gamempire.exe'
+    exe: 'Gamempire.exe',
+    setupIcon:'./app/img/logo.ico'
   });
   resultPromise.then();
 })
