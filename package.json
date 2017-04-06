@@ -19,8 +19,10 @@
     "babel-preset-react": "^6.23.0",
     "babelify": "^7.3.0",
     "browserify": "^14.1.0",
-    "electron-connect": "^0.6.1",
     "electron": "^1.6.2",
+    "electron-connect": "^0.6.1",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-winstaller": "^2.5.2",
     "eslint": "^3.17.1",
     "eslint-config-standard": "^7.0.1",
     "eslint-config-standard-jsx": "^3.3.0",
@@ -39,11 +41,12 @@
     "gulp-symdest": "^1.1.0",
     "gulp-useref": "^3.1.2",
     "gulp-vinyl-zip": "^1.4.0",
-    "vinyl-source-stream": "^1.1.0",
+    "react-grid-layout": "^0.14.4",
     "react-resizable": "^1.6.0",
-    "react-grid-layout": "^0.14.4"
+    "vinyl-source-stream": "^1.1.0"
   },
   "dependencies": {
+    "auto-updater": "^1.0.2",
     "foundation-sites": "^6.3.1",
     "jquery": "^3.1.1",
     "lodash": "^4.17.4",
@@ -55,7 +58,7 @@
     "react-tap-event-plugin": "^2.0.1",
     "request": "^2.81.0",
     "unirest": "^0.5.1",
-    "vex-js": "^3.1.0",
-    "vex-dialog":"^1.0.6"
+    "vex-dialog": "^1.0.6",
+    "vex-js": "^3.1.0"
   }
 }

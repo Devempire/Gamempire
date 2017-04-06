@@ -26,6 +26,7 @@ const electron = require('electron-connect').server.create()
 const electronPackager = require('gulp-atom-electron')
 const symdest = require('gulp-symdest')
 const zip = require('gulp-vinyl-zip')
+const electronInstaller = require('electron-winstaller');
 
 const electronVersion = require('electron/package.json').version
 
@@ -220,8 +221,8 @@ gulp.task('package-osx', ['build-production'], () => {
 
 gulp.task('package-windows', ['build-production'], () => {
   return gulp.src('./build/**')
-    .pipe(electronPackager({ version: electronVersion, platform: 'win32' }))
-    .pipe(zip.dest('./release/windows.zip'))
+    .pipe(electronPackager({ version: electronVersion, platform: 'win32' ,arcg:'all'}))
+    .pipe(gulp.dest('./release/windows'))
 })
 
 gulp.task('package-linux', ['build-production'], () => {
@@ -231,3 +232,14 @@ gulp.task('package-linux', ['build-production'], () => {
 })
 
 gulp.task('package', ['build-production', 'package-windows', 'package-osx', 'package-linux'])
+
+
+gulp.task('wininstall', ['build-production'],()=>{
+  var resultPromise = electronInstaller.createWindowsInstaller({
+    appDirectory: './build/windows',
+    outputDirectory: './release/',
+    authors: 'Gamempire',
+    exe: 'Gamempire.exe'
+  });
+  resultPromise.then();
+})
