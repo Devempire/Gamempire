@@ -1,5 +1,3 @@
-'use strict'
-
 //change the value to false when package, true for developing
 let isDevelopment = true;
 
@@ -11,13 +9,14 @@ const systemPreferences = electron.systemPreferences
 const BrowserWindow = electron.BrowserWindow
 var ipc = electron.ipcMain;
 
+const path = require('path')
+var iconPath = __dirname + '../../app/img/logo.ico';
 
-if(require('electron-squirrel-startup')) app.quit();
 
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
-  app.quit();
+  
 }
 
 function handleSquirrelEvent() {
@@ -82,8 +81,6 @@ function handleSquirrelEvent() {
   }
 };
 
-const path = require('path')
-var iconPath = __dirname + '../../app/img/logo.ico';
 
 global.sharedObject = {
   token: null,
@@ -264,7 +261,7 @@ app.on('ready', function() {
 
 
 });
-
+app.setAppUserModelId("com.squirrel.gamempire.Gamempire")
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
