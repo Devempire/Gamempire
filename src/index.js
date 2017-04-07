@@ -179,9 +179,21 @@ app.on('ready', function() {
 
   });
 
+  // ipc.on('experiment', function(event, arg){
+  //   event.returnValue=systemPreferences.getColor('button-text');
+  // });
+
+  ipc.on('getActiveCaption', function(event, arg){
+    event.returnValue=systemPreferences.getColor('active-caption');
+  });
+
   ipc.on('getAccentColor', function(event, arg){
     event.returnValue=systemPreferences.getAccentColor();
-  });//Return  accent
+  });
+
+  ipc.on('getActiveBorderColor', function(event, arg){
+    event.returnValue=systemPreferences.getColor('active-border');
+  });
 
   ipc.on('quicksize', function(event, arg){
     event.returnValue='';

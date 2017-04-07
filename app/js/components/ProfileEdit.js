@@ -154,6 +154,65 @@ module.exports = global.ProfileEdit = React.createClass({
     global.rotate = 0;
   },
 
+  setWindowsColours(){
+    var primaryElements = [
+        ".button",
+        "::selection",
+        "react-grid-item:hover",
+        ".react-grid-item:hover h2",
+        ".sidenav .active",
+        ".react-grid-placeholder",
+        ".validationError",
+        ".custom-file-upload"
+    ];
+    var backgroundElements = [
+        "body",
+        "html",
+        ".react-grid-item",
+        ".react-grid-item h2",
+        ".overlay",
+        "table tbody",
+        "table tfoot",
+        "table thead"
+    ];
+    var secondaryElements = [
+        ".secondary",
+        "table thead",
+        ".widgetTitle",
+        "#top_bar",
+        ".sidenav",
+        "input"
+    ];
+
+    var accentColor = ipc.sendSync('getAccentColor');
+    var activeBorderColor = ipc.sendSync('getActiveBorderColor');
+    var activeCaption = ipc.sendSync('getActiveCaption');
+    //var experiment = ipc.sendSync('experiment');
+    const red = accentColor.substr(0, 2);
+    const green = accentColor.substr(2, 2);
+    const blue = accentColor.substr(4, 2);
+    const alpha = accentColor.substr(6, 2);
+    console.log(accentColor);
+    console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    console.log(activeBorderColor);
+    console.log(activeCaption);
+    //console.log(experiment);
+    var red_decimal = parseInt(red, 16);
+    var green_decimal = parseInt(green, 16);
+    var blue_decimal = parseInt(blue, 16);
+    var alpha_percent = ((parseInt(alpha, 16)) / 255)
+
+    $.each(primaryElements, function(index, value) {
+        $(value).css("background-color", activeCaption);
+    });
+    $.each(backgroundElements, function(index, value) {
+        $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
+    });
+    $.each(secondaryElements, function(index, value) {
+        $(value).css("background-color", activeBorderColor);
+    });
+  },
+
   resetimage(e){
     ReactDOM.render(
       <img src={e} />,
@@ -271,7 +330,7 @@ module.exports = global.ProfileEdit = React.createClass({
   createProfile(el) {
     var i = el.i;
     return (
-      <div key={i} data-grid={el} className="noselect profileedit row columns">
+      <div key={i} data-grid={el} onLoad={this.setWindowsColours} className="noselect profileedit row columns">
         <h3>Edit Profile</h3>
         <hr/>
         <div id='popupContainer'></div>
@@ -445,7 +504,6 @@ module.exports = global.ProfileEdit = React.createClass({
           ".react-grid-placeholder",
           ".validationError",
           ".custom-file-upload"
-
       ];
       var backgroundElements = [
           "body",
@@ -468,11 +526,11 @@ module.exports = global.ProfileEdit = React.createClass({
       $.each(primaryElements, function(index, value) {
           $(value).css("background-color", Primary);
       });
-      $.each(secondaryElements, function(index, value) {
-          $(value).css("background-color", Secondary);
-      });
       $.each(backgroundElements, function(index, value) {
           $(value).css("background-color", Background);
+      });
+      $.each(secondaryElements, function(index, value) {
+          $(value).css("background-color", Secondary);
       });
   },
 
