@@ -48,8 +48,8 @@ module.exports = class Login extends React.Component {
       ];
 
       var accentColor = ipc.sendSync('getAccentColor');
-      var activeBorderColor = ipc.sendSync('getActiveBorderColor');
       var activeCaption = ipc.sendSync('getActiveCaption');
+      var inactiveCaption = ipc.sendSync('getInactiveCaption');
       //var experiment = ipc.sendSync('experiment');
       const red = accentColor.substr(0, 2);
       const green = accentColor.substr(2, 2);
@@ -57,8 +57,8 @@ module.exports = class Login extends React.Component {
       const alpha = accentColor.substr(6, 2);
       console.log(accentColor);
       console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
-      console.log(activeBorderColor);
       console.log(activeCaption);
+      console.log(inactiveCaption);
       //console.log(experiment);
       var red_decimal = parseInt(red, 16);
       var green_decimal = parseInt(green, 16);
@@ -72,7 +72,7 @@ module.exports = class Login extends React.Component {
           $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
       });
       $.each(secondaryElements, function(index, value) {
-          $(value).css("background-color", activeBorderColor);
+          $(value).css("background-color", inactiveCaption);
       });
     }
 

@@ -13,7 +13,6 @@ module.exports = global.Friends = React.createClass({
     };
   },
 
-
   loadFriends() {
 
     var id =electron.remote.getGlobal('sharedObject').id;
@@ -106,9 +105,71 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
     this.loadFriends();
   },
 
+  componentDidMount: function(){
+    this.setWindowsColours();
+  },
+
+  setWindowsColours(){
+    var primaryElements = [
+        ".button",
+        "::selection",
+        "react-grid-item:hover",
+        ".react-grid-item:hover h2",
+        ".sidenav .active",
+        ".react-grid-placeholder",
+        ".validationError",
+        ".custom-file-upload"
+    ];
+    var backgroundElements = [
+        "body",
+        "html",
+        ".react-grid-item",
+        ".react-grid-item h2",
+        ".overlay",
+        "table tbody",
+        "table tfoot",
+        "table thead"
+    ];
+    var secondaryElements = [
+        ".secondary",
+        "table thead",
+        ".widgetTitle",
+        "#top_bar",
+        ".sidenav",
+        "input"
+    ];
+
+    var accentColor = ipc.sendSync('getAccentColor');
+    var activeCaption = ipc.sendSync('getActiveCaption');
+    var inactiveCaption = ipc.sendSync('getInactiveCaption');
+    //var experiment = ipc.sendSync('experiment');
+    const red = accentColor.substr(0, 2);
+    const green = accentColor.substr(2, 2);
+    const blue = accentColor.substr(4, 2);
+    const alpha = accentColor.substr(6, 2);
+    console.log(accentColor);
+    console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    console.log(activeCaption);
+    console.log(inactiveCaption);
+    //console.log(experiment);
+    var red_decimal = parseInt(red, 16);
+    var green_decimal = parseInt(green, 16);
+    var blue_decimal = parseInt(blue, 16);
+    var alpha_percent = ((parseInt(alpha, 16)) / 255)
+
+    $.each(primaryElements, function(index, value) {
+        $(value).css("background-color", activeCaption);
+    });
+    $.each(backgroundElements, function(index, value) {
+        $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
+    });
+    $.each(secondaryElements, function(index, value) {
+        $(value).css("background-color", inactiveCaption);
+    });
+  },
+
   username(event){
     this.setState({username:event.target.value});
-   
   },
 
   search(){
@@ -219,8 +280,6 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
     })
   },
 
-
-
   render() {
     var title = "Friends \u2014 Gamempire"
     document.title = title
@@ -233,20 +292,15 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
     $( "#_Friends" ).addClass('active');
 
       return (
-        <div>
-        <div>
-        <input type="text" placeholder=" enter username here" onChange={this.username}/>
-        <button className="button" onClick={this.search} >Search</button>
-        <p>{this.state.result.msg ? this.state.result.msg :<a onClick={this.addfriend}>{this.state.result.user}</a>}  </p>
-        </div>
+        <div onLoad={this.setWindowsColours}>
+          <div>
+            <input type="text" placeholder=" enter username here" onChange={this.username}/>
+            <button className="button" onClick={this.search} >Search</button>
+            <p>{this.state.result.msg ? this.state.result.msg :<a onClick={this.addfriend}>{this.state.result.user}</a>}</p>
+          </div>
 
-        <div key={"1"} id="targat">Loading friends...</div>
+          <div key={"1"} id="targat">Loading friends...</div>
         </div>
-
       );
-
   }
-
 });
-
-

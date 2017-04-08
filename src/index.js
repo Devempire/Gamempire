@@ -177,7 +177,7 @@ app.on('ready', function() {
   });
 
   // ipc.on('experiment', function(event, arg){
-  //   event.returnValue=systemPreferences.getColor('button-text');
+  //   event.returnValue=systemPreferences.getColor('inactive-caption');
   // });
 
   ipc.on('getActiveCaption', function(event, arg){
@@ -188,8 +188,8 @@ app.on('ready', function() {
     event.returnValue=systemPreferences.getAccentColor();
   });
 
-  ipc.on('getActiveBorderColor', function(event, arg){
-    event.returnValue=systemPreferences.getColor('active-border');
+  ipc.on('getInactiveCaption', function(event, arg){
+    event.returnValue=systemPreferences.getColor('inactive-caption');
   });
 
   ipc.on('quicksize', function(event, arg){
