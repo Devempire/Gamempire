@@ -219,7 +219,7 @@ gulp.task('wininstall', ['build-production'],()=>{
     outputDirectory: './release',
     authors: 'Gamempire',
     exe: 'Gamempire.exe',
-    //iconUrl:'./app/img/logo.ico',
+    noMsi:true,
     setupIcon:'./app/img/logo.ico'
   });
   resultPromise.then();
