@@ -32,7 +32,7 @@ module.exports = global.Friends = React.createClass({
        }
 
       this.renderFriends();
-      
+
     }).fail((err)=>{
         console.log('Failed to load friends.');
         vex.dialog.alert({
@@ -83,7 +83,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
 allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
 <a data-tag={id} onClick={this.viewprofile} >
 <b>{username}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+<b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Remove</button>
 </div>
 );
@@ -96,7 +96,7 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
       document.getElementById('targat')
     );
 
-   
+
 
 
 },
@@ -147,10 +147,10 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
     const green = accentColor.substr(2, 2);
     const blue = accentColor.substr(4, 2);
     const alpha = accentColor.substr(6, 2);
-    console.log(accentColor);
-    console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
-    console.log(activeCaption);
-    console.log(inactiveCaption);
+    //console.log(accentColor);
+    //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    //console.log(activeCaption);
+    //console.log(inactiveCaption);
     //console.log(experiment);
     var red_decimal = parseInt(red, 16);
     var green_decimal = parseInt(green, 16);

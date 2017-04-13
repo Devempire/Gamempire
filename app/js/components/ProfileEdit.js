@@ -92,7 +92,7 @@ module.exports = global.ProfileEdit = React.createClass({
                     if (res.privacy[i] == 'false') {
                       var toggleEle = document.getElementById('toggle_privacy_last_name');
                       toggleEle.setAttribute('checked', 'checked');
-                    } 
+                    }
                     setTimeout(function () {
                       document.getElementById('toggle_privacy_last_name').parentNode.style.visibility = "visible";
                     }, 270);
@@ -132,7 +132,7 @@ module.exports = global.ProfileEdit = React.createClass({
                     setTimeout(function () {
                       document.getElementById('toggle_privacy_avatar').parentNode.style.visibility = "visible";
                     }, 270);
-                  } 
+                  }
                 }
               })
       }).fail((err)=>{
@@ -192,10 +192,10 @@ module.exports = global.ProfileEdit = React.createClass({
     const green = accentColor.substr(2, 2);
     const blue = accentColor.substr(4, 2);
     const alpha = accentColor.substr(6, 2);
-    console.log(accentColor);
-    console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
-    console.log(activeCaption);
-    console.log(inactiveCaption);
+    //console.log(accentColor);
+    //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    //console.log(activeCaption);
+    //console.log(inactiveCaption);
     //console.log(experiment);
     var red_decimal = parseInt(red, 16);
     var green_decimal = parseInt(green, 16);
@@ -365,7 +365,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <input type="text" id="userName" value={this.state.username} onChange={(event) => {this.setState({username: event.target.value})}}/>
             <font id='uname' color='red'></font>
 
-            About Me: 
+            About Me:
 
             <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
                 <input type="checkbox" onClick={this.toggleAboutMe} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_about_me"/>
@@ -403,7 +403,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <input type="text" id="lastName" value={this.state.lastname} onChange={(event) => {this.setState({lastname: event.target.value})}}/>
             <font id='lname' color='red'></font>
 
-            Birthday: 
+            Birthday:
 
             <div className="onoffswitch" style={{display : 'inline-block', visibility : 'hidden'}}>
                 <input type="checkbox" onClick={this.toggleBday} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_birthday"/>
