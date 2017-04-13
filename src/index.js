@@ -8,6 +8,7 @@ const systemPreferences = electron.systemPreferences
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 var ipc = electron.ipcMain;
+var os = require('os');
 
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
@@ -16,7 +17,7 @@ var iconPath = __dirname + '../../app/img/logo.ico';
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
-  
+
 }
 
 function handleSquirrelEvent() {
@@ -115,7 +116,7 @@ let createWindow = () => {
 
   if (isDevelopment) {
     // Open the DevTools.
-    mainWindow.webContents.openDevTools({mode: 'attach'})
+    mainWindow.webContents.openDevTools({mode: 'detach'})
   }
 
   mainWindow.center();
@@ -129,7 +130,7 @@ let createWindow = () => {
   })
 }
 
-//auto update 
+//auto update
 // app.on('ready', function(){
 //   console.log('application emitted "ready"');
 
@@ -258,6 +259,12 @@ app.on('ready', function() {
     event.returnValue='';
     mainWindow.minimize();
   });//Minimize button
+
+  ipc.on('hostStats', function(event, arg){
+    event.returnValue=[os.platform(), os.type(), os.release(), os.cpus(), os.homedir(), os.hostname(), os.totalmem()/1073741824+' GB', os.uptime()/3600+' Hours', os.networkInterfaces()];
+    console.log(os.platform()); // "win32"
+    console.log(os.type()); // "Windows_NT"
+  });//Returns user machine information
 
 
 });

@@ -196,6 +196,7 @@ module.exports = global.Dashboard = React.createClass({
   componentDidMount: function(){
     this.setWindowsColours();
     //console.log("component did mount!");
+    this.hostStats();
   },
 
   setWindowsColours(){
@@ -236,10 +237,10 @@ module.exports = global.Dashboard = React.createClass({
     const green = accentColor.substr(2, 2);
     const blue = accentColor.substr(4, 2);
     const alpha = accentColor.substr(6, 2);
-    console.log(accentColor);
-    console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
-    console.log(activeCaption);
-    console.log(inactiveCaption);
+    //console.log(accentColor);
+    //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    //console.log(activeCaption);
+    //console.log(inactiveCaption);
     //console.log(experiment);
     var red_decimal = parseInt(red, 16);
     var green_decimal = parseInt(green, 16);
@@ -277,6 +278,37 @@ module.exports = global.Dashboard = React.createClass({
     this.setState({showStore: true});
   },
 
+  hostStats(){
+    var host = ipc.sendSync('hostStats')
+    console.log(host);
+
+    $.ajax({
+          url:api_server+"/login/profile/dataupload",
+          type:"PUT",
+          contentType: 'application/json; charset=utf-8',
+          data:JSON.stringify({
+            _id:this.state.id,
+            ref:"clientStats",
+            data:host
+            })
+            }).done((res)=>{
+              //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
+              //electron.remote.getGlobal('sharedObject').data=this.state.data;
+            }).fail((res)=>{
+                console.log("Client stats upload failed.");
+                vex.dialog.alert({
+                    message: 'Client stats upload failed.',
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
+            });
+
+
+  },
+
   handleSubmit(event) {
       event.preventDefault();
 
@@ -308,7 +340,7 @@ module.exports = global.Dashboard = React.createClass({
                         $.get(api_server+'/widget/find/'+ this.state.selectwidget + '/info').done((res2)=>{
                         var i=this.state.games.length;
 
-                        
+
 
                         this.setState({
                               games: this.state.games.concat({
@@ -377,7 +409,7 @@ module.exports = global.Dashboard = React.createClass({
                 <div>
                   <label>Enter Name </label>
                   <input className="input-group-field noselect" type="text" onChange={(event)=> {this.setState({Name: event.target.value})}}/>
-                  <button className="button"  >Submit</button> 
+                  <button className="button"  >Submit</button>
                 </div>
 
 

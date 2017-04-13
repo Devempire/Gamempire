@@ -15,6 +15,7 @@ module.exports = class Login extends React.Component {
       this.loadUsername();
       this.loadPassword();
       this.setWindowsColours();
+
     }
 
     setWindowsColours(){
@@ -55,10 +56,10 @@ module.exports = class Login extends React.Component {
       const green = accentColor.substr(2, 2);
       const blue = accentColor.substr(4, 2);
       const alpha = accentColor.substr(6, 2);
-      console.log(accentColor);
-      console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
-      console.log(activeCaption);
-      console.log(inactiveCaption);
+      //console.log(accentColor);
+      //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+      //console.log(activeCaption);
+      //console.log(inactiveCaption);
       //console.log(experiment);
       var red_decimal = parseInt(red, 16);
       var green_decimal = parseInt(green, 16);
