@@ -15,8 +15,12 @@ module.exports = global.Notepad = React.createClass({
   getInitialState() {
     var id = electron.remote.getGlobal('sharedObject').id;
     var data = electron.remote.getGlobal('sharedObject').data;
+    //const notepad ='58c32d942ca0d464773a4dbb';
+    var notepadData = data["58c32d942ca0d464773a4dbb"];
+    console.log(data["58c32d942ca0d464773a4dbb"]);
+
     return {
-      data:data,
+      data:data["58c32d942ca0d464773a4dbb"],
       id:id,
 
     };
@@ -38,7 +42,16 @@ module.exports = global.Notepad = React.createClass({
                     data:this.state.data
                     })
                     }).done((res)=>{
-                      electron.remote.getGlobal('sharedObject').data=this.state.data;
+
+                      $.ajax({
+                        url:api_server+'/login/profile/'+ this.state.id + '/info',
+                        type:"GET"
+                              }).done((res2)=>{
+
+                        electron.remote.getGlobal('sharedObject').data=res2.data;
+
+                      })
+                      
                     }).fail((res)=>{
                         console.log("Notepad data upload failed.");
                         vex.dialog.alert({
