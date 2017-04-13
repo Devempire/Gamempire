@@ -20,9 +20,9 @@ var ipc = electron.ipcRenderer;
       <button id="max-btn" title="Maximize" onclick="ipc.sendSync('Maximize')"></button>
       <button id="close-btn" title="Close" onclick="closeWindowConfirm()"></button>
       <script>
-      var vex = require('vex-js')
-      vex.registerPlugin(require('vex-dialog'))
-      vex.defaultOptions.className = 'vex-theme-os'
+      var vex = require('vex-js');
+      vex.registerPlugin(require('vex-dialog'));
+      vex.defaultOptions.className = 'vex-theme-os';
       function closeWindowConfirm(){
         vex.dialog.confirm({
             overlayClosesOnClick: false,

@@ -38,14 +38,14 @@
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^3.1.0",
     "gulp-useref": "^3.1.2",
-    "react-grid-layout": "^0.14.4",
-    "react-resizable": "^1.6.0",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "auto-updater": "^1.0.2",
+    "electron-packager": "^8.6.0"
   },
   "dependencies": {
-    "auto-updater": "^1.0.2",
-    "electron-packager": "^8.6.0",
     "foundation-sites": "^6.3.1",
+    "react-grid-layout": "^0.14.4",
+    "react-resizable": "^1.6.0",
     "jquery": "^3.1.1",
     "lodash": "^4.17.4",
     "moment": "2.17.1",
@@ -60,6 +60,6 @@
     "vex-js": "^3.1.0"
   },
   "scripts": {
-    "package-win": "electron-packager . --version-string.ProductName=Gamempire --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./app/img/logo.ico --prune=true --out=../release/windows --ignore=node_modules"
+    "package-win": "electron-packager . --version-string.ProductName=Gamempire --overwrite --asar=true --platform=win32 --arch=ia32 --icon=./app/img/logo.ico --prune=true --out=../release/windows "
   }
 }
