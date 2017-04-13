@@ -28,28 +28,28 @@ module.exports = global.Notepad = React.createClass({
   },
 
   updatedata(){
-    $.ajax({
-          url:api_server+"/login/profile/dataupload",
-          type:"PUT",
-          contentType: 'application/json; charset=utf-8',
-          data:JSON.stringify({
-            _id:this.state.id,
-            data:this.state.data
-            })
-            }).done((res)=>{
-              electron.remote.getGlobal('sharedObject').data=this.state.data;
-            }).fail((res)=>{
-                console.log("Notepad data could not be updated.");
-                vex.dialog.alert({
-                    message: 'Notepad data could not be updated.',
-                    callback: function (value){
-                        if (value) {
-                          return;
-                        }
-                    }.bind(this)
-                })
-            });
-
+            $.ajax({
+                  url:api_server+"/login/profile/dataupload",
+                  type:"PUT",
+                  contentType: 'application/json; charset=utf-8',
+                  data:JSON.stringify({
+                    _id:this.state.id,
+                    ref:"58c32d942ca0d464773a4dbb",
+                    data:this.state.data
+                    })
+                    }).done((res)=>{
+                      electron.remote.getGlobal('sharedObject').data=this.state.data;
+                    }).fail((res)=>{
+                        console.log("Notepad data upload failed.");
+                        vex.dialog.alert({
+                            message: 'Notepad data upload failed.',
+                            callback: function (value){
+                                if (value) {
+                                  return;
+                                }
+                            }.bind(this)
+                        })
+                    });
 
   },
 
@@ -59,4 +59,3 @@ module.exports = global.Notepad = React.createClass({
     );
   }
 });
-
