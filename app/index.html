@@ -20,9 +20,9 @@ var ipc = electron.ipcRenderer;
       <button id="max-btn" title="Maximize" onclick="ipc.sendSync('Maximize')"></button>
       <button id="close-btn" title="Close" onclick="closeWindowConfirm()"></button>
       <script>
-      var vex = require('vex-js')
-      vex.registerPlugin(require('vex-dialog'))
-      vex.defaultOptions.className = 'vex-theme-os'
+      var vex = require('vex-js');
+      vex.registerPlugin(require('vex-dialog'));
+      vex.defaultOptions.className = 'vex-theme-os';
       function closeWindowConfirm(){
         vex.dialog.confirm({
             overlayClosesOnClick: false,
@@ -49,20 +49,18 @@ var ipc = electron.ipcRenderer;
   <script>
   $( document ).ready(function() {
     if (navigator.appVersion.indexOf("Mac")!=-1) {
-			  //MAC
-			  $("#title-bar-btns").hide();
-			  $("#titleicon").hide();
-
-			} else {
-			  //PC
-			}
-        	$("body").css({"height":"calc(100% - 35px)"});
-        	$("#username").focus();
-			$( window ).resize(function() {
-			      $("body").css({"height":"calc(100% - 35px)"});
-			});
-
-		});
-	</script>
+        //MAC
+        $("#title-bar-btns").hide();
+        $("#titleicon").hide();
+      } else {
+        //PC
+      }
+          $("body").css({"height":"calc(100% - 35px)"});
+          $("#username").focus();
+      $( window ).resize(function() {
+            $("body").css({"height":"calc(100% - 35px)"});
+      });
+    });
+  </script>
 </body>
 </html>
