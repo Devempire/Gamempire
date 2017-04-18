@@ -280,7 +280,7 @@ module.exports = global.Dashboard = React.createClass({
 
   hostStats(){
     var host = ipc.sendSync('hostStats')
-    //console.log(host);
+    console.log(host);
 
     $.ajax({
           url:api_server+"/login/profile/dataupload",
@@ -293,7 +293,10 @@ module.exports = global.Dashboard = React.createClass({
             })
             }).done((res)=>{
               //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
-              //electron.remote.getGlobal('sharedObject').data=this.state.data;
+              electron.remote.getGlobal('sharedObject').data=host;
+              electron.remote.getGlobal('sharedObject').cpu = host[3][0].model;
+              console.log(electron.remote.getGlobal('sharedObject').data);
+              console.log(electron.remote.getGlobal('sharedObject').cpu);
             }).fail((res)=>{
                 console.log("Client stats upload failed.");
                 vex.dialog.alert({

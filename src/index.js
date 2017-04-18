@@ -116,7 +116,8 @@ let createWindow = () => {
 
   if (isDevelopment) {
     // Open the DevTools.
-    mainWindow.webContents.openDevTools({mode: 'detach'})
+    mainWindow.webContents.openDevTools({mode: 'attach'})
+    //mainWindow.webContents.openDevTools({mode: 'detach'})
   }
 
   mainWindow.center();

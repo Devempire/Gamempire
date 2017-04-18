@@ -41,6 +41,14 @@ module.exports = global.Profile = React.createClass({
         this.setState({email:res.email});
       }
 
+      if (res.privacy.compspecs == false || res.privacy.compspecs == "false") {
+        this.setState({cpu:res.comp_specs.cpu});
+        this.setState({gpu:res.comp_specs.gpu});
+        this.setState({harddrive:res.comp_specs.harddrive});
+        this.setState({keyboard:res.comp_specs.keyboard});
+        this.setState({mouse:res.comp_specs.mouse});
+      }
+
       this.setState({
           username:res.username,
           avatar:avatar
@@ -74,12 +82,22 @@ module.exports = global.Profile = React.createClass({
     $( "#_Profile" ).addClass('active');
 
     return (<div>
-     	<img src={this.state.avatar} /><br/>
+     	<img src={this.state.avatar} /> 
      	<h3>{this.state.username}</h3>
       <p>{this.state.aboutme}</p>
       <h4>{this.state.firstname} {this.state.lastname}</h4>
       <h6>{this.state.email}</h6> 
       <h6>{this.state.birthday}</h6> <br/>
+      CPU:
+      <h6>{this.state.cpu}</h6>
+      GPU:
+      <h6>{this.state.gpu}</h6>
+      Hard Drive:
+      <h6>{this.state.harddrive}</h6>
+      Keyboard:
+      <h6>{this.state.keyboard}</h6>
+      Mouse:
+      <h6>{this.state.mouse}</h6>
      	</div>
      	)
   },

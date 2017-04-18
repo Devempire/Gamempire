@@ -132,6 +132,16 @@ module.exports = global.ProfileEdit = React.createClass({
                     setTimeout(function () {
                       document.getElementById('toggle_privacy_avatar').parentNode.style.visibility = "visible";
                     }, 270);
+                  } else if (i == 'compspecs') {
+                    var toggleEle = document.getElementById('toggle_privacy_compspecs');
+                    if (res.privacy[i] == 'true') {
+                      toggleEle.removeAttribute('checked');
+                    } else if (res.privacy[i] == 'false' || res.privacy[i] == false) {
+                      toggleEle.setAttribute('checked', 'checked');
+                    }
+                    setTimeout(function () {
+                      document.getElementById('toggle_privacy_compspecs').parentNode.style.visibility = "visible";
+                    }, 270);
                   }
                 }
               })
@@ -469,6 +479,36 @@ module.exports = global.ProfileEdit = React.createClass({
             <button className="button secondary" onClick={this.cancelChangePw}>Cancel</button>
           </div>
         </div>
+
+        <form>
+            <div className="onoffswitch" style={{visibility : 'hidden'}}>
+                <input type="checkbox" onClick={this.toggleCompSpecs} name="onoffswitch" className="onoffswitch-checkbox" id="toggle_privacy_compspecs"/>
+                <label className="onoffswitch-label" htmlFor="toggle_privacy_compspecs">
+                    <span className="onoffswitch-inner"></span>
+                    <span className="onoffswitch-switch"></span>
+                </label>
+            </div>
+
+            CPU: <br/>
+            <label>{electron.remote.getGlobal('sharedObject').cpu}</label>
+
+            GPU: <br/>
+            <label>gpu</label>
+
+            Hard Drive: <br/>
+            <label>hd</label>
+
+            Keyboard: <br/>
+            <label>kb</label>
+
+            Mouse: <br/>
+            <label>kb</label>
+        </form>
+
+        <div className="row expanded button-group">
+          <button className="button" onClick={this.saveCompSpecs}> Save </button>
+        </div>
+
         <div className="row expanded button-group">
         <label>Primary Colour
             <input id="Primary" type="color" />
@@ -489,6 +529,45 @@ module.exports = global.ProfileEdit = React.createClass({
         </div>
       </div>
     );
+  },
+
+  saveCompSpecs() {
+    var cpu = electron.remote.getGlobal('sharedObject').cpu;
+    var gpu = 'gpu';
+    var harddrive = 'hd';
+    var keyboard = 'keyboard';
+    var mouse = 'mouse';
+
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/login/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/login/profile/saveCompSpecs",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       cpu:cpu,
+                       gpu:gpu,
+                       harddrive:harddrive,
+                       keyboard:keyboard,
+                       mouse:mouse
+                   }
+               }).done((res)=>{
+                   console.log("comp specs is updated");
+               })
+           }).fail((err)=>{
+               console.log("Computer Specs is not updated in the server.");
+               vex.dialog.alert({
+                    message: "Computer Specs is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
+           });
   },
 
   themeColour() {
@@ -828,6 +907,43 @@ module.exports = global.ProfileEdit = React.createClass({
                console.log("Email's privacy is not updated in the server.");
                vex.dialog.alert({
                     message: "Email's privacy is not updated in the server.",
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
+           });
+  },
+
+  toggleCompSpecs() {
+    var toggleEle = document.getElementById('toggle_privacy_compspecs');
+    if (toggleEle.getAttribute('checked') == 'checked') {
+      toggleEle.removeAttribute('checked');
+      this.setState({check: true});
+    } else {
+      toggleEle.setAttribute('checked', 'checked');
+      this.setState({check: false});
+    }
+    var token = electron.remote.getGlobal('sharedObject').token;
+      $.post(api_server+"/login/load",
+         {
+             'token' :token
+         }).done((d) => {
+           $.ajax({
+                   url:api_server+"/login/profile/toggleCompSpecs",
+                   type:"PUT",
+                   data:{
+                       _id:d._id,
+                       privacy:this.state.check
+                   }
+               }).done((res)=>{
+                   console.log("comp specs privacy is updated");
+               })
+           }).fail((err)=>{
+               console.log("Computer Specs privacy is not updated in the server.");
+               vex.dialog.alert({
+                    message: "Computer Specs privacy is not updated in the server.",
                     callback: function (value){
                         if (value) {
                           return;
