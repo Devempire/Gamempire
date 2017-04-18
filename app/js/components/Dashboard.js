@@ -200,35 +200,6 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   setWindowsColours(){
-    var primaryElements = [
-        ".button",
-        "::selection",
-        "react-grid-item:hover",
-        ".react-grid-item:hover h2",
-        ".sidenav .active",
-        ".react-grid-placeholder",
-        ".validationError",
-        ".custom-file-upload"
-    ];
-    var backgroundElements = [
-        "body",
-        "html",
-        ".react-grid-item",
-        ".react-grid-item h2",
-        ".overlay",
-        "table tbody",
-        "table tfoot",
-        "table thead"
-    ];
-    var secondaryElements = [
-        ".secondary",
-        "table thead",
-        ".widgetTitle",
-        "#top_bar",
-        ".sidenav",
-        "input"
-    ];
-
     var accentColor = ipc.sendSync('getAccentColor');
     var activeCaption = ipc.sendSync('getActiveCaption');
     var inactiveCaption = ipc.sendSync('getInactiveCaption');
@@ -293,10 +264,7 @@ module.exports = global.Dashboard = React.createClass({
             })
             }).done((res)=>{
               //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
-              electron.remote.getGlobal('sharedObject').data=host;
               electron.remote.getGlobal('sharedObject').cpu = host[3][0].model;
-              console.log(electron.remote.getGlobal('sharedObject').data);
-              console.log(electron.remote.getGlobal('sharedObject').cpu);
             }).fail((res)=>{
                 console.log("Client stats upload failed.");
                 vex.dialog.alert({

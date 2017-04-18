@@ -574,34 +574,6 @@ module.exports = global.ProfileEdit = React.createClass({
       var Primary = $("#Primary").val();
       var Background = $("#Background").val();
       var Secondary = $("#Secondary").val();
-      var primaryElements = [
-          ".button",
-          "::selection",
-          "react-grid-item:hover",
-          ".react-grid-item:hover h2",
-          ".sidenav .active",
-          ".react-grid-placeholder",
-          ".validationError",
-          ".custom-file-upload"
-      ];
-      var backgroundElements = [
-          "body",
-          "html",
-          ".react-grid-item",
-          ".react-grid-item h2",
-          ".overlay",
-          "table tbody",
-          "table tfoot",
-          "table thead"
-      ];
-      var secondaryElements = [
-          ".secondary",
-          "table thead",
-          ".widgetTitle",
-          "#top_bar",
-          ".sidenav",
-          "input"
-      ];
       $.each(primaryElements, function(index, value) {
           $(value).css("background-color", Primary);
       });

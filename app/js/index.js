@@ -7,7 +7,7 @@ const moment = require('moment')
 const PureRenderMixin = require('react/lib/ReactComponentWithPureRenderMixin.js')
 const ReactGridLayout = require('react-grid-layout');
 const os = require('os');
-
+//const {systemPreferences} = require('electron')
 
 global.jquery = $
 window.React = React
@@ -35,6 +35,35 @@ global.Soundcloud = require('./components/Soundcloud.js')
 global.Notepad = require('./components/Notepad.js')
 
 injectTapEventPlugin();
+
+global.primaryElements = [
+  ".button",
+  "::selection",
+  "react-grid-item:hover",
+  ".react-grid-item:hover h2",
+  ".sidenav .active",
+  ".react-grid-placeholder",
+  ".validationError",
+  ".custom-file-upload"
+];
+global.backgroundElements = [
+  "body",
+  "html",
+  ".react-grid-item",
+  ".react-grid-item h2",
+  ".overlay",
+  "table tbody",
+  "table tfoot",
+  "table thead"
+];
+global.secondaryElements = [
+  ".secondary",
+  "table thead",
+  ".widgetTitle",
+  "#top_bar",
+  ".sidenav",
+  "input"
+];
 
 ReactDOM.render(
   <Login />,

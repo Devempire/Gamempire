@@ -19,35 +19,6 @@ module.exports = class Login extends React.Component {
     }
 
     setWindowsColours(){
-      var primaryElements = [
-          ".button",
-          "::selection",
-          "react-grid-item:hover",
-          ".react-grid-item:hover h2",
-          ".sidenav .active",
-          ".react-grid-placeholder",
-          ".validationError",
-          ".custom-file-upload"
-      ];
-      var backgroundElements = [
-          "body",
-          "html",
-          ".react-grid-item",
-          ".react-grid-item h2",
-          ".overlay",
-          "table tbody",
-          "table tfoot",
-          "table thead"
-      ];
-      var secondaryElements = [
-          ".secondary",
-          "table thead",
-          ".widgetTitle",
-          "#top_bar",
-          ".sidenav",
-          "input"
-      ];
-
       var accentColor = ipc.sendSync('getAccentColor');
       var activeCaption = ipc.sendSync('getActiveCaption');
       var inactiveCaption = ipc.sendSync('getInactiveCaption');
