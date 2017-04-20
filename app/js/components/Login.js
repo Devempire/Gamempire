@@ -182,6 +182,19 @@ module.exports = class Login extends React.Component {
                   electron.remote.getGlobal('sharedObject').widget=res2.widgets;
                   electron.remote.getGlobal('sharedObject').avatar=res2.avatar;
                   electron.remote.getGlobal('sharedObject').data=res2.data;
+
+                  $.ajax({
+                    url:api_server+"/login/changestatus",
+                    type:"PUT",
+                    contentType: 'application/json; charset=utf-8',
+                    data:JSON.stringify({
+                             _id:electron.remote.getGlobal('sharedObject').id,
+                             status:"online",
+                         })
+                     }).done((res)=>{
+                      
+
+
                    ipc.sendSync('loggedIn')
                    document.getElementById('top_bar').style.visibility = "visible";
               ReactDOM.render(
@@ -199,6 +212,10 @@ module.exports = class Login extends React.Component {
               //TODO: find faster way to way.
               document.getElementById('playgroundFrame').style.visibility = "hidden";
 
+              }).fail((err)=>{
+                      console.log("status failed to update to the server.")
+                      
+                    })
 
               });
 

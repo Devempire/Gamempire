@@ -139,7 +139,14 @@ module.exports = global.Bar = React.createClass({
 
       const topbart = (
         <div id="usertopbar">
-          <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
+          <div id="topbar_avatar">
+          <select>
+  				<option value="online" selected >online</option>
+  				<option value="AFK">AFK</option>
+  				<option value="in game">in game</option>
+  				<option value="offline">offline</option>
+			</select>
+				<img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
 					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
@@ -217,7 +224,18 @@ module.exports = global.Bar = React.createClass({
 
 	_Logout(){
     $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
-		document.getElementById('top_bar').innerHTML = "";
+		
+		//console.log(electron.remote.getGlobal('sharedObject'));
+		$.ajax({
+                    url:api_server+"/login/changestatus",
+                    type:"PUT",
+                    contentType: 'application/json; charset=utf-8',
+                    data:JSON.stringify({
+                             _id:electron.remote.getGlobal('sharedObject').id,
+                             status:"offline",
+                         })
+                     }).done((res)=>{
+        document.getElementById('top_bar').innerHTML = "";
 		electron.remote.getGlobal('sharedObject').username=null;
 		electron.remote.getGlobal('sharedObject').aboutme=null;
 		electron.remote.getGlobal('sharedObject').widget=null;
@@ -226,12 +244,17 @@ module.exports = global.Bar = React.createClass({
 		electron.remote.getGlobal('sharedObject').layout=null;
 		electron.remote.getGlobal('sharedObject').avatar=null;
 		electron.remote.getGlobal('sharedObject').data=null;
-		//console.log(electron.remote.getGlobal('sharedObject'));
-
 		ipc.sendSync('loggedOut')
 		ReactDOM.render(
 		  <Login />,
 		  document.getElementById('main-content')
 		);
+
+		}).fail((err)=>{
+                      console.log("status failed to update to the server.")
+                      
+                    })
+
+   
 	}
 });
