@@ -140,10 +140,8 @@ module.exports = global.Bar = React.createClass({
       const topbart = (
         <div id="usertopbar">
           <div id="topbar_avatar">
-          <select>
-  				<option value="online" selected >online</option>
-  				<option value="AFK">AFK</option>
-  				<option value="in game">in game</option>
+          <select  value ={this.select} onChange={this.handleChange}>
+  				<option value="online" >online</option>
   				<option value="offline">offline</option>
 			</select>
 				<img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
@@ -158,6 +156,42 @@ module.exports = global.Bar = React.createClass({
   		document.getElementById('top_bar')
   		);
 
+    },
+
+    handleChange(event) {
+    
+    var status =event.target.value;
+
+    vex.dialog.confirm({
+	        overlayClosesOnClick: false,
+	        message: 'Are you sure you want to go '+status+ ' to others?',
+	        callback: function (value){
+	            if (value) {
+	              	this.setState({
+         			 select: status,
+         				});
+         				this.updatestatus();
+	            } else {
+	            	return;
+	            }
+	        }.bind(this)
+	    })
+
+     
+
+  },
+
+  updatestatus(){
+  	$.ajax({
+             			url:api_server+"/login/changestatus",
+             			type:"PUT",
+             			contentType: 'application/json; charset=utf-8',
+             			data:JSON.stringify({
+                    		 _id:electron.remote.getGlobal('sharedObject').id,
+                     		status:this.state.select,
+                         	})
+                     		}).done((res)=>{
+                     		});
     },
 
 	_Dashboard(){
