@@ -29,7 +29,18 @@ var ipc = electron.ipcRenderer;
             message: 'Are you sure you want to exit Gamempire?',
             callback: function (value){
                 if (value) {
-                  ipc.sendSync('closeWindow')
+                  $.ajax({
+                  url:"http://gamempire.net/login/changestatus",
+                  type:"PUT",
+                  contentType: 'application/json; charset=utf-8',
+                  data:JSON.stringify({
+                         _id:electron.remote.getGlobal('sharedObject').id,
+                        status:"offline",
+                          })
+                        }).done((res)=>{
+                          ipc.sendSync('closeWindow')
+                        });
+                  
                 } else {
                   return;
                 }
