@@ -139,12 +139,14 @@ module.exports = global.Bar = React.createClass({
 
       const topbart = (
         <div id="usertopbar">
-          <div id="topbar_avatar">
-          <select  value ={this.select} onChange={this.handleChange}>
-  				<option value="online" >online</option>
-  				<option value="offline">offline</option>
-			</select>
-				<img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
+					<select value ={this.select} onChange={this.handleChange}>
+						<option value="online" >online</option>
+						<option value="offline">offline</option>
+					</select>
+          <div id="avatar">
+        		<img src={this.state.avatar}/>
+					</div>
+					<h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
 					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
@@ -159,7 +161,7 @@ module.exports = global.Bar = React.createClass({
     },
 
     handleChange(event) {
-    
+
     var status =event.target.value;
 
     vex.dialog.confirm({
@@ -177,7 +179,7 @@ module.exports = global.Bar = React.createClass({
 	        }.bind(this)
 	    })
 
-     
+
 
   },
 
@@ -258,7 +260,7 @@ module.exports = global.Bar = React.createClass({
 
 	_Logout(){
     $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
-		
+
 		//console.log(electron.remote.getGlobal('sharedObject'));
 		$.ajax({
                     url:api_server+"/login/changestatus",
@@ -286,9 +288,9 @@ module.exports = global.Bar = React.createClass({
 
 		}).fail((err)=>{
                       console.log("status failed to update to the server.")
-                      
+
                     })
 
-   
+
 	}
 });
