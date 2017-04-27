@@ -115,9 +115,14 @@ let createWindow = () => {
   mainWindow.loadURL(path.join('file://', __dirname, '/index.html'))
 
   if (isDevelopment) {
+
     // Open the DevTools.
-    mainWindow.webContents.openDevTools({mode: 'attach'})
-    //mainWindow.webContents.openDevTools({mode: 'detach'})
+    if (os.hostname() == "DESKTOP-9L9QIKH"){ //Borys likes his dev tools detached from Gamempire.
+      mainWindow.webContents.openDevTools({mode: 'detach'})
+    }else{
+      mainWindow.webContents.openDevTools({mode: 'attach'})
+    }
+
   }
 
   mainWindow.center();
@@ -265,6 +270,9 @@ app.on('ready', function() {
     event.returnValue=[os.platform(), os.type(), os.release(), os.cpus(), os.homedir(), os.hostname(), os.totalmem()/1073741824+' GB', os.uptime()/3600+' Hours', os.networkInterfaces()];
     console.log(os.platform()); // "win32"
     console.log(os.type()); // "Windows_NT"
+    var m = new Date();
+    var dateString = m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds();
+    conlose.log("Finished compiling at " + dateString )
   });//Returns user machine information
 
 
