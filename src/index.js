@@ -116,8 +116,12 @@ let createWindow = () => {
 
   if (isDevelopment) {
 
+    //output compile completion time for debugging
+    var m = new Date();
+    var dateString = (m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + (m.getUTCHours()-4) + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds()); //(m.getUTCHours()-4) MINUS 4 for our Toronto Timezone
+    console.log("Finished compiling at " + dateString)
     // Open the DevTools.
-    if (os.hostname() == "DESKTOP-9L9QIKH"){ //Borys likes his dev tools detached from Gamempire.
+    if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D"){ //Borys likes his dev tools detached from Gamempire.
       mainWindow.webContents.openDevTools({mode: 'detach'})
     }else{
       mainWindow.webContents.openDevTools({mode: 'attach'})
@@ -270,9 +274,6 @@ app.on('ready', function() {
     event.returnValue=[os.platform(), os.type(), os.release(), os.cpus(), os.homedir(), os.hostname(), os.totalmem()/1073741824+' GB', os.uptime()/3600+' Hours', os.networkInterfaces()];
     console.log(os.platform()); // "win32"
     console.log(os.type()); // "Windows_NT"
-    var m = new Date();
-    var dateString = m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + m.getUTCHours() + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds();
-    conlose.log("Finished compiling at " + dateString )
   });//Returns user machine information
 
 

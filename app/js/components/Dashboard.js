@@ -251,7 +251,7 @@ module.exports = global.Dashboard = React.createClass({
 
   hostStats(){
     var host = ipc.sendSync('hostStats')
-    console.log(host);
+    //console.log(host);
 
     $.ajax({
           url:api_server+"/login/profile/dataupload",
