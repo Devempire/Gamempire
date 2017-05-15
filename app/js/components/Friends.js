@@ -17,6 +17,7 @@ module.exports = global.Friends = React.createClass({
 
     var id =electron.remote.getGlobal('sharedObject').id;
     $.get(api_server+"/friend/"+id+ "/show").done((res)=>{
+
        for (var i = 0; i < res.length; i++) {
 
          this.setState({
@@ -26,6 +27,7 @@ module.exports = global.Friends = React.createClass({
              username:res[i].friend.username,
              avatar:res[i].friend.avatar,
              privacy:res[i].friend.privacy,
+             online:res[i].friend.status,
            })
          });
 
@@ -63,6 +65,7 @@ var allUsers = [];
 for (var i = 0; i < this.state.friends.length; i++) {
   var id =this.state.friends[i].id;
   var username=this.state.friends[i].username;
+  var online=this.state.friends[i].online;
   if (!this.state.friends[i].avatar || this.state.friends[i].privacy.avatar == true || this.state.friends[i].privacy.avatar == 'true'){
 
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
@@ -74,6 +77,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
     <a data-tag={id} onClick={this.viewprofile} >
     <b>{username}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <b>{online}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <button className="button" onClick={()=>{this.acceptfriend(id)}}> Accept </button>
     <button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Decline</button>
@@ -83,6 +87,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
 allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
 <a data-tag={id} onClick={this.viewprofile} >
 <b>{username}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>{online}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Remove</button>
 </div>

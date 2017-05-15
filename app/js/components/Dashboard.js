@@ -5,7 +5,6 @@ ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 const listWidgets = require('./listWidgets.js');
 
 var vex = require('vex-js')
-//var usb = require('usb')
 vex.defaultOptions.className = 'vex-theme-os'
 
 module.exports = global.Dashboard = React.createClass({
@@ -252,8 +251,7 @@ module.exports = global.Dashboard = React.createClass({
 
   hostStats(){
     var host = ipc.sendSync('hostStats')
-    console.log(host);
-    //console.log(usb.getDeviceList());
+    //console.log(host);
 
     $.ajax({
           url:api_server+"/login/profile/dataupload",

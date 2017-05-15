@@ -139,7 +139,14 @@ module.exports = global.Bar = React.createClass({
 
       const topbart = (
         <div id="usertopbar">
-          <div id="topbar_avatar"><img src={this.state.avatar}/></div> <h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
+					<select value ={this.select} onChange={this.handleChange}>
+						<option value="online" >online</option>
+						<option value="offline">offline</option>
+					</select>
+          <div id="avatar">
+        		<img src={this.state.avatar}/>
+					</div>
+					<h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
 					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
@@ -151,6 +158,42 @@ module.exports = global.Bar = React.createClass({
   		document.getElementById('top_bar')
   		);
 
+    },
+
+    handleChange(event) {
+
+    var status =event.target.value;
+
+    vex.dialog.confirm({
+	        overlayClosesOnClick: false,
+	        message: 'Are you sure you want to go '+status+ ' to others?',
+	        callback: function (value){
+	            if (value) {
+	              	this.setState({
+         			 select: status,
+         				});
+         				this.updatestatus();
+	            } else {
+	            	return;
+	            }
+	        }.bind(this)
+	    })
+
+
+
+  },
+
+  updatestatus(){
+  	$.ajax({
+             			url:api_server+"/login/changestatus",
+             			type:"PUT",
+             			contentType: 'application/json; charset=utf-8',
+             			data:JSON.stringify({
+                    		 _id:electron.remote.getGlobal('sharedObject').id,
+                     		status:this.state.select,
+                         	})
+                     		}).done((res)=>{
+                     		});
     },
 
 	_Dashboard(){
@@ -217,7 +260,18 @@ module.exports = global.Bar = React.createClass({
 
 	_Logout(){
     $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
-		document.getElementById('top_bar').innerHTML = "";
+
+		//console.log(electron.remote.getGlobal('sharedObject'));
+		$.ajax({
+                    url:api_server+"/login/changestatus",
+                    type:"PUT",
+                    contentType: 'application/json; charset=utf-8',
+                    data:JSON.stringify({
+                             _id:electron.remote.getGlobal('sharedObject').id,
+                             status:"offline",
+                         })
+                     }).done((res)=>{
+        document.getElementById('top_bar').innerHTML = "";
 		electron.remote.getGlobal('sharedObject').username=null;
 		electron.remote.getGlobal('sharedObject').aboutme=null;
 		electron.remote.getGlobal('sharedObject').widget=null;
@@ -226,12 +280,17 @@ module.exports = global.Bar = React.createClass({
 		electron.remote.getGlobal('sharedObject').layout=null;
 		electron.remote.getGlobal('sharedObject').avatar=null;
 		electron.remote.getGlobal('sharedObject').data=null;
-		//console.log(electron.remote.getGlobal('sharedObject'));
-
 		ipc.sendSync('loggedOut')
 		ReactDOM.render(
 		  <Login />,
 		  document.getElementById('main-content')
 		);
+
+		}).fail((err)=>{
+                      console.log("status failed to update to the server.")
+
+                    })
+
+
 	}
 });
