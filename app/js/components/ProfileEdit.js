@@ -502,7 +502,7 @@ module.exports = global.ProfileEdit = React.createClass({
             <label>kb</label>
 
             Mouse: <br/>
-            <label>kb</label>
+            <label>mouse</label>
         </form>
 
         <div className="row expanded button-group">
