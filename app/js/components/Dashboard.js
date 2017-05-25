@@ -75,6 +75,7 @@ module.exports = global.Dashboard = React.createClass({
           }
         }
       }
+      console.log(api_server);
       for (var i = 0; i < res.length; i++) {
           this.setState({
           widgets: this.state.widgets.concat({
@@ -97,7 +98,8 @@ module.exports = global.Dashboard = React.createClass({
           }.bind(this)
       })
     });
-
+    console.log('widets:');
+    console.log(this.state.widgets);
   },
 
   reRender(widgetID) {
@@ -145,7 +147,16 @@ module.exports = global.Dashboard = React.createClass({
 
     var g =this.state.widget.length;
     for (var h = 0; h < g; h++) {
+      //this.removeWidget(this.state.widget[h].widgetid)
         $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+            if(res2._id  == null) {
+              console.log('null widget');
+              console.log(this.state.widget.length);
+              console.log(this.state.widget);
+              console.log(res2);
+              console.log(this.state.widget[h].widgetid);
+              //this.removeWidget(this.state.widget[h].widgetid);
+            }
             var xx=res2.x;
             var yy=res2.y;
             var ww=res2.w;
@@ -442,6 +453,8 @@ module.exports = global.Dashboard = React.createClass({
         message: 'Are you sure you want to remove the ' + name + ' Widget?',
         callback: function (value){
             if (value) {
+              console.log('removing widget');
+              console.log(i);
               this.removeWidget(i);
             } else {
               return;
@@ -452,7 +465,6 @@ module.exports = global.Dashboard = React.createClass({
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
-
                  $.ajax({
                          url:api_server+"/login/profile/removewidget",
                          type:"PUT",
