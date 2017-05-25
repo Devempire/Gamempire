@@ -9,7 +9,7 @@ var unirest = require('unirest');
 var request = require('request');
 
 //Hearthstone Deck Builder
-module.exports = global.HSDeckBuilder = React.createClass({
+module.exports = global.GDQ = React.createClass({
   mixins: [PureRenderMixin],
 
   getDefaultProps() {
@@ -22,11 +22,10 @@ module.exports = global.HSDeckBuilder = React.createClass({
   },
 
   getInitialState() {
-
     return {
     	layouts: JSON.parse(JSON.stringify(originalLayouts)),
     	event:new Event(20),
-      events: this.getEvents(),
+      events:[],
     	response:undefined,
     	showStore:false,
       showEvent:false,
@@ -45,29 +44,37 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
   },
 
-  getEvents() {
-    var events = [];
+  loadEvents() {
+    var that = this;
+    console.log('Requesting events..');
     request({
       uri: gdqapi,
-      qs: {
-        type: 'event'
-      },
-      json: true
+      qs: { type: 'event' },
+      json: true,
+      timeout: 5000
     }, function(err, res, body) {
-      console.log(body);
-      body.forEach(function(evnt) {
-        var id = evnt.pk;
-        var date = evnt.fields.date;
-        var shortName = evnt.fields.short;
-        var target = evnt.fields.targetamount;
-        var raised = evnt.fields.amount;
-        var name = evnt.fields.name;
-        console.log(date);
-        events.push(new Event(id, name, shortName, date, target, raised))
-      })
+      if (body === Array) {
+        body.forEach(function (evnt) {
+          var id = evnt.pk;
+          var date = evnt.fields.date;
+          var shortName = evnt.fields.short;
+          var target = evnt.fields.targetamount;
+          var raised = evnt.fields.amount;
+          var name = evnt.fields.name;
+          that.setState({events: that.state.events.concat(new Event(id, name, shortName, date, target, raised))});
+        })
+        that.setState({
+          events: that.state.events.slice(0).sort(function (a, b) {
+            return b.date - a.date;
+          })
+        });
+        console.log(that.state.events);
+      }
+      else {
+        console.log('Error loading events');
+        console.log(err);
+      }
     });
-    console.log(events);
-    return events;
   },
 
   resetLayout() {
@@ -326,14 +333,17 @@ module.exports = global.HSDeckBuilder = React.createClass({
   },
 
   onEvent(item){
-    console.log(item)
     return (
-      <option value={item.value}>'fuck'</option>
+      <option value={item.value}>{item.shortName}</option>
     );
   },
 
-  render() {
+  componentWillMount: function(){
+    this.loadEvents();
+  },
 
+
+  render() {
     return (
       <div className="hearthstone_scroll">
 
