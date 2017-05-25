@@ -11,6 +11,8 @@ const heathstonebuilder = '58b93f03a7c98c3001ad48a9';
 const soundcloudapp = '58be7102884985c454420bbd';
 const notepad ='58c32d942ca0d464773a4dbb';
 
+const gdq = '591502ee4d8bb70c6dfbd89d' ;
+
 class listWidgets {
   loadwid(widgetID) {
 
@@ -26,6 +28,7 @@ class listWidgets {
     if ( widgetID == heathstonebuilder) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><HSDeckBuilder /></div> ); }
     if ( widgetID == soundcloudapp) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><Soundcloud /></div> ); }
     if ( widgetID == notepad) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><Notepad /></div>); }
+    if ( widgetID == gdq) { return ( <div id={widgetID} className="hearthstone_scroll widget jsx"><GDQ /></div>); }
   }
 }
 
