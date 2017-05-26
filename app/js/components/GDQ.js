@@ -1,6 +1,8 @@
 var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
+var ReactGridLayout = require('react-grid-layout');
+var FixedDataTable = require('fixed-data-table');
 
 const originalLayouts = getFromLS('layouts') || {};
 const gdqapi = "https://private.gamesdonequick.com/tracker/search";
@@ -15,31 +17,29 @@ module.exports = global.GDQ = React.createClass({
   getDefaultProps() {
     return {
       className: "layout",
-      cols: {lg: 3, md: 3, sm: 3, xs: 3, xxs: 3},
+      rowHeight: 30,
+      cols: {lg: 4, md: 4, sm: 4, xs: 4, xxs: 2},
       isDraggable: false,
-      verticalCompact: true
+      verticalCompact: true,
+      initialLayout: [
+        {x:0, y:0, w:1, h:1, i: "a", static: true},
+        {x:1, y:0, w:1, h:1, i: "b", static: true},
+        {x:2, y:0, w:1, h:1, i: "c", static: true},
+        {x:3, y:0, w:1, h:1, i: "d", static: true}
+      ]
     };
   },
 
   getInitialState() {
     return {
-    	layouts: JSON.parse(JSON.stringify(originalLayouts)),
-    	event:new Event(20),
+    	layouts: {lg: this.props.initialLayout},
+    	event:new Event(''),
       events:[],
+      runners:{},
+      runs:[],
     	response:undefined,
-    	showStore:false,
       showEvent:false,
-      showAddDeck:false,
-      myDeck:[],
-      myDeckFinal:[],
-      decks:[],
-      neutral:[],
-      classCards:[],
-      heroCard:'',
-      title:'',
-      description:'',
-      cardCounter:0,
-      hsCardKey:0
+      currentBreakpoint:'lg'
     };
 
   },
@@ -53,7 +53,8 @@ module.exports = global.GDQ = React.createClass({
       json: true,
       timeout: 5000
     }, function(err, res, body) {
-      if (body === Array) {
+      console.log(body);
+      if (body instanceof Array) {
         body.forEach(function (evnt) {
           var id = evnt.pk;
           var date = evnt.fields.date;
@@ -77,19 +78,38 @@ module.exports = global.GDQ = React.createClass({
     });
   },
 
+  loadRunners() {
+    var that = this;
+    console.log('Requesting runners..');
+    request({
+      uri: gdqapi,
+      qs: { type: 'runner' },
+      json: true,
+      timeout: 5000
+    }, function(err, res, body) {
+      if (body instanceof Array) {
+        body.forEach(function (runner) {
+          that.state.runners[runner.pk] = new Runner(runner.pk, runner.fields.name, runner.fields.stream);
+        })
+        console.log(that.state.runners);
+      }
+    });
+  },
+
   resetLayout() {
     this.setState({layouts: {}});
   },
 
-  onBreakpointChange(breakpoint, cols) {
+  onBreakpointChange(breakpoint) {
+    console.log(breakpoint);
     this.setState({
-      breakpoint: breakpoint,
-      cols: cols
+      currentBreakpoint: breakpoint
     });
   },
 
   onLayoutChange(layout, layouts) {
-    saveToLS('layouts', layouts);
+    //saveToLS('layouts', layouts);
+    console.log(layouts);
     this.setState({layouts});
   },
 
@@ -98,167 +118,47 @@ module.exports = global.GDQ = React.createClass({
                   showAddDeck: false});
   },
 
-  showEvent(event) {
-    this.setState({event: event.target.value});
-    this.setState({showDeckBuilder: true});
-    this.setState({showStore: false});
-
+  eventFromID(id) {
+    return this.state.events.find(function(event) {
+      return (event.id == id);
+    });
   },
 
-  //helper function for putting in class card names only into a list
-  putClassCards(i, deck) {
-    while (i < deck.length) {
-      this.setState({classCards: this.state.classCards.concat(<li key={i}>
-        <a href="#" id={deck[i].cost} name={deck[i].name} value={deck[i].rarity}
-        onClick={this.putCardToDeck}>{deck[i].cost} {deck[i].name}</a></li>)});
-      i++;
-    };
-    console.log(this.state.classCards);
-  },
-
-  searchClassCards() {
-    var card;
-    var input = document.getElementById('class_card');
-    var filter = input.value.toUpperCase();
-    var ul = document.getElementById("class_card_list");
-    var li = ul.getElementsByTagName('li');
-
-    // Loop through all list items, and hide those who don't match the search query
-    for (var i = 0; i < li.length; i++) {
-        card = li[i].getElementsByTagName("a")[0];
-        if (card.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
-  },
-
-  searchNeutralCards() {
-    var card;
-    var input = document.getElementById('neutral_card');
-    var filter = input.value.toUpperCase();
-    var ul = document.getElementById("neutral_card_list");
-    var li = ul.getElementsByTagName('li');
-
-    // Loop through all list items, and hide those who don't match the search query
-    for (var i = 0; i < li.length; i++) {
-        card = li[i].getElementsByTagName("a")[0];
-        if (card.innerHTML.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
-  },
-
-  putCardToDeck(event) {
-    var card_name = event.target.getAttribute('name');
-    var card_rarity = event.target.getAttribute('value');
-    var card_cost = event.target.getAttribute('id');
-    var card_picked = "";
-    var i = this.state.myDeck.length;
-    var count = 0;
-
-    for (var j = 0; j < this.state.myDeckFinal.length; j++) {
-      //have to do this for loop to put the elements inside the 
-      //this.state.myDeckFinal[j].props.children array into one
-      //string
-      for (let k of this.state.myDeckFinal[j].props.children) {
-        card_picked = card_picked + k
+  showEvent(slot) {
+    var event = this.eventFromID(slot.target.value);
+    this.setState({
+      event: event,
+      showEvent: true,
+    });
+    this.setState({showEvent: true});
+    console.log('Showing event:');
+    console.log(event);
+    var that = this;
+    request({
+      uri: gdqapi,
+      qs: {
+        type: 'run',
+        event: event.id
+      },
+      json: true,
+      timeout: 5000
+    }, function(err, res, body) {
+      console.log(body);
+      if (body instanceof Array) {
+        var runs = _.map(body, function(run) {
+          return new Run(run.pk,
+            run.fields.display_name,
+            run.fields.starttime,
+            run.fields.runners,
+            run.fields.category,
+            run.fields.run_time,
+            run.fields.setup_time,
+            run.fields.order);
+        })
+        console.log(runs);
+        that.setState({ runs: runs })
       }
-      if (card_picked == card_cost + " " + card_name) {
-        count++;
-      } else if (card_picked == card_cost + " " + card_name + ' x2') {
-        count = 2;
-      }
-      card_picked = "";
-    }
-
-    //myDeck is for during deck creation, the deck names need to be clickable
-    //to call removeCard function to remove a desired card.
-    //myDeckFinal is for publishing the deck, the deck names are not clickable
-    //and only for display.
-    if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count == 0) {
-      this.setState({myDeck: this.state.myDeck.concat(<li key={this.state.hsCardKey}>
-          <a href="#" id={card_cost} name={card_name} value={card_rarity}
-          onClick={this.removeCard}>{card_cost} {card_name}</a></li>)});
-      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={this.state.hsCardKey}>
-          {card_cost} {card_name}</li>)});
-      this.setState({cardCounter: this.state.cardCounter + 1});
-      this.setState({hsCardKey: this.state.hsCardKey + 1});
-    } else if (this.state.cardCounter < 30 && card_rarity != 'Legendary' && count == 1) {
-      //If a card already exists and the user wants to add the same card,
-      //remove the original card from the list and add in the card with x2
-      //to indicate there are 2 cards. Otherwise, just add the card normally.
-      for (var j = 0; j < i; j++) {
-        for (let k of this.state.myDeckFinal[j].props.children) {
-          card_picked = card_picked + k
-        }
-        if (card_picked == card_cost + " " + card_name) {
-          this.state.myDeck.splice(j, 1, <li key={this.state.hsCardKey}>
-              <a href="#" id={card_cost} name={card_name} value={card_rarity}
-              onClick={this.removeCard}>{card_cost} {card_name+' x2'}</a></li>)
-          this.setState({myDeck: this.state.myDeck});
-          this.state.myDeckFinal.splice(j, 1, <li key={this.state.hsCardKey}>
-              {card_cost} {card_name+' x2'}</li>)
-          this.setState({myDeckFinal: this.state.myDeckFinal});
-          this.setState({cardCounter: this.state.cardCounter + 1});
-          this.setState({hsCardKey: this.state.hsCardKey + 1});
-        }
-        card_picked = "";
-      }
-    } else if (this.state.cardCounter < 30 && card_rarity == 'Legendary' && count == 0) {
-      this.setState({myDeck: this.state.myDeck.concat(<li key={this.state.hsCardKey}>
-          <a href="#" id={card_cost} name={card_name} value={card_rarity}
-          onClick={this.removeCard}>{card_cost} {card_name}</a></li>)});
-      this.setState({myDeckFinal: this.state.myDeckFinal.concat(<li key={this.state.hsCardKey}>
-          {card_cost} {card_name}</li>)});
-      this.setState({cardCounter: this.state.cardCounter + 1});
-      this.setState({hsCardKey: this.state.hsCardKey + 1});
-    }
-  },
-
-  removeCard(event) {
-    var deck_list = [];
-    var card_name = event.target.getAttribute('name');
-    var card_rarity = event.target.getAttribute('value');
-    var card_cost = event.target.getAttribute('id');
-    var card_picked = '';
-
-    //First, put all card names in the deck into a list
-    for (var i = 0; i < this.state.myDeck.length; i++) {
-      for (let k of this.state.myDeckFinal[i].props.children) {
-        card_picked = card_picked + k
-      }
-      deck_list.push(card_picked);
-      card_picked = '';
-    }
-
-    //Second, find the index of the card to be removed
-    for (var j = 0; j < deck_list.length; j++) {
-      //If card_name has ' x2' in its name, remove that and replace it
-      //with the original name without the ' x2'. Otherwise, remove the
-      //card as normal.
-      if (deck_list[j] == card_cost + " " + card_name + ' x2') {
-        this.state.myDeck.splice(j, 1, <li key={this.state.hsCardKey}>
-            <a href="#" id={card_cost} name={card_name} value={card_rarity}
-            onClick={this.removeCard}>{card_cost} {card_name}</a></li>)
-        this.setState({myDeck: this.state.myDeck});
-        this.state.myDeckFinal.splice(j, 1, <li key={this.state.hsCardKey}>
-            {card_cost} {card_name}</li>)
-        this.setState({myDeckFinal: this.state.myDeckFinal});
-        this.setState({cardCounter: this.state.cardCounter - 1});
-        this.setState({hsCardKey: this.state.hsCardKey + 1});
-      } else if (deck_list[j] == card_cost + " " + card_name) {
-        var index = j;
-        this.state.myDeck.splice(index, 1);
-        this.setState({myDeck: this.state.myDeck});
-        this.state.myDeckFinal.splice(index, 1);
-        this.setState({myDeckFinal: this.state.myDeckFinal});
-        this.setState({cardCounter: this.state.cardCounter - 1});
-      }
-    }
+    });
   },
 
   handleSubmit(event) {
@@ -334,19 +234,23 @@ module.exports = global.GDQ = React.createClass({
 
   onEvent(item){
     return (
-      <option value={item.value}>{item.shortName}</option>
+      <option key={item.id} value={item.id}>{item.name}</option>
     );
   },
 
   componentWillMount: function(){
     this.loadEvents();
+    this.loadRunners();
+  },
+
+  componentDidMount: function() {
+    this.setState({ mounted: true });
   },
 
 
   render() {
     return (
-      <div className="hearthstone_scroll">
-
+      <div>
         <br/>
 
         <div className="row">
@@ -354,45 +258,32 @@ module.exports = global.GDQ = React.createClass({
         </div>
 
         <div className="row dropFade" style={{display: 'block'}}>
-          <h5>Choose an event: </h5>
-          <select value={this.state.event}
+          <select value={this.state.event.id}
                   onChange={this.showEvent}>
-            <option value="" disabled>Blarg</option>
+            <option value="" disabled>Choose an Event</option>
             {_.map(this.state.events, this.onEvent)}
           </select>
-          <br/>
         </div>
 
         <ResponsiveReactGridLayout style={{display: this.state.showEvent ? 'block' : 'none'}}
-            layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
-            onBreakpointChange={this.onBreakpointChange} {...this.props}>
-            <div key="a" data-grid={{x: 0, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll">
-              <h4>{this.state.selectclass} Cards</h4>
-              <input type="text" id="class_card" onKeyUp={this.searchClassCards} placeholder="Search a Card"></input>
-              <ul id="class_card_list">
-                {this.state.classCards}
-              </ul>
-            </div>
-            <div key="b" data-grid={{x: 1, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll" style={{left: '33.33%'}}>
-              <h4>Neutral Cards</h4>
-              <input type="text" id="neutral_card" onKeyUp={this.searchNeutralCards} placeholder="Search a Card"></input>
-              <ul id="neutral_card_list">
-                {this.state.neutral}
-              </ul>
-            </div>
-            <div key="c" data-grid={{x: 2, y: 0, w: 1, h: 11, static: true}} className="hearthstone_scroll" style={{left: '66.66%'}}>
-              <h4>Deck {this.state.cardCounter}/30</h4>
-              <ul id="deck_list">
-                <center><img src={this.state.heroCard} height="250" width="250"/></center>
-                {this.state.myDeck}
-              </ul>
-            </div>
+                         {...this.props}
+                         layouts={this.state.layouts}
+                         onLayoutChange={this.onLayoutChange}
+                         onBreakpointChange={this.onBreakpointChange}
+                         measureBeforeMount={false}
+                         useCSSTransforms={this.state.mounted}>
+          <div key="a" className="static">{this.state.event.statusString()}</div>
+          <div key="b" className="static">{this.state.event.donationString()}</div>
         </ResponsiveReactGridLayout>
 
-        <ResponsiveReactGridLayout layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
-            onBreakpointChange={this.onBreakpointChange} {...this.props}>
-            {_.map(this.state.decks, this.deckBuilder)}
-        </ResponsiveReactGridLayout>
+        <Table rowHeight={50}
+               headerHeight={50}
+               rowsCount={this.runs.getSize()}
+               {...this.props}>
+          <Column header={<Cell>Game</Cell>}
+                  cell={<TextCell data={this.runs} col="name" />}
+          />
+        </Table>
       </div>
     )
   }
@@ -427,6 +318,66 @@ function Event(id, name, shortName, date, target, raised) {
   this.raised = parseInt(raised);
 
   this.toString = function() {
-    return 'ID ' + that.id;
+    return that.shortName;
   };
+
+  this.statusString = function() {
+    if (that.date > new Date()) {
+      return "Upcoming: Starts on " + formatDate(that.date);
+    }
+    else {
+      return "Started on " + formatDate(that.date);
+    }
+  }
+
+  this.donationString = function() {
+    if (raised >= target) {
+      return "Met! Raised " + that.raised + "/" + that.target;
+    }
+    else {
+      return "Raised " + that.raised + "/" + that.target;
+    }
+  }
+}
+
+function Run(id, name, startTime, runners, category, estimate, setup, order) {
+  var that = this;
+
+  this.id = id;
+  this.name = name;
+  this.startTime = startTime;
+  this.runners = runners;
+  this.category = category;
+  this.estimate = (estimate == 0) ? '0:00:00' : estimate;
+  this.setup = (setup == 0) ? '0:00:00' : setup;
+  this.order = order;
+
+  this.toString = function() {
+    return that.name + that.category;
+  }
+
+  this.runnerString = function() {
+    var ret = '';
+    if (this.runners instanceof Array) {
+      this.runners.forEach(function (runner) {
+        ret += ', ' + that.state.runners[runner].name;
+      })
+    }
+    return ret;
+  }
+}
+
+function Runner(id, name, twitch) {
+  this.id = id;
+  this.name = name;
+  this.twitch = twitch;
+}
+
+function formatDate(date) {
+  var dd = date.getDate();
+  var mm = date.getMonth() + 1;
+  var yyyy = date.getFullYear();
+  if (dd < 10) { dd = '0' + dd }
+  if (mm < 10) { mm = '0' + mm }
+  return mm + '/' + dd + '/' + yyyy;
 }
