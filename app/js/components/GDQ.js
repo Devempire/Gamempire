@@ -2,7 +2,7 @@ var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 var ReactGridLayout = require('react-grid-layout');
-var FixedDataTable = require('fixed-data-table');
+var ReactTable = require('react-table').default;
 
 const originalLayouts = getFromLS('layouts') || {};
 const gdqapi = "https://private.gamesdonequick.com/tracker/search";
@@ -249,6 +249,30 @@ module.exports = global.GDQ = React.createClass({
 
 
   render() {
+    const data = [{
+      name: 'Tanner Linsley',
+      age: 26,
+      friend: {
+        name: 'Jason Maurer',
+        age: 23,
+      }
+    }]
+
+    const columns = [{
+      Header: 'Name',
+      accessor: 'name' // String-based value accessors!
+    }, {
+      Header: 'Age',
+      accessor: 'age',
+      Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
+    }, {
+      id: 'friendName', // Required because our accessor is not a string
+      Header: 'Friend Name',
+      accessor: d => d.friend.name // Custom value accessors!
+    }, {
+      Header: props => <span>Friend Age</span>, // Custom header components!
+      accessor: 'friend.age'
+    }]
     return (
       <div>
         <br/>
@@ -276,14 +300,10 @@ module.exports = global.GDQ = React.createClass({
           <div key="b" className="static">{this.state.event.donationString()}</div>
         </ResponsiveReactGridLayout>
 
-        <Table rowHeight={50}
-               headerHeight={50}
-               rowsCount={this.runs.getSize()}
-               {...this.props}>
-          <Column header={<Cell>Game</Cell>}
-                  cell={<TextCell data={this.runs} col="name" />}
-          />
-        </Table>
+        <ReactTable
+          data={data}
+          columns={columns}
+        />
       </div>
     )
   }
