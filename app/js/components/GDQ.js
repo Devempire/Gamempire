@@ -22,8 +22,8 @@ module.exports = global.GDQ = React.createClass({
       isDraggable: false,
       verticalCompact: true,
       initialLayout: [
-        {x:0, y:0, w:1, h:1, i: "a", static: true},
-        {x:1, y:0, w:1, h:1, i: "b", static: true},
+        {x:0, y:0, w:2, h:1, i: "a", static: true},
+        {x:2, y:0, w:2, h:1, i: "b", static: true},
         {x:2, y:0, w:1, h:1, i: "c", static: true},
         {x:3, y:0, w:1, h:1, i: "d", static: true}
       ]
@@ -39,7 +39,9 @@ module.exports = global.GDQ = React.createClass({
       runs:[],
     	response:undefined,
       showEvent:false,
-      currentBreakpoint:'lg'
+      currentBreakpoint:'lg',
+      loadingRuns:true,
+      loadingEvents:true
     };
 
   },
@@ -67,7 +69,8 @@ module.exports = global.GDQ = React.createClass({
         that.setState({
           events: that.state.events.slice(0).sort(function (a, b) {
             return b.date - a.date;
-          })
+          }),
+          loadingEvents: false
         });
         console.log(that.state.events);
       }
@@ -129,6 +132,7 @@ module.exports = global.GDQ = React.createClass({
     this.setState({
       event: event,
       showEvent: true,
+      loadingRuns: true
     });
     this.setState({showEvent: true});
     console.log('Showing event:');
@@ -156,7 +160,12 @@ module.exports = global.GDQ = React.createClass({
             run.fields.order);
         })
         console.log(runs);
-        that.setState({ runs: runs })
+        that.setState({
+          runs: runs,
+          loadingRuns: false
+        }, function() {
+          console.log('Runs set');
+        });
       }
     });
   },
@@ -249,29 +258,20 @@ module.exports = global.GDQ = React.createClass({
 
 
   render() {
-    const data = [{
-      name: 'Tanner Linsley',
-      age: 26,
-      friend: {
-        name: 'Jason Maurer',
-        age: 23,
-      }
-    }]
-
     const columns = [{
-      Header: 'Name',
-      accessor: 'name' // String-based value accessors!
+      Header: 'Time',
+      accessor: 'startTime' // String-based value accessors!
     }, {
-      Header: 'Age',
-      accessor: 'age',
+      Header: 'Game',
+      accessor: 'name',
       Cell: props => <span className='number'>{props.value}</span> // Custom cell components!
     }, {
-      id: 'friendName', // Required because our accessor is not a string
-      Header: 'Friend Name',
-      accessor: d => d.friend.name // Custom value accessors!
+      id: 'Runners', // Required because our accessor is not a string
+      Header: 'Runners',
+      accessor: d => d.runnerString(this.state.runners) // Custom value accessors!
     }, {
-      Header: props => <span>Friend Age</span>, // Custom header components!
-      accessor: 'friend.age'
+      Header: props => <span>Estimate</span>, // Custom header components!
+      accessor: 'estimate'
     }]
     return (
       <div>
@@ -283,8 +283,9 @@ module.exports = global.GDQ = React.createClass({
 
         <div className="row dropFade" style={{display: 'block'}}>
           <select value={this.state.event.id}
-                  onChange={this.showEvent}>
-            <option value="" disabled>Choose an Event</option>
+                  onChange={this.showEvent}
+                  disabled={this.state.loadingEvents}>
+            <option value="" disabled>{this.state.loadingEvents ? 'Loading...' : 'Choose an Event'}</option>
             {_.map(this.state.events, this.onEvent)}
           </select>
         </div>
@@ -300,10 +301,15 @@ module.exports = global.GDQ = React.createClass({
           <div key="b" className="static">{this.state.event.donationString()}</div>
         </ResponsiveReactGridLayout>
 
+        <div className="table-wrap">
         <ReactTable
-          data={data}
+          style={{display: this.state.showEvent ? 'block' : 'none'}}
+          className="-striped -highlight"
+          data={this.state.runs}
           columns={columns}
+          loading={this.state.loadingRuns}
         />
+        </div>
       </div>
     )
   }
@@ -351,7 +357,7 @@ function Event(id, name, shortName, date, target, raised) {
   }
 
   this.donationString = function() {
-    if (raised >= target) {
+    if (that.raised >= that.target) {
       return "Met! Raised " + that.raised + "/" + that.target;
     }
     else {
@@ -376,12 +382,13 @@ function Run(id, name, startTime, runners, category, estimate, setup, order) {
     return that.name + that.category;
   }
 
-  this.runnerString = function() {
+  this.runnerString = function(runners) {
     var ret = '';
-    if (this.runners instanceof Array) {
-      this.runners.forEach(function (runner) {
-        ret += ', ' + that.state.runners[runner].name;
-      })
+    if (that.runners instanceof Array && that.runners.length > 0) {
+      ret += runners[that.runners[0]].name;
+      for (var i = 1; i < that.runners.length; i++) {
+        ret += ', ' + runners[that.runners[i]].name;
+      }
     }
     return ret;
   }
