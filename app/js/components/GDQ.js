@@ -115,11 +115,15 @@ module.exports = global.GDQ = React.createClass({
 
   eventFromID (id) {
     return this.state.events.find(function (event) {
-      return (event.id === id)
+      console.log(event.id)
+      console.log(id)
+      return (event.id == id)
     })
   },
 
   showEvent (slot) {
+    console.log('Selected ID:')
+    console.log(slot.target.value)
     var event = this.eventFromID(slot.target.value)
     this.setState({
       event: event,
