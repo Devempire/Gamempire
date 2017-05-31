@@ -9,5 +9,8 @@
     "React": false
   },
   "extends": ["standard", "standard-jsx"],
-  "plugins": ["react"]
+  "plugins": ["react"],
+  "rules": {
+    "semi": [2, "always"]
+  }
 }

@@ -1,10 +1,12 @@
+import {GDQManager} from './GDQManager.js';
+
 var WidthProvider = require('react-grid-layout').WidthProvider
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout)
 var ReactTable = require('react-table').default
 
 const originalLayouts = getFromLS('layouts') || {}
-const gdqapi = 'https://private.gamesdonequick.com/tracker/search'
+const gdqapi = 'https://gamesdonequick.com/tracker/search'
 
 var unirest = require('unirest')
 var request = require('request')
@@ -45,6 +47,7 @@ module.exports = global.GDQ = React.createClass({
   },
 
   loadEvents () {
+    var manager = GDQManager.Instance();
     var that = this
     console.log('Requesting events..')
     request({
@@ -314,6 +317,13 @@ function Run (id, name, startTime, runners, category, estimate, setup, order) {
       }
     }
     return ret
+  }
+
+  this.runnerCell = function (runners) {
+    return _.map(that.runners, function (runner) {
+      
+      return <option key={item.id} value={item.id}>{item.name}</option>
+    })
   }
 }
 
