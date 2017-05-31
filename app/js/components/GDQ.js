@@ -258,36 +258,7 @@ function saveToLS (key, value) {
   }
 }
 
-function Event (id, name, shortName, date, target, raised) {
-  var that = this
 
-  this.id = id
-  this.name = name
-  this.shortName = shortName
-  this.date = new Date(date)
-  this.target = parseInt(target)
-  this.raised = parseInt(raised)
-
-  this.toString = function () {
-    return that.shortName
-  }
-
-  this.statusString = function () {
-    if (that.date > new Date()) {
-      return 'Upcoming: Starts on ' + formatDate(that.date)
-    } else {
-      return 'Started on ' + formatDate(that.date)
-    }
-  }
-
-  this.donationString = function () {
-    if (that.raised >= that.target) {
-      return 'Met! Raised ' + that.raised + '/' + that.target
-    } else {
-      return 'Raised ' + that.raised + '/' + that.target
-    }
-  }
-}
 
 function Run (id, name, startTime, runners, category, estimate, setup, order) {
   var that = this
@@ -323,11 +294,3 @@ function Runner (id, name, twitch) {
   this.twitch = twitch
 }
 
-function formatDate (date) {
-  var dd = date.getDate()
-  var mm = date.getMonth() + 1
-  var yyyy = date.getFullYear()
-  if (dd < 10) { dd = '0' + dd }
-  if (mm < 10) { mm = '0' + mm }
-  return mm + '/' + dd + '/' + yyyy
-}
