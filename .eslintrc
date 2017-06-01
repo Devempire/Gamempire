@@ -11,6 +11,7 @@
   "extends": ["standard", "standard-jsx"],
   "plugins": ["react"],
   "rules": {
-    "semi": [2, "always"]
+    "semi": [2, "always"],
+    "no-trailing-spaces": ["error", { "skipBlankLines": true }]
   }
 }
