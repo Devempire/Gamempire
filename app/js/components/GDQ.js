@@ -1,13 +1,17 @@
-var WidthProvider = require('react-grid-layout').WidthProvider
-var ResponsiveReactGridLayout = require('react-grid-layout').Responsive
-ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout)
-var ReactTable = require('react-table').default
+import {GDQManager} from './GDQManager.js';
+import {GDQEvent} from './GDQEvent.js';
 
-const originalLayouts = getFromLS('layouts') || {}
-const gdqapi = 'https://private.gamesdonequick.com/tracker/search'
+var WidthProvider = require('react-grid-layout').WidthProvider;
+var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
+ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
+var ReactTable = require('react-table').default;
 
-var unirest = require('unirest')
-var request = require('request')
+const originalLayouts = getFromLS('layouts') || {};
+const gdqapi = 'https://gamesdonequick.com/tracker/search';
+
+var unirest = require('unirest');
+var request = require('request');
+var manager = GDQManager.Instance();
 
 // Hearthstone Deck Builder
 module.exports = global.GDQ = React.createClass({
@@ -26,13 +30,13 @@ module.exports = global.GDQ = React.createClass({
         {x: 2, y: 0, w: 1, h: 1, i: 'c', static: true},
         {x: 3, y: 0, w: 1, h: 1, i: 'd', static: true}
       ]
-    }
+    };
   },
 
   getInitialState () {
     return {
       layouts: {lg: this.props.initialLayout},
-      event: new Event(''),
+      event: new GDQEvent(''),
       events: [],
       runners: {},
       runs: [],
@@ -41,46 +45,16 @@ module.exports = global.GDQ = React.createClass({
       currentBreakpoint: 'lg',
       loadingRuns: true,
       loadingEvents: true
-    }
+    };
   },
 
   loadEvents () {
-    var that = this
-    console.log('Requesting events..')
-    request({
-      uri: gdqapi,
-      qs: { type: 'event' },
-      json: true,
-      timeout: 5000
-    }, function (err, res, body) {
-      console.log(body)
-      if (body instanceof Array) {
-        body.forEach(function (evnt) {
-          var id = evnt.pk
-          var date = evnt.fields.date
-          var shortName = evnt.fields.short
-          var target = evnt.fields.targetamount
-          var raised = evnt.fields.amount
-          var name = evnt.fields.name
-          that.setState({events: that.state.events.concat(new Event(id, name, shortName, date, target, raised))})
-        })
-        that.setState({
-          events: that.state.events.slice(0).sort(function (a, b) {
-            return b.date - a.date
-          }),
-          loadingEvents: false
-        })
-        console.log(that.state.events)
-      } else {
-        console.log('Error loading events')
-        console.log(err)
-      }
-    })
+
   },
 
   loadRunners () {
-    var that = this
-    console.log('Requesting runners..')
+    var that = this;
+    console.log('Requesting runners..');
     request({
       uri: gdqapi,
       qs: { type: 'runner' },
@@ -89,51 +63,43 @@ module.exports = global.GDQ = React.createClass({
     }, function (err, res, body) {
       if (body instanceof Array) {
         body.forEach(function (runner) {
-          that.state.runners[runner.pk] = new Runner(runner.pk, runner.fields.name, runner.fields.stream)
-        })
-        console.log(that.state.runners)
+          that.state.runners[runner.pk] = new Runner(runner.pk, runner.fields.name, runner.fields.stream);
+        });
+        console.log(that.state.runners);
       }
-    })
+    });
   },
 
   resetLayout () {
-    this.setState({layouts: {}})
+    this.setState({layouts: {}});
   },
 
   onBreakpointChange (breakpoint) {
-    console.log(breakpoint)
+    console.log(breakpoint);
     this.setState({
       currentBreakpoint: breakpoint
-    })
+    });
   },
 
   onLayoutChange (layout, layouts) {
     // saveToLS('layouts', layouts);
-    console.log(layouts)
-    this.setState({layouts})
-  },
-
-  eventFromID (id) {
-    return this.state.events.find(function (event) {
-      console.log(event.id)
-      console.log(id)
-      return (event.id == id)
-    })
+    console.log(layouts);
+    this.setState({layouts});
   },
 
   showEvent (slot) {
-    console.log('Selected ID:')
-    console.log(slot.target.value)
-    var event = this.eventFromID(slot.target.value)
+    console.log('Selected ID:');
+    console.log(slot.target.value);
+    var event = manager.eventFromID(slot.target.value);
     this.setState({
       event: event,
       showEvent: true,
       loadingRuns: true
-    })
-    this.setState({showEvent: true})
-    console.log('Showing event:')
-    console.log(event)
-    var that = this
+    });
+    this.setState({showEvent: true});
+    console.log('Showing event:');
+    console.log(event);
+    var that = this;
     request({
       uri: gdqapi,
       qs: {
@@ -143,7 +109,7 @@ module.exports = global.GDQ = React.createClass({
       json: true,
       timeout: 5000
     }, function (err, res, body) {
-      console.log(body)
+      console.log(body);
       if (body instanceof Array) {
         var runs = _.map(body, function (run) {
           return new Run(run.pk,
@@ -153,34 +119,33 @@ module.exports = global.GDQ = React.createClass({
             run.fields.category,
             run.fields.run_time,
             run.fields.setup_time,
-            run.fields.order)
-        })
-        console.log(runs)
+            run.fields.order);
+        });
+        console.log(runs);
         that.setState({
           runs: runs,
           loadingRuns: false
         }, function () {
-          console.log('Runs set')
-        })
+          console.log('Runs set');
+        });
       }
-    })
+    });
   },
 
   onEvent (item) {
     return (
       <option key={item.id} value={item.id}>{item.name}</option>
-    )
+    );
   },
 
   componentWillMount: function () {
-    this.loadEvents()
-    this.loadRunners()
+    this.loadEvents();
+    this.loadRunners();
   },
 
   componentDidMount: function () {
-    this.setState({ mounted: true })
+    this.setState({ mounted: true });
   },
-
 
   render () {
     const columns = [{
@@ -197,7 +162,7 @@ module.exports = global.GDQ = React.createClass({
     }, {
       Header: props => <span>Estimate</span>, // Custom header components!
       accessor: 'estimate'
-    }]
+    }];
     return (
       <div>
         <br />
@@ -236,61 +201,64 @@ module.exports = global.GDQ = React.createClass({
         />
         </div>
       </div>
-    )
+    );
   }
-})
+});
 
 function getFromLS (key) {
-  let ls = {}
+  let ls = {};
   if (global.localStorage) {
     try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {}
+      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
     } catch (e) { /* Ignore */ }
   }
-  return ls[key]
+  return ls[key];
 }
 
 function saveToLS (key, value) {
   if (global.localStorage) {
     global.localStorage.setItem('rgl-8', JSON.stringify({
       [key]: value
-    }))
+    }));
   }
 }
 
-
-
 function Run (id, name, startTime, runners, category, estimate, setup, order) {
-  var that = this
+  var that = this;
 
-  this.id = id
-  this.name = name
-  this.startTime = startTime
-  this.runners = runners
-  this.category = category
-  this.estimate = (estimate === 0) ? '0:00:00' : estimate
-  this.setup = (setup === 0) ? '0:00:00' : setup
-  this.order = order
+  this.id = id;
+  this.name = name;
+  this.startTime = startTime;
+  this.runners = runners;
+  this.category = category;
+  this.estimate = (estimate === 0) ? '0:00:00' : estimate;
+  this.setup = (setup === 0) ? '0:00:00' : setup;
+  this.order = order;
 
   this.toString = function () {
-    return that.name + that.category
-  }
+    return that.name + that.category;
+  };
 
   this.runnerString = function (runners) {
-    var ret = ''
+    var ret = '';
     if (that.runners instanceof Array && that.runners.length > 0) {
-      ret += runners[that.runners[0]].name
+      ret += runners[that.runners[0]].name;
       for (var i = 1; i < that.runners.length; i++) {
-        ret += ', ' + runners[that.runners[i]].name
+        ret += ', ' + runners[that.runners[i]].name;
       }
     }
-    return ret
-  }
+    return ret;
+  };
+
+  this.runnerCell = function (runners) {
+    return _.map(that.runners, function (runner) {
+      return <option key={item.id} value={item.id}>{item.name}</option>;
+    });
+  };
 }
 
 function Runner (id, name, twitch) {
-  this.id = id
-  this.name = name
-  this.twitch = twitch
+  this.id = id;
+  this.name = name;
+  this.twitch = twitch;
 }
-

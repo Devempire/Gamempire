@@ -1,4 +1,4 @@
-export class Formatters {
+export default class Formatters {
   static formatDate (date) {
     var dd = date.getDate();
     var mm = date.getMonth() + 1;
@@ -9,6 +9,6 @@ export class Formatters {
   }
 
   static formatDollars (dollars) {
-    var ret = String(parseInt())
+    var ret = String(parseInt());
   }
-}
+};

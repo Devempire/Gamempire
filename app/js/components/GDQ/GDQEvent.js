@@ -1,5 +1,5 @@
-import formatMoney from 'accounting';
-import formatDate from '../../Helpers/Formatters.js';
+import {formatMoney} from 'accounting-js';
+import Formatters from '../../Helpers/Formatters.js';
 
 export class GDQEvent {
   constructor (id, name, shortName, date, target, raised) {
@@ -17,9 +17,9 @@ export class GDQEvent {
 
   statusString () {
     if (this.date > new Date()) {
-      return 'Upcoming: Starts on ' + formatDate(this.date);
+      return 'Upcoming: Starts on ' + Formatters.formatDate(this.date);
     } else {
-      return 'Started on ' + formatDate(this.date);
+      return 'Started on ' + Formatters.formatDate(this.date);
     }
   }
 
