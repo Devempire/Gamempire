@@ -1,11 +1,11 @@
-import {GDQEvent} from './GDQEvent.js';
+import {GDQEvent, GDQRunner} from './GDQModels.js';
 import request from 'request';
 
 const gdqapi = 'https://gamesdonequick.com/tracker/search';
 
 let instance = null;
 
-export class GDQManager extends React.Component {
+export class GDQManager {
   static Instance () {
     if (instance == null) {
       console.log('Creating GDQManager instance');
@@ -15,8 +15,6 @@ export class GDQManager extends React.Component {
   }
 
   constructor () {
-    super();
-
     this._events = [];
     this._runners = [];
     this._eventsLoaded = false;
@@ -48,15 +46,33 @@ export class GDQManager extends React.Component {
           var name = evnt.fields.name;
           that._events.push(new GDQEvent(id, name, shortName, date, target, raised));
         });
-        that.setState({_events: that._events.slice(0).sort(function (a, b) {
+        that._events.slice(0).sort(function (a, b) {
           return b.date - a.date;
-        })});
+        });
         that._eventsLoaded = true;
         console.log('Events loaded');
         console.log(that._events);
       } else {
         console.log('Error loading events');
         console.log(err);
+      }
+    });
+  }
+
+  getRunners () {
+    var that = this;
+    console.log('Requesting runners..');
+    request({
+      uri: gdqapi,
+      qs: { type: 'runner' },
+      json: true,
+      timeout: 5000
+    }, function (err, res, body) {
+      if (body instanceof Array) {
+        body.forEach(function (runner) {
+          that.state.runners[runner.pk] = new Runner(runner.pk, runner.fields.name, runner.fields.stream);
+        });
+        console.log(that.state.runners);
       }
     });
   }

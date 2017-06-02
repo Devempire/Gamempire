@@ -1,5 +1,5 @@
 import {GDQManager} from './GDQManager.js';
-import {GDQEvent} from './GDQEvent.js';
+import {GDQEvent} from './GDQModels.js';
 
 var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
@@ -50,24 +50,6 @@ module.exports = global.GDQ = React.createClass({
 
   loadEvents () {
 
-  },
-
-  loadRunners () {
-    var that = this;
-    console.log('Requesting runners..');
-    request({
-      uri: gdqapi,
-      qs: { type: 'runner' },
-      json: true,
-      timeout: 5000
-    }, function (err, res, body) {
-      if (body instanceof Array) {
-        body.forEach(function (runner) {
-          that.state.runners[runner.pk] = new Runner(runner.pk, runner.fields.name, runner.fields.stream);
-        });
-        console.log(that.state.runners);
-      }
-    });
   },
 
   resetLayout () {
@@ -221,44 +203,4 @@ function saveToLS (key, value) {
       [key]: value
     }));
   }
-}
-
-function Run (id, name, startTime, runners, category, estimate, setup, order) {
-  var that = this;
-
-  this.id = id;
-  this.name = name;
-  this.startTime = startTime;
-  this.runners = runners;
-  this.category = category;
-  this.estimate = (estimate === 0) ? '0:00:00' : estimate;
-  this.setup = (setup === 0) ? '0:00:00' : setup;
-  this.order = order;
-
-  this.toString = function () {
-    return that.name + that.category;
-  };
-
-  this.runnerString = function (runners) {
-    var ret = '';
-    if (that.runners instanceof Array && that.runners.length > 0) {
-      ret += runners[that.runners[0]].name;
-      for (var i = 1; i < that.runners.length; i++) {
-        ret += ', ' + runners[that.runners[i]].name;
-      }
-    }
-    return ret;
-  };
-
-  this.runnerCell = function (runners) {
-    return _.map(that.runners, function (runner) {
-      return <option key={item.id} value={item.id}>{item.name}</option>;
-    });
-  };
-}
-
-function Runner (id, name, twitch) {
-  this.id = id;
-  this.name = name;
-  this.twitch = twitch;
 }
