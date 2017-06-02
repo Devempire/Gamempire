@@ -3,6 +3,12 @@ import Formatters from '../../Helpers/Formatters.js';
 
 const gdqapi = 'https://gamesdonequick.com/tracker/search';
 var request = require('request');
+const shell = window.require('electron').shell;
+// open links externally by default
+$(document).on('click', 'a[href^="http"]', function (event) {
+  event.preventDefault();
+  shell.openExternal(this.href);
+});
 
 export class GDQEvent {
   constructor (id, name, shortName, date, target, raised) {
@@ -62,6 +68,10 @@ export class GDQEvent {
         that.runs = runs;
         handler(that);
       }
+      else {
+        console.log('Error loading runs');
+        console.log(err);
+      }
     });
   }
 }
@@ -102,8 +112,10 @@ export class GDQRun {
   }
 
   runnerCell (runners) {
-    return _.map(this.runners, function (runner) {
-      return <span><a href={runners[this.runners[0]].twitch}>{runners[this.runners[0]].name}</a></span>;
+    var count = this.runners.length;
+    return _.map(this.runners, function (runner, i) {
+      var sep = (i + 1 >= count) ? '' : ', ';
+      return <span key={runner}><a href={runners[runner].twitch}>{runners[runner].name + sep}</a></span>;
     });
   }
 }

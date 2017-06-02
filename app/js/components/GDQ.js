@@ -105,6 +105,8 @@ module.exports = global.GDQ = React.createClass({
   },
 
   render () {
+    var that = this;
+
     const columns = [{
       Header: 'Time',
       accessor: 'startTime' // String-based value accessors!
@@ -115,7 +117,8 @@ module.exports = global.GDQ = React.createClass({
     }, {
       id: 'Runners', // Required because our accessor is not a string
       Header: 'Runners',
-      accessor: d => d.runnerString(this.state.manager.runners) // Custom value accessors!
+      accessor: d => d.runnerCell(that.state.manager.runners),
+      Cell: props => props.value // Custom value accessors!
     }, {
       Header: props => <span>Estimate</span>, // Custom header components!
       accessor: 'estimate'

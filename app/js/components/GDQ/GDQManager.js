@@ -49,15 +49,16 @@ export class GDQManager {
       console.log(body);
       if (body instanceof Array) {
         body.forEach(function (evnt) {
-          var id = evnt.pk;
-          var date = evnt.fields.date;
-          var shortName = evnt.fields.short;
-          var target = evnt.fields.targetamount;
-          var raised = evnt.fields.amount;
-          var name = evnt.fields.name;
-          that._events.push(new GDQEvent(id, name, shortName, date, target, raised));
+          that._events.push(new GDQEvent(
+            evnt.pk,
+            evnt.fields.name,
+            evnt.fields.short,
+            evnt.fields.date,
+            evnt.fields.targetamount,
+            evnt.fields.amount
+          ));
         });
-        that._events.slice(0).sort(function (a, b) {
+        that._events.sort(function (a, b) {
           return b.date - a.date;
         });
         that.eventsLoaded(that._events);
@@ -88,9 +89,17 @@ export class GDQManager {
     }, function (err, res, body) {
       if (body instanceof Array) {
         body.forEach(function (runner) {
-          that._runners[runner.pk] = new GDQRunner(runner.pk, runner.fields.name, runner.fields.stream);
+          that._runners[runner.pk] = new GDQRunner(
+            runner.pk,
+            runner.fields.name,
+            runner.fields.stream
+          );
         });
         console.log(that._runners);
+      }
+      else {
+        console.log('Error loading runners');
+        console.log(err);
       }
     });
   }
