@@ -10,8 +10,6 @@ const originalLayouts = getFromLS('layouts') || {};
 const gdqapi = 'https://gamesdonequick.com/tracker/search';
 
 var unirest = require('unirest');
-var request = require('request');
-var manager = GDQManager.Instance();
 
 // Hearthstone Deck Builder
 module.exports = global.GDQ = React.createClass({
@@ -44,12 +42,23 @@ module.exports = global.GDQ = React.createClass({
       showEvent: false,
       currentBreakpoint: 'lg',
       loadingRuns: true,
-      loadingEvents: true
+      loadingEvents: true,
+      manager: GDQManager.Instance()
     };
   },
 
-  loadEvents () {
+  loadedEvents (events) {
+    this.setState({
+      events: events,
+      loadingEvents: false
+    });
+  },
 
+  loadedRuns (event) {
+    this.setState({
+      event: event,
+      loadingRuns: false
+    });
   },
 
   resetLayout () {
@@ -72,45 +81,10 @@ module.exports = global.GDQ = React.createClass({
   showEvent (slot) {
     console.log('Selected ID:');
     console.log(slot.target.value);
-    var event = manager.eventFromID(slot.target.value);
     this.setState({
-      event: event,
       showEvent: true,
-      loadingRuns: true
-    });
-    this.setState({showEvent: true});
-    console.log('Showing event:');
-    console.log(event);
-    var that = this;
-    request({
-      uri: gdqapi,
-      qs: {
-        type: 'run',
-        event: event.id
-      },
-      json: true,
-      timeout: 5000
-    }, function (err, res, body) {
-      console.log(body);
-      if (body instanceof Array) {
-        var runs = _.map(body, function (run) {
-          return new Run(run.pk,
-            run.fields.display_name,
-            run.fields.starttime,
-            run.fields.runners,
-            run.fields.category,
-            run.fields.run_time,
-            run.fields.setup_time,
-            run.fields.order);
-        });
-        console.log(runs);
-        that.setState({
-          runs: runs,
-          loadingRuns: false
-        }, function () {
-          console.log('Runs set');
-        });
-      }
+      loadingRuns: true,
+      event: this.state.manager.showEvent(slot.target.value, this.loadedRuns)
     });
   },
 
@@ -121,8 +95,9 @@ module.exports = global.GDQ = React.createClass({
   },
 
   componentWillMount: function () {
-    this.loadEvents();
-    this.loadRunners();
+    this.state.manager.getEvents();
+    this.state.manager.getRunners();
+    this.state.manager.addLoadedEventsHandler(this.loadedEvents);
   },
 
   componentDidMount: function () {
@@ -140,7 +115,7 @@ module.exports = global.GDQ = React.createClass({
     }, {
       id: 'Runners', // Required because our accessor is not a string
       Header: 'Runners',
-      accessor: d => d.runnerString(this.state.runners) // Custom value accessors!
+      accessor: d => d.runnerString(this.state.manager.runners) // Custom value accessors!
     }, {
       Header: props => <span>Estimate</span>, // Custom header components!
       accessor: 'estimate'
@@ -177,7 +152,7 @@ module.exports = global.GDQ = React.createClass({
           <ReactTable
             style={{display: this.state.showEvent ? 'block' : 'none'}}
             className='-striped -highlight'
-            data={this.state.runs}
+            data={this.state.event.runs}
             columns={columns}
             loading={this.state.loadingRuns}
         />
