@@ -94,6 +94,22 @@ export class GDQRun {
     this.estimate = (estimate === 0) ? '0:00:00' : estimate;
     this.setup = (setup === 0) ? '0:00:00' : setup;
     this.order = order;
+    this._watching = false;
+  }
+
+  get watching () {
+    return this._watching;
+  }
+
+  handleWatchChange (sender) {
+    console.log('checked');
+    console.log(sender.target.value);
+    that._watching = sender.target.value;
+    console.log(that._watching);
+  }
+
+  checkbox () {
+    return <input type='checkbox' checked={this.watching} onChange={this.handleWatchChange} />;
   }
 
   toString () {

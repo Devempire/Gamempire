@@ -103,6 +103,11 @@ module.exports = global.GDQSchedule = React.createClass({
     var that = this;
 
     const columns = [{
+      Header: 'Watch',
+      id: 'Watch',
+      accessor: d => d.checkbox(),
+      Cell: props => props.value
+    }, {
       Header: 'Time',
       accessor: 'startTime' // String-based value accessors!
     }, {
