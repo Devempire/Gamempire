@@ -5,7 +5,7 @@ const gdqapi = 'https://gamesdonequick.com/tracker/search';
 
 let instance = null;
 
-export class GDQManager {
+export default class GDQManager {
   static Instance () {
     if (instance == null) {
       console.log('Creating GDQManager instance');
@@ -20,6 +20,9 @@ export class GDQManager {
     this._runners = {};
     this._eventsLoaded = false;
     this._loadedEventsHandlers = [];
+
+    this.getEvents();
+    this.getRunners();
   }
 
   get events () {
