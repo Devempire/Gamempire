@@ -33,7 +33,7 @@ global.Friends = require('./components/Friends.js')
 global.HSDeckBuilder = require('./components/HSDeckBuilder.js')
 global.Soundcloud = require('./components/Soundcloud.js')
 global.Notepad = require('./components/Notepad.js')
-global.GDQ = require('./components/GDQ.js')
+global.GDQ = require('./components/GDQ/GDQ.js').GDQ
 
 injectTapEventPlugin();
 
