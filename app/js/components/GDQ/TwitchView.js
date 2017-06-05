@@ -1,36 +1,10 @@
+import {ScreenRatioConverter} from '../../Helpers/Converters.js';
+
 export default class TwitchView extends React.Component {
-  constructor (props) {
-    super(props);
-
-    this.state = {
-      width: '400',
-      height: '300'
-    };
-
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-  }
-
-  updateWindowDimensions () {
-    console.log('changin dims');
-    console.log(window.innerWidth);
-    this.setState({
-      width: Math.max(window.innerWidth, 400),
-      height: Math.max(window.innerHeight, 300)
-    });
-  }
-
-  componentDidMount () {
-    this.updateWindowDimensions();
-    window.addEventListener('resize', this.updateWindowDimensions);
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('resize', this.updateWindowDimensions);
-  }
-
   render () {
     let width = Math.max(this.props.width, 400);
-    let height = Math.ceil((width * 9) / 16);
+    let height = this.props.RatioConverter.getHeightFromWidth(width);
+
     return (
       <iframe
         src={this.props.src}
@@ -39,3 +13,7 @@ export default class TwitchView extends React.Component {
     );
   }
 }
+
+TwitchView.defaultProps = {
+  RatioConverter: new ScreenRatioConverter(16, 9)
+};
