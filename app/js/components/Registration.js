@@ -97,7 +97,7 @@ module.exports = class Registration extends React.Component {
         var namePattern = new RegExp('^[a-zA-Z ]{1,}$');
         var userPattern = new RegExp('^[a-zA-Z0-9]{3,}$');
         //var passPattern = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$');
-        var emailPattern = new RegExp('^[a-zA-Z0-9]{1,}@[a-zA-Z]{1,}[.]{1}[a-zA-Z]{1,}$');
+        var emailPattern = new RegExp('^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
         var fname = document.getElementById('fname');
         var lname = document.getElementById('lname');
