@@ -340,7 +340,7 @@ module.exports = global.ProfileEdit = React.createClass({
   createProfile(el) {
     var i = el.i;
     return (
-      <div key={i} data-grid={el} onLoad={this.setWindowsColours} className="noselect profileedit row columns">
+      <div key={i} data-grid={el} className="noselect profileedit row columns">
         <h3>Edit Profile</h3>
         <hr/>
         <div id='popupContainer'></div>
@@ -1064,6 +1064,8 @@ module.exports = global.ProfileEdit = React.createClass({
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
+    $("#mySidenav>a").css("background-color", "");
+
 
     //Set Dashbaord as active in menu
     $( "#_ProfileEdit" ).addClass('active');

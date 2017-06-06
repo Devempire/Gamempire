@@ -111,7 +111,7 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
   },
 
   componentDidMount: function(){
-    this.setWindowsColours();
+    //this.setWindowsColours();
   },
 
   setWindowsColours(){
@@ -292,12 +292,13 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
+    $("#mySidenav>a").css("background-color", "");
 
     //Set Dashbaord as active in menu
-    $( "#_Friends" ).addClass('active');
+    $( "#_Friends" ).addClass("active");
 
       return (
-        <div onLoad={this.setWindowsColours}>
+        <div>
           <div>
             <input type="text" placeholder=" enter username here" onChange={this.username}/>
             <button className="button" onClick={this.search} >Search</button>

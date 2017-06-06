@@ -14,7 +14,7 @@ module.exports = class Login extends React.Component {
       this.loadCheck();
       this.loadUsername();
       this.loadPassword();
-      this.setWindowsColours();
+      //this.setWindowsColours();
 
     }
 
@@ -192,7 +192,7 @@ module.exports = class Login extends React.Component {
                              status:"online",
                          })
                      }).done((res)=>{
-                      
+
 
 
                    ipc.sendSync('loggedIn')
@@ -214,7 +214,7 @@ module.exports = class Login extends React.Component {
 
               }).fail((err)=>{
                       console.log("status failed to update to the server.")
-                      
+
                     })
 
               });
