@@ -296,7 +296,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-app.on('before-quit', (ev)=>{
-  ev.preventDefault();
-  });
