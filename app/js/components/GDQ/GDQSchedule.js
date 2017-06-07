@@ -1,4 +1,5 @@
 import {GDQEvent} from './GDQModels.js';
+import Checkbox from '../Standalones/Checkbox.js';
 
 var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
@@ -9,28 +10,12 @@ const gdqapi = 'https://gamesdonequick.com/tracker/search';
 
 var unirest = require('unirest');
 
-// Hearthstone Deck Builder
-module.exports = global.GDQSchedule = React.createClass({
-  mixins: [PureRenderMixin],
 
-  getDefaultProps () {
-    return {
-      className: 'layout',
-      rowHeight: 30,
-      cols: {lg: 4, md: 4, sm: 4, xs: 4, xxs: 2},
-      isDraggable: false,
-      verticalCompact: true,
-      initialLayout: [
-        {x: 0, y: 0, w: 1, h: 1, i: 'a', static: true},
-        {x: 1, y: 0, w: 1, h: 1, i: 'b', static: true},
-        {x: 2, y: 0, w: 1, h: 1, i: 'c', static: true},
-        {x: 3, y: 0, w: 1, h: 1, i: 'd', static: true}
-      ]
-    };
-  },
+export default class GDQSchedule extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getInitialState () {
-    return {
+    this.state = {
       layouts: {lg: this.props.initialLayout},
       event: new GDQEvent(''),
       events: [],
@@ -41,40 +26,52 @@ module.exports = global.GDQSchedule = React.createClass({
       currentBreakpoint: 'lg',
       loadingRuns: true,
       loadingEvents: true,
-      filterRuns: false
+      filterRuns: false,
+      watchedRuns: {}
     };
-  },
+
+    this.onLayoutChange = this.onLayoutChange.bind(this);
+    this.onBreakpointChange = this.onBreakpointChange.bind(this);
+    this.loadedEvents = this.loadedEvents.bind(this);
+    this.loadedRuns = this.loadedRuns.bind(this);
+    this.showEvent = this.showEvent.bind(this);
+    this.onWatchCheck = this.onWatchCheck.bind(this);
+    this.filterChange = this.filterChange.bind(this);
+  }
 
   loadedEvents (events) {
     this.setState({
       events: events,
       loadingEvents: false
     });
-  },
+  }
 
   loadedRuns (event) {
+    var watchedRuns = {};
+    event.runs.forEach((run) => {
+      watchedRuns[run.id] = run.watching;
+    });
     this.setState({
       event: event,
-      loadingRuns: false
+      loadingRuns: false,
+      watchedRuns: watchedRuns
     });
-  },
+  }
 
   resetLayout () {
     this.setState({layouts: {}});
-  },
+  }
 
   onBreakpointChange (breakpoint) {
-    console.log(breakpoint);
     this.setState({
       currentBreakpoint: breakpoint
     });
-  },
+  }
 
   onLayoutChange (layout, layouts) {
     // saveToLS('layouts', layouts);
-    console.log(layouts);
     this.setState({layouts});
-  },
+  }
 
   showEvent (slot) {
     console.log('Selected ID:');
@@ -84,25 +81,35 @@ module.exports = global.GDQSchedule = React.createClass({
       loadingRuns: true,
       event: this.props.manager.showEvent(slot.target.value, this.loadedRuns)
     });
-  },
+  }
 
   onEvent (item) {
     return (
       <option key={item.id} value={item.id}>{item.name}</option>
     );
-  },
+  }
 
   filterChange(sender) {
     this.setState({ filterRuns: !this.state.filterRuns });
-  },
+  }
 
-  componentWillMount: function () {
+  onWatchCheck (value, id) {
+    console.log('Watched checked');
+    console.log(id);
+    var watchedRuns = _.clone(this.state.watchedRuns);
+    watchedRuns[id] = !watchedRuns[id];
+    var run = this.state.event.runFromID(id);
+    run.watching = watchedRuns[id];
+    this.setState({ watchedRuns: watchedRuns });
+  }
+
+  componentWillMount () {
     this.props.manager.addLoadedEventsHandler(this.loadedEvents);
-  },
+  }
 
-  componentDidMount: function () {
+  componentDidMount () {
     this.setState({ mounted: true });
-  },
+  }
 
   render () {
     var that = this;
@@ -110,8 +117,10 @@ module.exports = global.GDQSchedule = React.createClass({
     const columns = [{
       Header: 'Watch',
       id: 'Watch',
-      accessor: d => d.checkbox(),
-      Cell: props => props.value
+      accessor: d => d.id,
+      Cell: props => <Checkbox checked={that.state.watchedRuns[props.value]}
+                               onChange={that.onWatchCheck}
+                               id={props.value}/>
     }, {
       Header: 'Time',
       accessor: 'startTime' // String-based value accessors!
@@ -175,7 +184,21 @@ module.exports = global.GDQSchedule = React.createClass({
       </div>
     );
   }
-});
+}
+
+GDQSchedule.defaultProps = {
+  className: 'layout',
+  rowHeight: 30,
+  cols: {lg: 4, md: 4, sm: 4, xs: 4, xxs: 2},
+  isDraggable: false,
+  verticalCompact: true,
+  initialLayout: [
+    {x: 0, y: 0, w: 1, h: 1, i: 'a', static: true},
+    {x: 1, y: 0, w: 1, h: 1, i: 'b', static: true},
+    {x: 2, y: 0, w: 1, h: 1, i: 'c', static: true},
+    {x: 3, y: 0, w: 1, h: 1, i: 'd', static: true}
+  ]
+};
 
 function getFromLS (key) {
   let ls = {};

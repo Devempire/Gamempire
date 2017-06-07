@@ -47,6 +47,12 @@ export class GDQEvent {
     });
   }
 
+  runFromID (id) {
+    return this.runs.find((run) => {
+      return run.id == id;
+    });
+  }
+
   getRuns (handler) {
     var that = this;
     request({
@@ -100,17 +106,12 @@ export class GDQRun {
     this.estimate = (estimate === 0) ? '0:00:00' : estimate;
     this.setup = (setup === 0) ? '0:00:00' : setup;
     this.order = order;
-    this._watching = false;
+    this.watching = false;
   }
-
-  get watching () {
-    return this._watching;
-  }
-
   handleWatchChange (checked) {
     console.log('checked');
-    this._watching = checked;
-    console.log(this._watching);
+    this.watching = checked;
+    console.log(this.watching);
   }
 
   checkbox () {
