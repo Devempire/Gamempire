@@ -101,15 +101,14 @@ export class GDQRun {
     return this._watching;
   }
 
-  handleWatchChange (sender) {
+  handleWatchChange (checked) {
     console.log('checked');
-    console.log(sender.target.value);
-    that._watching = sender.target.value;
-    console.log(that._watching);
+    this._watching = checked;
+    console.log(this._watching);
   }
 
   checkbox () {
-    return <input type='checkbox' checked={this.watching} onChange={this.handleWatchChange} />;
+    return <GDQRunChecbox handleChecked={this.handleWatchChange.bind(this)} />;
   }
 
   toString () {
@@ -133,5 +132,22 @@ export class GDQRun {
       var sep = (i + 1 >= count) ? '' : ', ';
       return <span key={runner}><a href={runners[runner].twitch}>{runners[runner].name + sep}</a></span>;
     });
+  }
+}
+
+// Managed react component so that checkboxes update gracefully
+class GDQRunChecbox extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = { checked: false };
+  }
+  onCheck () {
+    this.setState({ checked: !this.state.checked }, () => {
+      this.props.handleChecked(this.state.checked);
+    });
+  }
+
+  render () {
+    return <input type='checkbox' checked={this.state.checked} onChange={this.onCheck.bind(this)} />;
   }
 }
