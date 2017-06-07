@@ -21,8 +21,8 @@ module.exports = global.GDQSchedule = React.createClass({
       isDraggable: false,
       verticalCompact: true,
       initialLayout: [
-        {x: 0, y: 0, w: 2, h: 1, i: 'a', static: true},
-        {x: 2, y: 0, w: 2, h: 1, i: 'b', static: true},
+        {x: 0, y: 0, w: 1, h: 1, i: 'a', static: true},
+        {x: 1, y: 0, w: 1, h: 1, i: 'b', static: true},
         {x: 2, y: 0, w: 1, h: 1, i: 'c', static: true},
         {x: 3, y: 0, w: 1, h: 1, i: 'd', static: true}
       ]
@@ -41,6 +41,7 @@ module.exports = global.GDQSchedule = React.createClass({
       currentBreakpoint: 'lg',
       loadingRuns: true,
       loadingEvents: true,
+      filterRuns: false
     };
   },
 
@@ -89,6 +90,10 @@ module.exports = global.GDQSchedule = React.createClass({
     return (
       <option key={item.id} value={item.id}>{item.name}</option>
     );
+  },
+
+  filterChange(sender) {
+    this.setState({ filterRuns: !this.state.filterRuns });
   },
 
   componentWillMount: function () {
@@ -149,13 +154,20 @@ module.exports = global.GDQSchedule = React.createClass({
           useCSSTransforms={this.state.mounted}>
           <div key='a' className='static'>{this.state.event.statusString()}</div>
           <div key='b' className='static'>{this.state.event.donationString()}</div>
+          <div key='c' className='static'>
+            Show watched only
+            <input type='checkbox'
+                   checked={this.state.filterRuns}
+                   onChange={this.filterChange}
+            />
+          </div>
         </ResponsiveReactGridLayout>
 
         <div className='table-wrap'>
           <ReactTable
             style={{display: this.state.showEvent ? 'block' : 'none'}}
             className='-striped -highlight'
-            data={this.state.event.runs}
+            data={this.state.filterRuns ? this.state.event.watchedRuns() : this.state.event.runs}
             columns={columns}
             loading={this.state.loadingRuns}
         />

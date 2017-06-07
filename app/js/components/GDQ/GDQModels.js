@@ -41,6 +41,12 @@ export class GDQEvent {
     }
   }
 
+  watchedRuns () {
+    return this.runs.filter((run) => {
+      return run.watching;
+    });
+  }
+
   getRuns (handler) {
     var that = this;
     request({
