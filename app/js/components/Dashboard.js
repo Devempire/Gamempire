@@ -283,7 +283,7 @@ module.exports = global.Dashboard = React.createClass({
             data:host
             })
             }).done((res)=>{
-              //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
+              
             }).fail((res)=>{
                 console.log("Client stats upload failed.");
                 vex.dialog.alert({
