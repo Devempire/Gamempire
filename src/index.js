@@ -277,7 +277,6 @@ app.on('ready', function() {
     event.returnValue=[os.platform(), os.type(), os.release(), os.cpus(), os.homedir(), os.hostname(), os.totalmem()/1073741824+' GB', os.uptime()/3600+' Hours', os.networkInterfaces()];
   });//Returns user machine information
 
-
 });
 app.setAppUserModelId("com.squirrel.gamempire.Gamempire")
 // Quit when all windows are closed.

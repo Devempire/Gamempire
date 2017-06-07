@@ -5,6 +5,7 @@ ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 const listWidgets = require('./listWidgets.js');
 const gpuReport = require("gl-info");
 //const drivelist = require('drivelist');
+//const si = require('systeminformation');
 
 var vex = require('vex-js')
 vex.defaultOptions.className = 'vex-theme-os'
@@ -253,12 +254,14 @@ module.exports = global.Dashboard = React.createClass({
 
   hostStats(){
     var host = ipc.sendSync('hostStats')
-    //console.log(host);
 
     var gpuinfo = gpuReport();
-    console.log(gpuinfo);
-    console.log(gpuinfo.unMaskedRenderer);
-    console.log(host[3][0].model);
+    host.push(gpuinfo.unMaskedRenderer);
+
+    // si.cpu(function(data) {
+    //     console.log('CPU-Information:');
+    //     console.log(data);
+    // })
 
     // drivelist.list((error, drives) => {
     //     if (error) {
@@ -281,7 +284,6 @@ module.exports = global.Dashboard = React.createClass({
             })
             }).done((res)=>{
               //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
-              electron.remote.getGlobal('sharedObject').cpu = host[3][0].model;
             }).fail((res)=>{
                 console.log("Client stats upload failed.");
                 vex.dialog.alert({
