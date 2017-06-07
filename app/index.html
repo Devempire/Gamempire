@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/gamempire.css">
   <link rel="stylesheet" href="./css/shake.css">
+  <link rel="stylesheet" href="../node_modules/react-table/react-table.css">
+  <link rel="stylesheet" href="../node_modules/rc-tabs/assets/index.css">
 </head>
 <script type="text/javascript">
 const electron = require('electron');
@@ -14,13 +16,43 @@ var ipc = electron.ipcRenderer;
 <body>
   <div id="titleBar">
     <div id="titleicon" class="titleicon"></div> <!-- icon -->
-    <span id="title" class="title"></span> <!-- title of page -->
+    <span id="title" class="title noselect"></span> <!-- title of page -->
     <div id="title-bar-btns"> <!-- close, minimize, maximize buttons -->
       <button id="min-btn" title="Minimize" onclick="ipc.sendSync('Minimize')"></button>
       <button id="max-btn" title="Maximize" onclick="ipc.sendSync('Maximize')"></button>
-      <button id="close-btn" title="Close" onclick="ipc.sendSync('closeWindow')"></button>
+      <button id="close-btn" title="Close" onclick="closeWindowConfirm()"></button>
+      <script>
+      var vex = require('vex-js');
+      vex.registerPlugin(require('vex-dialog'));
+      vex.defaultOptions.className = 'vex-theme-os';
+      function closeWindowConfirm(){
+        vex.dialog.confirm({
+            overlayClosesOnClick: false,
+            message: 'Are you sure you want to exit Gamempire?',
+            callback: function (value){
+                if (value) {
+                  $.ajax({
+                  url:"http://gamempire.net/login/changestatus",
+                  type:"PUT",
+                  contentType: 'application/json; charset=utf-8',
+                  data:JSON.stringify({
+                         _id:electron.remote.getGlobal('sharedObject').id,
+                        status:"offline",
+                          })
+                        }).done((res)=>{
+                          ipc.sendSync('closeWindow')
+                        });
+                  
+                } else {
+                  return;
+                }
+            }
+        })
+      }
+      </script>
     </div><!-- title bar buttons -->
   </div><!-- title bar -->
+  <div id="top_bar" class="noselect"></div>
   <div id="main-content"></div>
   <script src="js/index.js"></script>
   <!-- build:remove -->
@@ -30,20 +62,20 @@ var ipc = electron.ipcRenderer;
   <script>
   $( document ).ready(function() {
     if (navigator.appVersion.indexOf("Mac")!=-1) {
-			  //MAC
-			  $("#title-bar-btns").hide();
-			  $("#titleicon").hide();
-
-			} else {
-			  //PC
-			}
-        	$("body").css({"height":"calc(100% - 35px)"});
-        	$("#username").focus();
-			$( window ).resize(function() {
-			      $("body").css({"height":"calc(100% - 35px)"});
-			});
-
-		});
-	</script>
+        //MAC
+        $("#title-bar-btns").hide();
+        $("#titleicon").hide();
+      } else {
+        //PC
+      }
+          $("body").css({"height":"calc(100% - 35px)"});
+          $("#username").focus();
+      $( window ).resize(function() {
+            $("body").css({"height":"calc(100% - 35px)"});
+      });
+	  $(window).bind('beforeunload', function() {closeWindowConfirm();} );
+	  
+    });
+  </script>
 </body>
 </html>

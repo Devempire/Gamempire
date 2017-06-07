@@ -5,9 +5,9 @@ Copyright 2017 Gamempire. All rights reserved.
 
 
 gulp serve 								to launch server, watch and electron for dev
-gulp package-windows build-production  	to package Windows applicaion. Will be packaged to ./release/windows.zip
-gulp package-osx build-production 		to package MacOSx applicaion. Will be packaged in ./release/??
-gulp package-linux build-production 	to package Linux application. Will be packaged to ./release/linux.zip
+gulp package-windows build-production  	to package Windows applicaion. Will be packaged to ./release/windows
+gulp package-osx build-production 		to package MacOSx applicaion. Will be packaged in ./release/darwin
+gulp package-linux build-production 	to package Linux application. Will be packaged to ./release/linux
 
 */
 
@@ -23,11 +23,10 @@ const rename = require('gulp-rename')
 const useref = require('gulp-useref')
 const replace = require('gulp-replace')
 const electron = require('electron-connect').server.create()
-const electronPackager = require('gulp-atom-electron')
-const symdest = require('gulp-symdest')
-const zip = require('gulp-vinyl-zip')
 
-const electronVersion = require('electron-prebuilt/package.json').version
+const electronInstaller = require('electron-winstaller');
+
+const electronVersion = require('electron/package.json').version
 
 /* These are the building tasks! */
 
@@ -212,22 +211,16 @@ gulp.task('serve', ['build', 'watch'], () => {
 
 /* These are the packaging tasks! */
 
-gulp.task('package-osx', ['build-production'], () => {
-  return gulp.src('./build/**')
-    .pipe(electronPackager({ version: electronVersion, platform: 'darwin' }))
-    .pipe(symdest('release'))
-})
 
-gulp.task('package-windows', ['build-production'], () => {
-  return gulp.src('./build/**')
-    .pipe(electronPackager({ version: electronVersion, platform: 'win32' }))
-    .pipe(zip.dest('./release/windows.zip'))
-})
 
-gulp.task('package-linux', ['build-production'], () => {
-  return gulp.src('./build/**')
-    .pipe(electronPackager({ version: electronVersion, platform: 'linux' }))
-    .pipe(zip.dest('./release/linux.zip'))
+gulp.task('wininstall', ['build-production'],()=>{
+  var resultPromise = electronInstaller.createWindowsInstaller({
+    appDirectory: '../release/windows/Gamempire-win32-ia32',
+    outputDirectory: '../release',
+    authors: 'Gamempire',
+    exe: 'Gamempire.exe',
+    noMsi:true,
+    setupIcon:'./app/img/logo.ico'
+  });
+  resultPromise.then();
 })
-
-gulp.task('package', ['build-production', 'package-windows', 'package-osx', 'package-linux'])

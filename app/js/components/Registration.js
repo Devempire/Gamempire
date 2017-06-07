@@ -1,3 +1,6 @@
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
+
 module.exports = class Registration extends React.Component {
 
     constructor(props) {
@@ -21,7 +24,7 @@ module.exports = class Registration extends React.Component {
     // }
 
     render() {
-      var title = "Registration - Gamempire"
+      var title = "Sign up  \u2014 Gamempire"
       document.title = title
       document.getElementById('title').textContent = title
 
@@ -94,8 +97,8 @@ module.exports = class Registration extends React.Component {
         var namePattern = new RegExp('^[a-zA-Z ]{1,}$');
         var userPattern = new RegExp('^[a-zA-Z0-9]{3,}$');
         //var passPattern = new RegExp('^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$');
-        var emailPattern = new RegExp('^[a-zA-Z0-9]{1,}@[a-zA-Z]{1,}[.]{1}[a-zA-Z]{1,}$');
-
+        //var emailPattern = new RegExp();
+		var emailPattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
         var fname = document.getElementById('fname');
         var lname = document.getElementById('lname');
         var user = document.getElementById('user');
@@ -184,9 +187,9 @@ module.exports = class Registration extends React.Component {
 
     }
 
-     _register(){
-       
-        $.post(api_server+'/user/add',
+    _register(){
+
+        $.post(api_server+'/login/add',
 
                 {
 
@@ -201,8 +204,8 @@ module.exports = class Registration extends React.Component {
                 }
         )
             .done((res) =>{
-                
-                this._backToLogin();
+
+                this._registerConfirm(this.state.email);
             })
             .fail((res)=>{
                     $("#signupmsg").html("Username or email already exists !<button id='close' onclick='$(this).parent().hide();' >");
@@ -212,9 +215,19 @@ module.exports = class Registration extends React.Component {
                     setTimeout(function () {
                         $("#signupmsg").removeClass("shake");
                     },200);
-                    console.log("i am in trouble");
                         });
 
+    }
+
+    _registerConfirm(email){
+        vex.dialog.alert({
+            message: 'We have sent an email to ' + email + ' to verify your email address. Please click the link in that email to get verified.',
+            callback: function (value){
+                if (value) {
+                    this._backToLogin();
+                }
+            }.bind(this)
+        })
     }
 
     _backToLogin() {

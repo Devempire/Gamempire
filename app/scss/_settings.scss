@@ -50,12 +50,16 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #ff4e4e,
-  secondary: #1A1E21,
+  primary: #a52f2f,
+  secondary: #000,
   success: #3adb76,
   warning: #ffae00,
   alert: #cc4b37,
 );
+$background-color: #c7c4c4;
+$primary-font: #000;
+$secondary-font: #818181;
+$selected-menu-font: #fff;
 $light-gray: #e6e6e6;
 $medium-gray: #cacaca;
 $dark-gray: #8a8a8a;
@@ -69,10 +73,11 @@ $global-margin: 1rem;
 $global-padding: 1rem;
 $global-weight-normal: normal;
 $global-weight-bold: bold;
-$global-radius: 0;
+$global-radius: 2px;
 $global-text-direction: ltr;
 $global-flexbox: false;
 $print-transparent-backgrounds: true;
+
 
 @include add-foundation-colors;
 
@@ -618,4 +623,3 @@ $topbar-submenu-background: $topbar-background;
 $topbar-title-spacing: 0.5rem 1rem 0.5rem 0;
 $topbar-input-width: 200px;
 $topbar-unstack-breakpoint: medium;
-

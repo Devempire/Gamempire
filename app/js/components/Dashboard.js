@@ -2,63 +2,85 @@ var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
-const originalLayouts = getFromLS('layouts') || {};
-
-
 const listWidgets = require('./listWidgets.js');
+const gpuReport = require("gl-info");
+//const drivelist = require('drivelist');
+//const si = require('systeminformation');
 
-module.exports = global.Dashboardv2 = React.createClass({
-  mixins: [PureRenderMixin],
+var vex = require('vex-js')
+vex.defaultOptions.className = 'vex-theme-os'
+
+module.exports = global.Dashboard = React.createClass({
 
   getDefaultProps() {
     return {
+      breakpoint: "md",
       className: "layout",
-      cols: {lg: 18, md: 12, sm: 12, xs: 4, xxs: 4},
+      cols: {lg: 12, md: 24, sm: 12, xs: 4, xxs: 4},
       rowHeight: 20,
-      verticalCompact: true
     };
   },
 
-
   getInitialState() {
+    var widget = electron.remote.getGlobal('sharedObject').widget;
+    var layout = electron.remote.getGlobal('sharedObject').layout;
+    var id = electron.remote.getGlobal('sharedObject').id;
     return {
-      layouts: JSON.parse(JSON.stringify(originalLayouts)),
-      profile:{i:"profile",x: 100, y: 100, w: 0, h: 0, static: true},
-      addgame:{i:"add",x: 100, y:100 , w: 0, h: 0, static: false},
       games:[],
       widgets:[],
-      response:undefined,
-      username:null,
-      lastname:null,
-      firstname:null,
-      selectinterest:[],
-      selectgame:'',
+      id:id,
+      layouts:layout,
+      widget:widget,
       showStore:false,
-      gamename:'',
-      selectwidgettype:'',
-      img:null,
-      level:null,
-      avatar:null,
-      hero:null,
-      image:null,
-      time:null,
-      hero1:null,
-      image1:null,
-      time1:null,
-      hero2:null,
-      image2:null,
-      time2:null,
-      aboutMe:"about me",
-
+      selectwidget:'',
     };
+  },
+
+  onLayoutChange(layout, layouts) {
+
+    this.setState({layouts});
+    if(JSON.stringify(layouts.md)=="[]") {
+            //console.log('Just stopped a unnecessary API request on blank layouts.');
+    }else{
+      $.ajax({
+        url:api_server+"/login/profile/updatelayout",
+        type:"PUT",
+        contentType: 'application/json; charset=utf-8',
+        data:JSON.stringify({
+                             _id:this.state.id,
+                             layout:layouts
+                         })
+                     }).done((res)=>{
+                      electron.remote.getGlobal('sharedObject').layout=this.state.layouts;
+
+                    }).fail((err)=>{
+                      console.log("Layout failed to update to the server.")
+                      vex.dialog.alert({
+                          message: 'Layout failed to update to the server.',
+                          callback: function (value){
+                              if (value) {
+                                return;
+                              }
+                          }.bind(this)
+                      })
+                    })
+    }
   },
 
   loadWidgets(){
-
     $.get(api_server+"/widget/show").done((res)=>{
+        var i = res.length;
+        while (i--) {
+          var id = res[i]._id;
+          for(var j=0; j<this.state.widget.length;j++){
+          if (id ==this.state.widget[j].widgetid) {
+            res.splice(i, 1);
 
+          }
+        }
+      }
       for (var i = 0; i < res.length; i++) {
-         this.setState({
+          this.setState({
           widgets: this.state.widgets.concat({
             value:res[i]._id,
             text:res[i].widgetname,
@@ -67,292 +89,324 @@ module.exports = global.Dashboardv2 = React.createClass({
          });
 
       }
-    }).fail((err)=>{
-      console.log("something wrong with the load widget");
-    });
 
+    }).fail((err)=>{
+      console.log('Something is wrong with loading widgets.');
+      vex.dialog.alert({
+          message: 'Something is wrong with loading widgets.',
+          callback: function (value){
+              if (value) {
+                return;
+              }
+          }.bind(this)
+      })
+    });
   },
 
-  loadProfile(){
+  reRender(widgetID) {
+    this.setState({games: _.reject(this.state.games, {i: widgetID})});
 
-      var token = electron.remote.getGlobal('sharedObject').token;
-      $.post(api_server+"/login/load",{
-          'token': token
-          }).done((d)=> {
-              $.get(api_server+'/login/profile/'+ d._id + '/info').done((res)=>{
 
-                  var g=res.widgets.length;
-                  this.setState({response: res,
-                                  username:res.username,
-                                  firstname:res.firstname,
-                                  lastname:res.lastname,
-                                  aboutMe:res.aboutme});
-                  for (var i = 0; i < g; i++) {
-                      if (i == 0) {
-                            var x =0;
-                            var width = 12;
-                            var height = 13;
-                            var row = 0;
-                          } else {
-                            var x = (i-1)%3 *4;
-                            var width = 4;
-                            var height = 13;
-                            var row = 14*(1+((i-1)/3));
-                          }
-                        this.setState({
-                                  games: this.state.games.concat({
-                                    i: res.widgets[i].widgetid,
-                                    widgetname: res.widgets[i].widgetname,
-                                    widgetid: res.widgets[i].widgetid,
-                                    selectgame: res.widgets[i].widgetid,
-                                    widgettype: res.widgets[i].widgettype,
-                                    x: x,
-                                    y: row,
-                                    w: width,
-                                    h: height,
-                                    minH: 13,
-                                    maxH: 13,
-                                    minW: 4,
-                                    maxW: 12,
-                                  })
-                      });
+    $.get(api_server+'/widget/find/'+ widgetID + '/info').done((res2)=>{
+      console.log(res2.widgetname+' widget was reset.');
+    var i=this.state.games.length;
 
-                      if(res.widgets[i].widgetname =="Overwatch"){
-                        var names =res.widgets[i].username;
-                        var list =names.split("#");
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
-                           this.setState({
-                            level:res.data.level,
-                            avatar:res.data.avatar,
-                          });
-                        });
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                           var H =JSON.parse(res);
+    if (i == 0) {
+      var x=0;
+      var y = 0;
+    } else {
+      var y = 4*(i/2);
+      var x = (i%2) *12;
+    }
 
-                           this.setState({
-                            hero:H[0].name,
-                            image:H[0].image,
-                            time:H[0].playtime,
-                            hero1:H[1].name,
-                            image1:H[1].image,
-                            time1:H[1].playtime,
-                            hero2:H[2].name,
-                            image2:H[2].image,
-                            time2:H[2].playtime,
+    this.setState({
+          games: this.state.games.concat({
+            i: widgetID,
+            widgettype:res2.widgettype,
+            widgetname:res2.widgetname,
+            x: x,
+            y: y,
+            w: res2.w,
+            h: res2.h,
+            minH: res2.minH,
+            maxH: res2.maxH,
+            minW: res2.minW,
+            maxW: res2.maxW,
+          }),
+          widgets: _.reject(this.state.widgets, {value: widgetID}),
+          showStore:false,
+          selectwidget:'',
 
-                        });
-                        });
-                      }
-                  }
-          });
-      });
+        });
+    });
+    //this.setState({selectwidget: widgetID});
+    //this.handleSubmit(widgetID);
+  },
 
+  loadLayout(){
+    var mdl =this.state.layouts.md;
+
+    var g =this.state.widget.length;
+    for (var h = 0; h < g; h++) {
+      //this.removeWidget(this.state.widget[h].widgetid)
+        $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+            var xx=res2.x;
+            var yy=res2.y;
+            var ww=res2.w;
+            var hh=res2.h;
+            for(var j=0; j<mdl.length; j++){
+              if(mdl[j].i == res2._id){
+                xx=mdl[j].x;
+                yy=mdl[j].y;
+                ww=mdl[j].w;
+                hh=mdl[j].h;
+                }
+
+                //Debugging
+                //console.log('x: '+ xx);
+                //console.log('y: '+yy);
+                //console.log('w: '+ww);
+                //console.log('h: '+hh);
+            }
+
+
+
+            this.setState({
+                games: this.state.games.concat({
+                    i: res2._id,
+                    widgettype:res2.widgettype,
+                    widgetname:res2.widgetname,
+                    x:xx,
+                    y:yy,
+                    h:hh,
+                    w:ww,
+                    minH: res2.minH,
+                    maxH: res2.maxH,
+                    minW: res2.minW,
+                    maxW: res2.maxW,
+                    })
+                });
+
+              });
+
+        }
   },
 
   componentWillMount: function(){
-    this.loadProfile();
+    this.loadLayout();
     this.loadWidgets();
+    this.hostStats();
   },
 
-  resetLayout() {
-    this.setState({layouts: {}});
+  componentDidMount: function(){
+    //this.setWindowsColours();
+    //console.log("component did mount!");
+  },
+
+  setWindowsColours(){
+    var accentColor = ipc.sendSync('getAccentColor');
+    var activeCaption = ipc.sendSync('getActiveCaption');
+    var inactiveCaption = ipc.sendSync('getInactiveCaption');
+    //var experiment = ipc.sendSync('experiment');
+    const red = accentColor.substr(0, 2);
+    const green = accentColor.substr(2, 2);
+    const blue = accentColor.substr(4, 2);
+    const alpha = accentColor.substr(6, 2);
+    //console.log(accentColor);
+    //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+    //console.log(activeCaption);
+    //console.log(inactiveCaption);
+    //console.log(experiment);
+    var red_decimal = parseInt(red, 16);
+    var green_decimal = parseInt(green, 16);
+    var blue_decimal = parseInt(blue, 16);
+    var alpha_percent = ((parseInt(alpha, 16)) / 255)
+
+    $.each(primaryElements, function(index, value) {
+        $(value).css("background-color", activeCaption);
+    });
+    $.each(backgroundElements, function(index, value) {
+        $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
+    });
+    $.each(secondaryElements, function(index, value) {
+        $(value).css("background-color", inactiveCaption);
+    });
   },
 
   onBreakpointChange(breakpoint, cols) {
+    //console.log('onBreakpointChange Triggered \n    Breakpoint: '+ breakpoint+'\n     Cols: ' + cols );
     this.setState({
       breakpoint: breakpoint,
       cols: cols
     });
   },
 
-  onLayoutChange(layout, layouts) {
-    saveToLS('layouts', layouts);
-    this.setState({layouts});
-  },
-
   handleChange(event) {
     $( "#add_widget_button" ).prop( "disabled", false );
-    var widtype = document.getElementById(event.target.options[event.target.selectedIndex].text).getAttribute('name');
-    this.setState({selectgame: event.target.value, selectwidgetname: event.target.options[event.target.selectedIndex].text, selectwidgettype: widtype});
+
+    this.setState({
+          selectwidget: event.target.value,
+         });
   },
 
   show() {
     this.setState({showStore: true});
   },
 
-  handleSubmit(event) {
-    event.preventDefault();
-{/*
-    if(this.state.gamename == ''){
-       $("#msg").html("username in game must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
-        $("#msg").addClass('label warning input-group-field');
-        $("#msg").addClass("shake");
-        $("#msg").show();
-        setTimeout(function () {
-          $("#msg").removeClass("shake");
-        },200);
-        return false;
-    }
-*/}
-    var L = this.state.games.length;
-    for (var i = 0; i < L; i++) {
-      if(this.state.selectgame === this.state.games[i].i){
-        $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
-        $("#msg").addClass('label warning input-group-field');
-        $("#msg").addClass("shake");
-        $("#msg").show();
-        setTimeout(function () {
-          $("#msg").removeClass("shake");
-        },200);
-        return false;
-      }
-    }
+  hostStats(){
+    var host = ipc.sendSync('hostStats')
 
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
+    var gpuinfo = gpuReport();
+    host.push(gpuinfo.unMaskedRenderer);
+
+    // si.cpu(function(data) {
+    //     console.log('CPU-Information:');
+    //     console.log(data);
+    // })
+
+    // drivelist.list((error, drives) => {
+    //     if (error) {
+    //         throw error;
+    //     }
+
+    //     drives.forEach((drive) => {
+    //         console.log(drive);
+    //     });
+    // });
+
+    $.ajax({
+          url:api_server+"/login/profile/dataupload",
+          type:"PUT",
+          contentType: 'application/json; charset=utf-8',
+          data:JSON.stringify({
+            _id:this.state.id,
+            ref:"clientStats",
+            data:host
+            })
+            }).done((res)=>{
+              //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
+            }).fail((res)=>{
+                console.log("Client stats upload failed.");
+                vex.dialog.alert({
+                    message: 'Client stats upload failed.',
+                    callback: function (value){
+                        if (value) {
+                          return;
+                        }
+                    }.bind(this)
+                })
+            });
+
+
+  },
+
+  handleSubmit(event) {
+      event.preventDefault();
+
+    // avoid dup checking in widget, it should never happen again with current option selection.
+ // var L = this.state.games.length;
+ //     for (var h = 0; h < L; h++) {
+ //       if(this.state.selectwidget === this.state.games[h].i){
+ //         $("#msg").html("The widget already exists! <button id='close' onclick='$(this).parent().hide();' ></button>");
+ //         $("#msg").addClass('label warning input-group-field');
+ //         $("#msg").addClass("shake");
+ //         $("#msg").show();
+ //         setTimeout(function () {
+ //           $("#msg").removeClass("shake");
+ //         },200);
+ //         return false;
+ //       }
+ //     }
+
                  $.ajax({
-                         url:api_server+"/user/profile/addwidget",
+                         url:api_server+"/login/profile/addwidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
-                             widgetid:this.state.selectgame,
-                             widgetname:this.state.selectwidgetname,
-                             widgettype:this.state.selectwidgettype,
-                             username:$("#gameusername").val()
+                             _id:this.state.id,
+                             widgetid:this.state.selectwidget,
                          })
                      }).done((res)=>{
 
-                      var i=this.state.games.length;
+                        $.get(api_server+'/widget/find/'+ this.state.selectwidget + '/info').done((res2)=>{
+                        var i=this.state.games.length;
 
-                        if (i == 0) {
-                          var x=0;
-                          var width = 12;
-                          var height = 13;
-                          var row = 0;
-                        } else {
-                          var width = 4;
-                          var height = 13;
-                          var row = 14*(1+((i-1)/3));
-                          var x = (i-1)%3 *4;
-                        }
+
 
                         this.setState({
                               games: this.state.games.concat({
-                                _id: this.state._id,
-                                i: this.state.selectgame,
-                                widgetname: this.state.selectwidgetname,
-                                widgetid: this.state.selectgame,
-                                widgettype: this.state.selectwidgettype,
-                                x: x,
-                                y: row,
-                                w: width,
-                                h: height,
-                                minH: 5,
-                                maxH: 20,
-                                minW: 2,
-                                maxW: 18,
-                                int:this.state.selectinterest,
-                                username:$("#gameusername").val(),
-
+                                i: this.state.selectwidget,
+                                widgettype:res2.widgettype,
+                                widgetname:res2.widgetname,
+                                x: 0,
+                                y: Infinity,
+                                w: res2.w,
+                                h: res2.h,
+                                minH: res2.minH,
+                                maxH: res2.maxH,
+                                minW: res2.minW,
+                                maxW: res2.maxW,
                               }),
+                              widgets: _.reject(this.state.widgets, {value: this.state.selectwidget}),
                               showStore:false,
-                              gamename:'',
-                              selectgame:'',
-                              selectwidgettype:'',
+                              selectwidget:'',
 
                             });
-
-                        //var list = $("#gameusername").val().split("#");
-                        if(this.state.selectgame=="Overwatch"){
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/profile").done((res)=>{
-                            this.setState({
-                              level:res.data.level,
-                              avatar:res.data.avatar,
-                              });
+                        $.ajax({
+                              url:api_server+'/login/profile/'+ this.state.id + '/info',
+                              type:"GET"
+                             }).done((res3)=>{
+                            electron.remote.getGlobal('sharedObject').widget=res3.widgets;
                           });
-                        $.get("https://api.lootbox.eu/pc/us/"+list[0]+"-"+list[1]+"/competitive/heroes").done((res)=>{
-                            var H = JSON.parse(res);
-                            this.setState({
-                              hero:H[0].name,
-                              image:H[0].image,
-                              time:H[0].playtime,
-                              hero1:H[1].name,
-                              image1:H[1].image,
-                              time1:H[1].playtime,
-                              hero2:H[2].name,
-                              image2:H[2].image,
-                              time2:H[2].playtime,
+                        $( "#add_widget_button" ).prop( "disabled", true );
 
-                            });
-                          });
-                        }
+
+
+
+
+                        });
                       }).fail((err)=>{
-                             alert("opps!");
-                         });
-                     });
+                        console.log('Adding a new widget failed.');
+                        vex.dialog.alert({
+                            message: 'Adding a new widget failed.',
+                            callback: function (value){
+                                if (value) {
+                                  return;
+                                }
+                            }.bind(this)
+                        })
+                      });
+
   },
 
   onGame(el){
-    var i = el.widgetid;
-    var widgetname = el.widgetname;
+    var i =el.i;
     var widgettype = el.widgettype;
-    var widgetID;
-    var widgetTitle;
-    var removeStyle = {
-      position: 'absolute',
-      right: '2px',
-      top: 0,
-      cursor: 'pointer'
-    };
-    switch(i, widgetname) {
-    default:
-        widgetTitle = widgetname;
-        widgetID = i;
-    };
-
-    //console.log(widgetID);
-
-    //for it's hardcoded. Widget we intended to have <react key div>< .widgetTitle div>< .widget> everything goes inside here </ .widget div></ .widgetTitle div> </react key div>
-    //This is where we should split up by Widget Type. Game related tool widgets will load differently from other widget types.
-    //if (widgetType=='social'){ }
-    //if (widgetType=='game'){ }
-    //if (widgetType=='music'){ }
-    //TODO: get react gride min/max height/width from widgets database
-    //etc.
+    var widgetID =el.i;
+    var widgetTitle=el.widgetname;
+    var el = el;
 
     if (widgettype == 'game') {
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
-            <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
+          <p className="widgetTitle noselect">{widgetTitle}
+            <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
+            <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
+          </p>
             <div className="widget">
             <div className="gameImage" style={{background: 'url(./../app/img/widget_img/'+widgetID+'.png)'}}>
               <div className="row">
                 <div className="overlay">
-              {
-                    //overwatch is ID 58ad36e568ddfeac581167ad
-                    //I promise i didn't make that up, just copy pasted from Widgts DB
-              }      { widgetID == "58ad36e568ddfeac581167ad" ?  ( <div>  <div className="row user"><img className="avatar" src={this.state.avatar} /><div><h5>{el.useringame}</h5><p>level:{this.state.level}
-                                         </p></div></div>
-                                         <hr />
-                    <div className="row heroes">
-                      <div className="column small-4"><img src={this.state.image} />  <h6>{this.state.hero}</h6><p>{this.state.time}</p></div>
-                      <div className="column small-4"><img src={this.state.image1} /> <h6>{this.state.hero1}</h6><p>{this.state.time1} </p></div>
-                      <div className="column small-4"><img src={this.state.image2} /> <h6>{this.state.hero2}</h6> <p>{this.state.time2}</p> </div>
-                    </div>
-                  </div>
-                  ):(<p>example</p>) }
+                <div>
+                  <label>Enter Name </label>
+                  <input className="input-group-field noselect" type="text" onChange={(event)=> {this.setState({Name: event.target.value})}}/>
+                  <button className="button"  >Submit</button>
                 </div>
-                {/*<p>interest:</p>
-                <p>{el.int}</p>
-                <p>username in game : {el.useringame} </p>
-                <button className="button" onClick={this.editgame(el)}>Edit</button>*/}
+
+
+                </div>
               </div>
             </div>
-            <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span>
             <ul className="menu horizontal">
             <li><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21">
             <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
@@ -370,21 +424,30 @@ module.exports = global.Dashboardv2 = React.createClass({
             </div>
           </div>
         );
-    } else {
-
-
+    } else if (widgettype == 'social' || widgettype == 'music') {
     //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
     //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
       return (
-        <div key={widgetID} data-grid={el} className="widgetFrame">
-          <p className="widgetTitle noselect">{widgetTitle} <span className="remove" style={removeStyle} onClick={this.removeWidget.bind(this, i)}>x</span></p>
-          {listWidgets.loadwid(widgetID)}
+        <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
+        <p className="widgetTitle noselect">{widgetTitle}
+          <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
+        </p>
+        {listWidgets.loadwid(widgetID)}
         </div>
       );
+    } else if (widgettype == 'other') {
+      return (
+      <div key={widgetID} data-grid={el} className="widgetFrame">
+        <p className="widgetTitle noselect">{widgetTitle}
+          <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
+          <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
+        </p>
+        {listWidgets.loadjsx(widgetID)}
+      </div>
+    );
     }
     //console.log(widgetTitle + ' Loaded.');
-
-
   },
 
   onwidget(item){
@@ -393,28 +456,61 @@ module.exports = global.Dashboardv2 = React.createClass({
     );
   },
 
+  removeWidgetConfirm(i, name){
+    vex.dialog.confirm({
+        overlayClosesOnClick: false,
+        message: 'Are you sure you want to remove the ' + name + ' Widget?',
+        callback: function (value){
+            if (value) {
+              console.log('removing widget');
+              console.log(i);
+              this.removeWidget(i);
+            } else {
+              return;
+            }
+        }.bind(this)
+    })
+  },
+
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
                  $.ajax({
-                         url:api_server+"/user/profile/removewidget",
+                         url:api_server+"/login/profile/removewidget",
                          type:"PUT",
                          contentType: 'application/json; charset=utf-8',
                          data:JSON.stringify({
-                             _id:d._id,
+                             _id:this.state.id,
                              widgetid:i
                          })
                      }).done((res)=>{
-                      console.log("remvoed!");
-                     }).fail((res)=>{
-                      console.log("fail to remove");
-                     });
-                   });
+                      $.get(api_server+'/widget/find/'+ i + '/info').done((res2)=>{
+                        this.setState({
+                              widgets: this.state.widgets.concat({
+                                value:res2._id,
+                                text:res2.widgetname,
+                                widgettype:res2.widgettype
+                              })
+                            });
+                          });
+                      $.ajax({
+                              url:api_server+'/login/profile/'+ this.state.id + '/info',
+                              type:"GET"
+                             }).done((res3)=>{
+                            electron.remote.getGlobal('sharedObject').widget=res3.widgets;
 
+                          });
+
+                     }).fail((res)=>{
+                      console.log('Widget failed to remove.');
+                      vex.dialog.alert({
+                          message: 'Widget failed to remove.',
+                          callback: function (value){
+                              if (value) {
+                                return;
+                              }
+                          }.bind(this)
+                      })
+                     });
   },
 
   goToProfileEdit() {
@@ -423,52 +519,22 @@ module.exports = global.Dashboardv2 = React.createClass({
         document.getElementById('content'));
   },
 
-  editAboutMe(event) {
-
-    this.setState({aboutMe:event.target.value});
-  },
-
-  updateAboutMe(event){
-    var token = electron.remote.getGlobal('sharedObject').token;
-    $.post(api_server+"/user/load",
-              {
-                 'token' :token
-              }).done((d)=> {
-                $.ajax({
-                         url:api_server+"/user/profile/updateaboutme",
-                         type:"PUT",
-                         contentType: 'application/json; charset=utf-8',
-                         data:JSON.stringify({
-                             _id:d._id,
-                             aboutme:this.state.aboutMe
-                         })
-                     }).done((res)=>{
-                      console.log("aboutme on server!");
-                    }).fail((err)=>{
-                      console.log("aboutme fail to update to server!")
-                    })
-              });
-
-  },
-
   render() {
     // Set Titles
-    var title = "Dashboard v2 - Testing - Gamempire"
+    var title = "Dashboard \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
+    $("#mySidenav>a").css("background-color", "");
 
     //Set Dashbaord as active in menu
-    $( "#_Dashboard" ).addClass('active');
+    $( "#_Dashboard" ).addClass("active");
 
-    if (this.state.response) {
+
       return (
         <div className="noselect">
-        <h2 className="profilehover" onClick={this.goToProfileEdit}>{this.state.username}</h2>
-        <input type="text" placeholder="About Me" value={this.state.aboutMe} onChange={this.editAboutMe} onBlur={this.updateAboutMe}/>
-
           <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
@@ -478,17 +544,12 @@ module.exports = global.Dashboardv2 = React.createClass({
           <div className="row dropFade" style={{display: this.state.showStore ? 'block' : 'none'}}>
             <form onSubmit={this.handleSubmit}>
               <h5>Add widget:</h5>
-              <select value={this.state.selectgame} onChange={this.handleChange} id="selectWidget">
+              <select value={this.state.selectwidget} onChange={this.handleChange} id="selectWidget">
                   <option className="disabled" value="" disabled>Select a widget</option>
                   {_.map(this.state.widgets, this.onwidget)}
 
               </select>
-{/*
-<!-- make this go inside specific widget that needs username not for all widgets -->
-            <br/> Username in Game:
-              <br></br>
-              <input id="gameusername" type="text" placeholder="YourTag#0000 OR Yourname" onChange={(event) => {this.setState({gamename: event.target.value})}} value={this.state.gamename}/>
-*/}
+
               <button className="button" type="submit" id="add_widget_button" value="Submit" disabled>Add</button>
             </form>
             <center><div className="input-group-field" id="msg"></div></center><br/>
@@ -500,30 +561,7 @@ module.exports = global.Dashboardv2 = React.createClass({
         </div>
       );
 
-    } else {
-      return (
-        <div className="content-loading"></div>
-        );
-    }
   }
 
 
 });
-
-function getFromLS(key) {
-  let ls = {};
-  if (global.localStorage) {
-    try {
-      ls = JSON.parse(global.localStorage.getItem('rgl-8')) || {};
-    } catch(e) {/*Ignore*/}
-  }
-  return ls[key];
-}
-
-function saveToLS(key, value) {
-  if (global.localStorage) {
-    global.localStorage.setItem('rgl-8', JSON.stringify({
-      key: value
-    }));
-  }
-}
