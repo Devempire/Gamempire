@@ -60,6 +60,9 @@ module.exports = global.Bar = React.createClass({
 
     componentDidMount: function(){
     	this.topbar();
+
+			//go online
+			this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
     },
 
 	render() {
@@ -139,14 +142,19 @@ module.exports = global.Bar = React.createClass({
 
       const topbart = (
         <div id="usertopbar">
-					<select value ={this.select} onChange={this.handleChange}>
-						<option value="online" >online</option>
-						<option value="offline">offline</option>
+
+
+					<select title="Change status" className="statusSelect" value={this.select} onChange={this.handleChange}>
+						<option value="online" >Online</option>
+						<option value="offline">Offline</option>
 					</select>
+
+
+
           <div id="avatar">
         		<img src={this.state.avatar}/>
 					</div>
-					<h5 onClick={this._ProfileEdit}> {this.state.username}</h5>
+					<h5 className="topbar_username" title="Edit profile" onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
 					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
@@ -163,6 +171,7 @@ module.exports = global.Bar = React.createClass({
     handleChange(event) {
 
     var status =event.target.value;
+		$(".statusSelect").css('background', 'url("../app/img/' + status + '.ico")  97% / 17% no-repeat #eee');
 
     vex.dialog.confirm({
 	        overlayClosesOnClick: false,
@@ -172,8 +181,11 @@ module.exports = global.Bar = React.createClass({
 	              	this.setState({
          			 select: status,
          				});
+								this.setState({status:status});
          				this.updatestatus();
 	            } else {
+								$(".statusSelect").css('background', 'url("../app/img/' + this.state.status + '.ico")  97% / 17% no-repeat #eee');
+								$(".statusSelect").val(this.state.status);
 	            	return;
 	            }
 	        }.bind(this)
