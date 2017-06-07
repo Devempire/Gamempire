@@ -197,7 +197,7 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   componentDidMount: function(){
-    this.setWindowsColours();
+    //this.setWindowsColours();
     //console.log("component did mount!");
   },
 
@@ -523,9 +523,10 @@ module.exports = global.Dashboard = React.createClass({
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
+    $("#mySidenav>a").css("background-color", "");
 
     //Set Dashbaord as active in menu
-    $( "#_Dashboard" ).addClass('active');
+    $( "#_Dashboard" ).addClass("active");
 
 
       return (

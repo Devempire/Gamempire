@@ -67,7 +67,7 @@ module.exports = global.Bar = React.createClass({
 		    <div id="mySidenav" className="sidenav noselect">
 					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
 					<a href="#" onClick={this._Profile} id="_Profile">Profile</a>
-          			<a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
+          <a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#" onClick={this._Friends} id="_Friends">Friends</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
@@ -203,6 +203,8 @@ module.exports = global.Bar = React.createClass({
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+
 
 	},
 	_Friends(){
@@ -212,6 +214,8 @@ module.exports = global.Bar = React.createClass({
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+
 
 	},
 
@@ -222,6 +226,8 @@ module.exports = global.Bar = React.createClass({
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+
 	},
 
 	_Playground(){
@@ -242,6 +248,8 @@ module.exports = global.Bar = React.createClass({
 		);
 		document.getElementById('playgroundFrame').style.visibility = "hidden";
 		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+
 	},
 
 	_LogoutConfirm(){

@@ -467,7 +467,7 @@ hr {
     top: 0;
     padding-right: 10px;
     /* To make the clicable area of a little larger than the visible area so users can easily click it */
-    cursor: col-resize;
+    cursor: url("../img/arrow_out.png"), auto;
 }
 
 .toggleNav:hover {

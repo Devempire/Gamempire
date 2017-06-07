@@ -77,16 +77,18 @@ module.exports = global.Profile = React.createClass({
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
+    $("#mySidenav>a").css("background-color", "");
+
 
     //Set Dashbaord as active in menu
     $( "#_Profile" ).addClass('active');
 
     return (<div>
-     	<img src={this.state.avatar} /> 
+     	<img src={this.state.avatar} />
      	<h3>{this.state.username}</h3>
       <p>{this.state.aboutme}</p>
       <h4>{this.state.firstname} {this.state.lastname}</h4>
-      <h6>{this.state.email}</h6> 
+      <h6>{this.state.email}</h6>
       <h6>{this.state.birthday}</h6> <br/>
       CPU:
       <h6>{this.state.cpu}</h6>

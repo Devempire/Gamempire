@@ -124,7 +124,7 @@ let createWindow = () => {
     console.log("Node version: " + process.version) //prints node version installed on machine.
 
     // Open the DevTools.
-    if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D"){ //Borys likes his dev tools detached from Gamempire.
+    if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.
       mainWindow.webContents.openDevTools({mode: 'detach'})
     }else{
       mainWindow.webContents.openDevTools({mode: 'attach'})

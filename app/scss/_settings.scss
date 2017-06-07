@@ -50,14 +50,14 @@ $global-font-size: 100%;
 $global-width: rem-calc(1200);
 $global-lineheight: 1.5;
 $foundation-palette: (
-  primary: #0FD899,
-  secondary: #2e3b41,
+  primary: #FF8752,
+  secondary: #DDD6CE,
   success: #3adb76,
   warning: #ffae00,
   alert: #cc4b37,
 );
-$background-color: #2A363B;
-$primary-font: #fff;
+$background-color: #fff;
+$primary-font: #C0C0C0;
 $secondary-font: #818181;
 
 $light-gray: #e6e6e6;
@@ -623,4 +623,3 @@ $topbar-submenu-background: $topbar-background;
 $topbar-title-spacing: 0.5rem 1rem 0.5rem 0;
 $topbar-input-width: 200px;
 $topbar-unstack-breakpoint: medium;
-

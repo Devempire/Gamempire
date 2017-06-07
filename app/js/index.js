@@ -38,6 +38,7 @@ injectTapEventPlugin();
 
 global.primaryElements = [
   ".button",
+  ".submit",
   "::selection",
   "react-grid-item:hover",
   ".react-grid-item:hover h2",
