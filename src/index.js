@@ -13,7 +13,6 @@ var os = require('os');
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
 
-
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else

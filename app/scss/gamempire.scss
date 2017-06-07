@@ -1423,19 +1423,19 @@ h5:hover {
 /* End Playground CSS*/
 
 .aboutmelabel {
-    font-size: 16px;
+    font-size: fpx;
 }
 
 
 .statusSelect {
-   margin-right: 10px;
    border: 1px solid #111;
    background: transparent;
    width: 95px;
-   padding: 5px 35px 5px 5px;
+   padding: 4px 35px 5px 5px;
+   margin: 1px 10px 0px 0px;
    font-size: 16px;
    border: 1px solid #ccc;
-   height: 34px;
+   height: 26px;
    -webkit-appearance: none;
    -moz-appearance: none;
    appearance: none;
@@ -1450,4 +1450,17 @@ h5:hover {
 
 .topbar_username{
   color:$secondary-font;
+}
+
+
+.widget350 {
+    width: 100%;
+    height: 350px !important;
+    overflow: auto;
+    touch-action: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
 }
