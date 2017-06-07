@@ -59,8 +59,9 @@
      "react-tap-event-plugin": "^2.0.1",
      "request": "^2.81.0",
      "unirest": "^0.5.1",
-      "vex-js": "^3.1.0",
-      "accounting-js": "^1.1.1"
+     "vex-js": "^3.1.0",
+     "accounting-js": "^1.1.1",
+     "gl-info": "^0.1.0"
     },
   "scripts": {
     "package-win": "electron-packager . --version-string.ProductName=Gamempire --overwrite --asar=false --platform=win32 --arch=ia32 --icon=./app/img/logo.ico --prune=true --out=../release/windows "
