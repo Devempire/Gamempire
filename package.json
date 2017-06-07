@@ -7,7 +7,7 @@
      "type": "git",
      "url": "git+https://github.com/devempire/gamempire.git"
    },
-   "author": "Borys Kotanski, Seong-Min Jeong, Jiaqin Meng, Nathan Pilla",
+   "author": "Borys Kotanski, Seong-Min Jeong, Jiaqin Meng, Nathan Pilla, Dillon Newell",
    "license": "Copyright © 2017 Gaming Hub Inc.",
    "bugs": {
      "url": "https://github.com/Devempire/Gamempirev2/issues"
@@ -61,6 +61,7 @@
      "unirest": "^0.5.1",
      "vex-js": "^3.1.0",
      "accounting-js": "^1.1.1",
+     "gl-info": "^0.1.0"
      "gl-info": "^0.1.0"
     },
   "scripts": {

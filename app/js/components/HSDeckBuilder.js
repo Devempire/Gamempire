@@ -340,7 +340,7 @@ module.exports = global.HSDeckBuilder = React.createClass({
 
     //Put < during release/testing phases. Put > during development.
     if (this.state.cardCounter < 30) {
-      $("#hsmsg").html("Deck is not complete. Please add 30 cards to the deck.<button id='close' onclick='$(this).parent().hide();' ></button>");
+      $("#hsmsg").html("Deck is not complete. Please add 30 cards to the deck.<button id='close' onclick='$(this).parent().hide();' >");
       $("#hsmsg").addClass('label warning');
       $("#hsmsg").addClass("shake");
       $("#hsmsg").show();

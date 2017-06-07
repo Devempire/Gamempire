@@ -258,7 +258,7 @@ hr {
 
 .sidenav .active {
     background-color: $primary-color;
-    color: $primary-font;
+    color: $selected-menu-font;
     border-radius: 0px $global-radius $global-radius 0px;
 }
 
@@ -471,7 +471,7 @@ hr {
 }
 
 .toggleNav:hover {
-    background-color: lighten( $background-color, 2%);
+    background-color: darken( $primary-color, 25%);
 }
 
 .toggleNav:after {
@@ -496,10 +496,27 @@ hr {
 [type=time],
 [type=url],
 [type=color],
-textarea,
+textarea {
+    background-color: lighten( $background-color, 20%);
+    color:  lighten($black, 60%);
+    box-shadow: none;
+    border: none;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 2.4375rem;
+    margin: 0 0 1rem;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: box-shadow .5s, background-color .3s ease-in-out;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+}
+
 select {
-    background-color: lighten( $background-color, 2%);
-    color: $secondary-font;
+    background-color: lighten( $background-color, 20%);
+    color:  lighten($black, 60%);
     box-shadow: none;
     border: none;
     display: block;
@@ -529,9 +546,15 @@ select {
 [type=time]:hover,
 [type=url]:hover,
 [type=color]:hover,
-textarea:hover,
+textarea:hover {
+    background-color: lighten( $background-color, 15%);
+    color:  lighten($black, 30%);
+}
+
+
 select:hover {
-    background-color: lighten( $background-color, 3%);
+    background-color: darken($background-color, 15%);
+    color:  lighten($black, 30%);
 }
 
 [type=text]:focus,
@@ -548,10 +571,20 @@ select:hover {
 [type=time]:focus,
 [type=url]:focus,
 [type=color]:focus,
-textarea:focus,
 select:focus {
     border: none;
-    background-color: lighten( $background-color, 7%);
+    background-color: lighten( $background-color, 15%);
+    color:  lighten($black, 30%);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    outline: none;
+    box-shadow: none;
+}
+
+textarea:focus {
+    border: none;
+    background-color: lighten( $background-color, 15%);
+    color:  lighten($black, 30%);
     -webkit-appearance: none;
     -moz-appearance: none;
     outline: none;
@@ -1031,7 +1064,7 @@ label {
 
 .sidenav a:hover,
 .offcanvas a:focus {
-    color: #f1f1f1;
+    color: $selected-menu-font;
 }
 
 
@@ -1111,7 +1144,7 @@ label {
     margin-right: auto;
     margin-left: auto;
     margin-top: -25px;
-    color: $primary-font;
+    color: $selected-menu-font;
     text-align: center;
     position: inherit;
 }
@@ -1391,4 +1424,30 @@ h5:hover {
 
 .aboutmelabel {
     font-size: 16px;
+}
+
+
+.statusSelect {
+   margin-right: 10px;
+   border: 1px solid #111;
+   background: transparent;
+   width: 95px;
+   padding: 5px 35px 5px 5px;
+   font-size: 16px;
+   border: 1px solid #ccc;
+   height: 34px;
+   -webkit-appearance: none;
+   -moz-appearance: none;
+   appearance: none;
+   background: #eee;
+   color:  lighten($black, 30%);
+   background: url("../img/online.ico") 98% / 17% no-repeat #eee;
+}
+
+.statusSelect:hover {
+    color:  lighten($black, 15%);
+}
+
+.topbar_username{
+  color:$secondary-font;
 }

@@ -7,6 +7,7 @@ import AvatarEditor from 'react-avatar-editor'
 var vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
+const gpuReport = require("gl-info");
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
@@ -490,10 +491,10 @@ module.exports = global.ProfileEdit = React.createClass({
             </div>
 
             CPU: <br/>
-            <label>{electron.remote.getGlobal('sharedObject').cpu}</label>
+            <label>{ipc.sendSync('hostStats')[3][0].model}</label>
 
             GPU: <br/>
-            <label>gpu</label>
+            <label>{gpuReport().unMaskedRenderer}</label>
 
             Hard Drive: <br/>
             <label>hd</label>
@@ -532,8 +533,8 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   saveCompSpecs() {
-    var cpu = electron.remote.getGlobal('sharedObject').cpu;
-    var gpu = 'gpu';
+    var cpu = ipc.sendSync('hostStats')[3][0].model;
+    var gpu = gpuReport().unMaskedRenderer;
     var harddrive = 'hd';
     var keyboard = 'keyboard';
     var mouse = 'mouse';
