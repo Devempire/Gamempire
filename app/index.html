@@ -5,6 +5,8 @@
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/gamempire.css">
   <link rel="stylesheet" href="./css/shake.css">
+  <link rel="stylesheet" href="../node_modules/react-table/react-table.css">
+  <link rel="stylesheet" href="../node_modules/rc-tabs/assets/index.css">
 </head>
 <script type="text/javascript">
 const electron = require('electron');
@@ -71,6 +73,8 @@ var ipc = electron.ipcRenderer;
       $( window ).resize(function() {
             $("body").css({"height":"calc(100% - 35px)"});
       });
+	  //$(window).bind('beforeunload', function() {closeWindowConfirm();} );
+	  
     });
   </script>
 </body>

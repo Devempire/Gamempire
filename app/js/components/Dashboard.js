@@ -71,8 +71,9 @@ module.exports = global.Dashboard = React.createClass({
     $.get(api_server+"/widget/show").done((res)=>{
         var i = res.length;
         while (i--) {
+          var id = res[i]._id;
           for(var j=0; j<this.state.widget.length;j++){
-          if (res[i]._id ==this.state.widget[j].widgetid) {
+          if (id ==this.state.widget[j].widgetid) {
             res.splice(i, 1);
 
           }
@@ -100,7 +101,6 @@ module.exports = global.Dashboard = React.createClass({
           }.bind(this)
       })
     });
-
   },
 
   reRender(widgetID) {
@@ -148,6 +148,7 @@ module.exports = global.Dashboard = React.createClass({
 
     var g =this.state.widget.length;
     for (var h = 0; h < g; h++) {
+      //this.removeWidget(this.state.widget[h].widgetid)
         $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
             var xx=res2.x;
             var yy=res2.y;
@@ -461,6 +462,8 @@ module.exports = global.Dashboard = React.createClass({
         message: 'Are you sure you want to remove the ' + name + ' Widget?',
         callback: function (value){
             if (value) {
+              console.log('removing widget');
+              console.log(i);
               this.removeWidget(i);
             } else {
               return;
@@ -471,7 +474,6 @@ module.exports = global.Dashboard = React.createClass({
 
   removeWidget(i) {
     this.setState({games: _.reject(this.state.games, {i: i})});
-
                  $.ajax({
                          url:api_server+"/login/profile/removewidget",
                          type:"PUT",

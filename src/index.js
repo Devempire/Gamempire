@@ -13,7 +13,6 @@ var os = require('os');
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
 
-
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
   // squirrel event handled and app will exit in 1000ms, so don't do anything else
@@ -139,6 +138,7 @@ let createWindow = () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
+
     mainWindow = null
   })
 }
