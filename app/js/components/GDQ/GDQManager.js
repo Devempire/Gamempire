@@ -99,12 +99,24 @@ export default class GDQManager {
           );
         });
         console.log(that._runners);
-      }
-      else {
+      } else {
         console.log('Error loading runners');
         console.log(err);
       }
     });
+  }
+
+  getLatestEvent () {
+    return this.events.last();
+  }
+
+  // Returns null if no event on, otherwise the event
+  getOngoingEvent () {
+    if (this.getLatestEvent().isCurrent()) {
+      return this.getLatestEvent();
+    } else {
+      return null;
+    }
   }
 
   showEvent (id, handler) {
