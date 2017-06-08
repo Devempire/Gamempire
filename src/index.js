@@ -91,11 +91,13 @@ global.sharedObject = {
   layout:null,
   avatar:null,
   data:null,
+  gpuHTML:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let gpuWindow
 
 let createWindow = () => {
   // Create the browser window.
@@ -143,6 +145,81 @@ let createWindow = () => {
   })
 }
 
+
+
+
+let creategpuWindow = () => {
+
+  // Create the browser window.
+  gpuWindow  = new BrowserWindow({
+    show:false,
+    minHeight: 480,
+    minWidth: 313,
+    width: 970,
+    height: 480,
+    frame: true,
+    thickFrame: true,
+    titleBarStyle: 'hidden',
+    backgroundColor: '#0e1519',
+    icon: iconPath
+  }); //mainWindow
+
+
+
+  gpuWindow.webContents.on('dom-ready', () => {
+    function execute(){
+      gpuWindow.webContents.executeJavaScript(`
+        require('electron').ipcRenderer.send('gpu', document.body.innerHTML);
+      `);
+    }
+
+setTimeout( execute, 8000 );
+
+  });
+
+  ipc.on('gpu', (_, gpu) => {
+
+    global.sharedObject = {gpuHTML: gpu};
+  })
+
+  gpuWindow.loadURL('chrome://gpu');
+
+
+
+  if (isDevelopment) {
+
+    console.log("System: " + os.platform()); // "win32"
+    //output compile completion time for debugging
+    var m = new Date();
+    var dateString = (m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + (m.getUTCHours()-4) + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds()); //(m.getUTCHours()-4) MINUS 4 for our Toronto Timezone
+    console.log("Finished compiling at: " + dateString)
+    console.log("Node version: " + process.version) //prints node version installed on machine.
+
+    // Open the DevTools.
+    if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.
+      gpuWindow.webContents.openDevTools({mode: 'detach'})
+    }else{
+      gpuWindow.webContents.openDevTools({mode: 'attach'})
+    }
+
+  }//End development code
+
+  gpuWindow.center();
+
+  // Emitted when the window is closed.
+  gpuWindow.on('closed', () => {
+    // Dereference the window object, usually you would store windows
+    // in an array if your app supports multi windows, this is the time
+    // when you should delete the corresponding element.
+
+    gpuWindow = null
+  })
+
+
+
+
+}
+
 //auto update
 // app.on('ready', function(){
 //   console.log('application emitted "ready"');
@@ -177,6 +254,7 @@ let createWindow = () => {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   createWindow();
+  creategpuWindow();
   ipc.on('disable-x-frame', (event, arg) => {
 
     session.fromPartition(arg.partition).webRequest.onHeadersReceived({}, (d, c) => {

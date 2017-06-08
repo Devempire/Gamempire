@@ -72,6 +72,7 @@ module.exports = global.Bar = React.createClass({
 					<a href="#" onClick={this._Profile} id="_Profile">Profile</a>
           <a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
 					<a href="#" onClick={this._Friends} id="_Friends">Friends</a>
+					<a href="#" onClick={this.gpuTest} id="testingGPU">GET GPU</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 					<a id="8" >Add custom page</a>
@@ -207,6 +208,18 @@ module.exports = global.Bar = React.createClass({
                      		}).done((res)=>{
                      		});
     },
+
+		gpuTest(){
+			var gpuHTML = electron.remote.getGlobal('sharedObject').gpuHTML
+			console.log(gpuHTML.slice(68157+152, 68334))
+
+//var num = gpuHTML.indexOf("szDescription")
+//var num1 = gpuHTML.indexOf("</span>", num+10)
+	//		console.log(gpuHTML.slice(num+142, num1))
+
+
+68334
+		},
 
 	_Dashboard(){
 		ReactDOM.render(
