@@ -211,14 +211,7 @@ module.exports = global.Bar = React.createClass({
 
 		gpuTest(){
 			var gpuHTML = electron.remote.getGlobal('sharedObject').gpuHTML
-			console.log(gpuHTML.slice(68157+152, 68334))
-
-//var num = gpuHTML.indexOf("szDescription")
-//var num1 = gpuHTML.indexOf("</span>", num+10)
-	//		console.log(gpuHTML.slice(num+142, num1))
-
-
-68334
+			console.log(gpuHTML.slice(68157+151, 68333))
 		},
 
 	_Dashboard(){
