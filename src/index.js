@@ -148,6 +148,7 @@ let createWindow = () => {
 
 
 
+
 let creategpuWindow = () => {
   gpuWindow  = new BrowserWindow({
     show:false,
