@@ -117,12 +117,23 @@ let createWindow = () => {
 
   if (isDevelopment) {
 
-    console.log("System: " + os.platform()); // "win32"
+
     //output compile completion time for debugging
     var m = new Date();
     var dateString = (m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + (m.getUTCHours()-4) + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds()); //(m.getUTCHours()-4) MINUS 4 for our Toronto Timezone
-    console.log("Finished compiling at: " + dateString)
-    console.log("Node version: " + process.version) //prints node version installed on machine.
+    console.log("FINISHED compiling at: " + dateString)
+    console.log("")
+    console.log("")
+    console.log("VERSIONS")
+    console.log("________________________________________")
+    console.log("Node version    : " + process.versions.node)
+    console.log("Chrome version  : " + process.versions.chrome)
+    console.log("Electron version: " + process.versions.electron)
+    console.log("V8 version      : " + process.versions.v8)
+    console.log("Modules         : " + process.versions.modules)
+    console.log("System          : " + os.platform());
+    console.log("________________________________________")
+    console.log("")
 
     // Open the DevTools.
     if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.
