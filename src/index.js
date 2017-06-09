@@ -2,6 +2,7 @@
 let isDevelopment = true;
 
 const electron = require('electron')
+const shell = require('shelljs')
 // Module to control application life.
 const app = electron.app
 const systemPreferences = electron.systemPreferences
@@ -97,7 +98,7 @@ global.sharedObject = {
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
-let gpuWindow
+
 
 let createWindow = () => {
   // Create the browser window.
@@ -133,6 +134,13 @@ let createWindow = () => {
     console.log("Modules         : " + process.versions.modules)
     console.log("System          : " + os.platform());
     console.log("________________________________________")
+    console.log("GPU")
+    //shell.exec('wmic path win32_VideoController get name', {async:true})
+    shell.exec('wmic path win32_VideoController get name', {async:true}, function(code, stdout, stderr) {
+      global.sharedObject = {gpuHTML: stdout};
+
+    });
+
     console.log("")
 
     // Open the DevTools.
@@ -156,44 +164,6 @@ let createWindow = () => {
   })
 }
 
-
-
-
-
-let creategpuWindow = () => {
-  gpuWindow  = new BrowserWindow({
-    show:false,
-    minHeight: 480,
-    minWidth: 313,
-    width: 970,
-    height: 480,
-    frame: true,
-    thickFrame: true,
-    titleBarStyle: 'hidden',
-    backgroundColor: '#0e1519',
-    icon: iconPath
-  });
-
-
-  gpuWindow.webContents.on('dom-ready', () => {
-    function execute(){
-      gpuWindow.webContents.executeJavaScript(`
-        require('electron').ipcRenderer.send('gpu', document.body.innerHTML);
-      `);
-    }
-    setTimeout( execute, 8000 );
-  });
-
-  ipc.on('gpu', (_, gpu) => {
-    global.sharedObject = {gpuHTML: gpu};
-  })
-
-  gpuWindow.loadURL('chrome://gpu');
-
-  gpuWindow.on('closed', () => {
-    gpuWindow = null
-  })
-}
 
 //auto update
 // app.on('ready', function(){
@@ -229,7 +199,6 @@ let creategpuWindow = () => {
 // initialization and is ready to create browser windows.
 app.on('ready', function() {
   createWindow();
-  creategpuWindow();
   ipc.on('disable-x-frame', (event, arg) => {
 
     session.fromPartition(arg.partition).webRequest.onHeadersReceived({}, (d, c) => {

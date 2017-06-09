@@ -163,7 +163,6 @@ module.exports = global.ProfileEdit = React.createClass({
     this.loadProfile();
     global.avatar_scale = this.state.scale;
     global.rotate = 0;
-    console.log(gpuReport());
   },
 
   setWindowsColours(){
@@ -529,7 +528,6 @@ module.exports = global.ProfileEdit = React.createClass({
           <button className="button" onClick={this.resend} style={{display: this.state.is_verified?  'none':'block' }}>Resend Email Verification</button>
           <button className="button secondary" onClick={this.backToDashboard}>Back to Dashboard</button>
         </div>
-        <webview className='widget350' src='chrome://gpu'></webview>
       </div>
 
     );
