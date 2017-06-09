@@ -92,7 +92,7 @@ global.sharedObject = {
   layout:null,
   avatar:null,
   data:null,
-  gpuHTML:null,
+  gpuHTML:{},
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -137,7 +137,14 @@ let createWindow = () => {
     console.log("GPU")
     //shell.exec('wmic path win32_VideoController get name', {async:true})
     shell.exec('wmic path win32_VideoController get name', {async:true}, function(code, stdout, stderr) {
-      global.sharedObject = {gpuHTML: stdout};
+      var rawgpu = stdout.substring(5).split(/\n/)
+      var i = 1;
+      var gpu = new Array();
+      for (i = 1; i < rawgpu.length-2; i++) {
+        gpu.push(rawgpu[i]);
+      }
+
+      global.sharedObject = {gpuHTML: gpu};
 
     });
 
