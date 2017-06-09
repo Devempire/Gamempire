@@ -94,6 +94,7 @@ global.sharedObject = {
   data:null,
   gpuHTML:null,
   viewProfileID:null,
+  harddrives:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -136,7 +137,7 @@ let createWindow = () => {
     console.log("System          : " + os.platform());
     console.log("")
     console.log("")
-    console.log("GPU")
+    console.log("HARDWARE")
     console.log("________________________________________")
     //shell.exec('wmic path win32_VideoController get name', {async:true})
     shell.exec('wmic path win32_VideoController get name', {async:true, silent:true}, function(code, stdout, stderr) {
@@ -145,14 +146,31 @@ let createWindow = () => {
       var gpu = new Array();
       for (i = 1; i < rawgpu.length-2; i++) {
         gpu.push(rawgpu[i].trim());
-        console.log(rawgpu[i].trim());
+    console.log('GPU             : '+rawgpu[i].trim());
       }
-      console.log("")
-      console.log("")
       global.sharedObject.gpuHTML = gpu;
+      console.log("")
+      console.log("")
     //  global.sharedObject = {gpuHTML: gpu};
 
     });
+
+    shell.exec('wmic diskdrive get Model', {async:true, silent:true}, function(code, stdout, stderr) {
+      var hard = stdout.substring(6).split(/\n/)
+      var i = 1;
+      var harddr = new Array();
+      for (i = 1; i < hard.length-2; i++) {
+        harddr.push(hard[i].trim());
+    console.log('Hard Drive      : '+hard[i].trim());
+      }
+      global.sharedObject.harddrives = harddr;
+    //  global.sharedObject = {gpuHTML: gpu};
+
+    });
+
+
+
+
 
     // Open the DevTools.
     if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.

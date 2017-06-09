@@ -166,7 +166,7 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   componentDidMount: function(){
-    setTimeout( execute, 270 );
+    setTimeout( execute, 500 );
     function execute(){
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
       var option='';
@@ -176,6 +176,19 @@ module.exports = global.ProfileEdit = React.createClass({
       }
       var gpus = '<select id="gpusel">'+option+'</select>';
       document.getElementById('gpudiv').innerHTML = gpus;
+
+
+
+      var hdrives = electron.remote.getGlobal('sharedObject').harddrives;
+      var options='';
+      var j =0;
+      for (j = 0; j < hdrives.length; j++) {
+      var options = options+'<option value="'+hdrives[j]+'">'+hdrives[j]+'</option>';
+      }
+      var hardd = '<select id="hardsel">'+options+'</select>';
+      document.getElementById('harddiv').innerHTML = hardd;
+
+
     }
   },
 
@@ -511,9 +524,8 @@ module.exports = global.ProfileEdit = React.createClass({
             GPU: <br/>
             <div id="gpudiv">Loading GPU...</div><br/>
 
-
             Hard Drive: <br/>
-            <label>hd</label>
+            <div id="harddiv">Loading Hard Drives...</div><br/>
 
             Keyboard: <br/>
             <label>kb</label>
@@ -553,7 +565,7 @@ module.exports = global.ProfileEdit = React.createClass({
     var cpu = ipc.sendSync('hostStats')[3][0].model;
     console.log($("#gpusel").val())
     var gpu = $("#gpusel").val()
-    var harddrive = 'hd';
+    var harddrive = $("#hardsel").val();
     var keyboard = 'keyboard';
     var mouse = 'mouse';
 
