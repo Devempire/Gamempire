@@ -166,7 +166,7 @@ module.exports = global.ProfileEdit = React.createClass({
   },
 
   componentDidMount: function(){
-    setTimeout( execute, 5000 );
+    setTimeout( execute, 270 );
     function execute(){
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
       var option='';
