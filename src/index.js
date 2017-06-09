@@ -93,6 +93,7 @@ global.sharedObject = {
   avatar:null,
   data:null,
   gpuHTML:null,
+  viewProfileID:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -148,7 +149,8 @@ let createWindow = () => {
       }
       console.log("")
       console.log("")
-      global.sharedObject = {gpuHTML: gpu};
+      global.sharedObject.gpuHTML = gpu;
+    //  global.sharedObject = {gpuHTML: gpu};
 
     });
 
