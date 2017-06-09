@@ -133,22 +133,24 @@ let createWindow = () => {
     console.log("V8 version      : " + process.versions.v8)
     console.log("Modules         : " + process.versions.modules)
     console.log("System          : " + os.platform());
-    console.log("________________________________________")
+    console.log("")
+    console.log("")
     console.log("GPU")
+    console.log("________________________________________")
     //shell.exec('wmic path win32_VideoController get name', {async:true})
-    shell.exec('wmic path win32_VideoController get name', {async:true}, function(code, stdout, stderr) {
+    shell.exec('wmic path win32_VideoController get name', {async:true, silent:true}, function(code, stdout, stderr) {
       var rawgpu = stdout.substring(5).split(/\n/)
       var i = 1;
       var gpu = new Array();
       for (i = 1; i < rawgpu.length-2; i++) {
-        gpu.push(rawgpu[i]);
+        gpu.push(rawgpu[i].trim());
+        console.log(rawgpu[i].trim());
       }
-
+      console.log("")
+      console.log("")
       global.sharedObject = {gpuHTML: gpu};
 
     });
-
-    console.log("")
 
     // Open the DevTools.
     if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.
