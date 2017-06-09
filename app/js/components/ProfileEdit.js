@@ -165,6 +165,21 @@ module.exports = global.ProfileEdit = React.createClass({
     global.rotate = 0;
   },
 
+  componentDidMount: function(){
+    setTimeout( execute, 5000 );
+    function execute(){
+      var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
+      var option='';
+      var i =0;
+      for (i = 0; i < gpus.length; i++) {
+      var option = option+'<option value="'+gpus[i]+'">'+gpus[i]+'</option>';
+      }
+      var gpus = '<select id="gpusel">'+option+'</select>';
+      document.getElementById('gpudiv').innerHTML = gpus;
+    }
+  },
+
+
   setWindowsColours(){
     var primaryElements = [
         ".button",
@@ -494,7 +509,8 @@ module.exports = global.ProfileEdit = React.createClass({
             <label>{ipc.sendSync('hostStats')[3][0].model}</label>
 
             GPU: <br/>
-            <label>{gpuReport().unMaskedRenderer}</label>
+            <div id="gpudiv">Loading GPU...</div><br/>
+
 
             Hard Drive: <br/>
             <label>hd</label>
@@ -535,7 +551,8 @@ module.exports = global.ProfileEdit = React.createClass({
 
   saveCompSpecs() {
     var cpu = ipc.sendSync('hostStats')[3][0].model;
-    var gpu = gpuReport().unMaskedRenderer;
+    console.log($("#gpusel").val())
+    var gpu = $("#gpusel").val()
     var harddrive = 'hd';
     var keyboard = 'keyboard';
     var mouse = 'mouse';

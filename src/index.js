@@ -92,7 +92,7 @@ global.sharedObject = {
   layout:null,
   avatar:null,
   data:null,
-  gpuHTML:{},
+  gpuHTML:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will
