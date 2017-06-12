@@ -331,7 +331,7 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
   </div>
   <div className="media-object-section">
     <h3>{this.state.result.user}</h3>
-    <p><span className="label" onClick={this.addfriend}><i className="fi-plus"></i> Add <b>{this.state.result.user}</b></span></p>
+    <p><span className="label" onClick={this.addfriend}><b aria-hidden="true">+</b> Add <b>{this.state.result.user}</b></span></p>
   </div>
 </div>
 </p>}</p>

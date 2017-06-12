@@ -154,7 +154,8 @@ body,
 
 #content {
     transition: 0.5s;
-    padding-left: 20px;
+    padding-left: 30px;
+    padding-right: 16px;
 }
 
 #main_content {
@@ -427,7 +428,7 @@ hr {
 
 #content.navOpen {
     padding-left: 25px;
-    padding-right: 8px;
+    padding-right: 25px;
     transform: translateX(202px);
     width: calc(100% - 192px);
 }
