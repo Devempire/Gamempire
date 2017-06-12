@@ -237,7 +237,7 @@ hr {
     -webkit-app-region: drag;
     user-select: none;
     height: 25px;
-    background: $secondary-color;
+    background: lighten($secondary-color, 15%);
     position: fixed;
     top: 0;
     left: 0;
@@ -472,7 +472,7 @@ hr {
 }
 
 .toggleNav:hover {
-    background-color: darken( $primary-color, 25%);
+    background-color: $primary-color;
 }
 
 .toggleNav:after {

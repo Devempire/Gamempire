@@ -191,7 +191,60 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
             username:name
         }).done((res)=>{
       this.setState({result:res});
-      document.getElementById('search_results').style.display = "block";
+if(res.msg =="No results found."){
+  console.log("no results found.")
+  ReactDOM.render(
+  <div className="row expanded">
+    <p>Results for <b><i>{this.state.username}</i></b> not found.</p><br/>
+  </div>,
+  document.getElementById('search_results')
+  );
+  document.getElementById('search_results').style.display = "block";
+}else{
+
+var isFriend = null;
+for (var i = 0; i < this.state.friends.length; i++) {
+
+  if (this.state.friends[i].username === this.state.username){
+
+    if (this.state.friends[i].online == 'online'){
+      var status = (<span className="success round label">Online</span>);
+    }else if (this.state.friends[i].online == 'offline'){
+      var status = (<span className="alert round label">Offline</span>);
+    }
+    isFriend = true;
+    break;
+  }else{
+    isFriend = null;
+  }
+}
+
+
+
+ReactDOM.render(
+<div className="row expanded">
+  <p>Showing results for <b><i>{this.state.username}</i></b>.</p><br/>
+  <div className="media-object stack-for-small small-12 columns expanded" id="populateResults">
+    <div key={Math.random().toString(36).substr(2, 5)}>
+      <div className="media-object-section">
+        <div id="userAvatar">
+          {this.state.result.avatar ? <img src={api_server+'/img/avatars/'+this.state.result._id+'.jpg?' + new Date().getTime()} /> : <img src='./../app/img/user.jpg' /> }
+        </div>
+      </div>
+      <div className="media-object-section">
+        <h3>{this.state.result.user}</h3>
+        <p>{isFriend ? 'Friends since TODO GET FRIENDS SINCE DATE' : <p><span className="label" onClick={this.addfriend}><b aria-hidden="true">+</b> Add <b>{this.state.result.user}</b></span></p> }</p>
+        <p>{status ? status : ''}</p>
+      </div>
+    </div>
+    <button title="Clear search" className="close-button" type="button" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
+  </div>
+</div>,
+document.getElementById('search_results')
+);
+
+document.getElementById('search_results').style.display = "block";
+}
     });
 
   }
@@ -319,33 +372,14 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
             </ul>
           </div>
           <br/>
-          <div className="callout" id="search_results" data-closable>
-            <div className="row expanded">
-              <p>{this.state.result.msg ? <p>Results for <b><i>{this.state.username}</i></b> not found.</p> :
-              <p>Showing results for <b><i>{this.state.username}</i></b>.<br/>
-<div className="media-object stack-for-small small-12 columns expanded" id="populateResults">
-  <div className="media-object-section">
-    <div id="userAvatar">
-      {this.state.result.avatar ? <img src={api_server+'/img/avatars/'+this.state.result._id+'.jpg?' + new Date().getTime()} /> : <img src='./../app/img/user.jpg' /> }
-    </div>
-  </div>
-  <div className="media-object-section">
-    <h3>{this.state.result.user}</h3>
-    <p><span className="label" onClick={this.addfriend}><b aria-hidden="true">+</b> Add <b>{this.state.result.user}</b></span></p>
-  </div>
-</div>
-</p>}</p>
-
-
-
-              <button title="Clear search" className="close-button" type="button" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
-            </div>
+          <div className="callout" id="search_results">
           </div>
 
           <div key={"1"} id="targat">Loading friends...</div>
         </div>
       );
   },
+
   usernameSearch(e) {
      if (e.key == 'Enter') {
        var usr = $("#usernameSearch").val();
