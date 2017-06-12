@@ -111,6 +111,7 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
   },
 
   componentDidMount: function(){
+    document.getElementById('search_results').style.display = "none";
     //this.setWindowsColours();
   },
 
@@ -175,20 +176,29 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
 
   username(event){
     this.setState({username:event.target.value});
+    document.getElementById('search_results').style.display = "none";
   },
 
   search(){
+    var usr = $("#usernameSearch").val();
+    if (usr == "" || usr == null){
+      $("#usernameSearch").focus();
+    }else{
+
     var name =this.state.username;
     $.post(api_server+"/friend/info",
     {
             username:name
         }).done((res)=>{
       this.setState({result:res});
+      document.getElementById('search_results').style.display = "block";
     });
+
+  }
   },
 
   addfriend(){
-    if(this.state.result.msg =="no result found !"){
+    if(this.state.result.msg =="No results found."){
       return ;
     }else{
     var id =electron.remote.getGlobal('sharedObject').id;
@@ -299,14 +309,69 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
 
       return (
         <div>
-          <div>
-            <input type="text" placeholder=" enter username here" onChange={this.username}/>
-            <button className="button" onClick={this.search} >Search</button>
-            <p>{this.state.result.msg ? this.state.result.msg :<a onClick={this.addfriend}>{this.state.result.user}</a>}</p>
+        <br/><br/>
+          <div className="row search_input">
+            <ul className="menu">
+              <li><h4>Search friends</h4></li>
+              <li>   </li>
+              <li><input type="search" id="usernameSearch" placeholder="Search by username" onChange={this.username} onKeyPress={this.usernameSearch.bind(this)}/></li>
+              <li><button type="button" id="usernameSearchbtn" className="button" onClick={this.search}>Search</button></li>
+            </ul>
+          </div>
+          <br/>
+          <div className="callout" id="search_results" data-closable>
+            <div className="row expanded">
+              <p>{this.state.result.msg ? <p>Results for <b><i>{this.state.username}</i></b> not found.</p> :
+              <p>Showing results for <b><i>{this.state.username}</i></b>.<br/>
+<div className="media-object stack-for-small small-12 columns expanded" id="populateResults">
+  <div className="media-object-section">
+    <div id="userAvatar">
+      {this.state.result.avatar ? <img src={api_server+'/img/avatars/'+this.state.result._id+'.jpg?' + new Date().getTime()} /> : <img src='./../app/img/user.jpg' /> }
+    </div>
+  </div>
+  <div className="media-object-section">
+    <h3>{this.state.result.user}</h3>
+    <p><span className="label" onClick={this.addfriend}><i className="fi-plus"></i> Add <b>{this.state.result.user}</b></span></p>
+  </div>
+</div>
+</p>}</p>
+
+
+
+              <button title="Clear search" className="close-button" type="button" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
+            </div>
           </div>
 
           <div key={"1"} id="targat">Loading friends...</div>
         </div>
       );
+  },
+  usernameSearch(e) {
+     if (e.key == 'Enter') {
+       var usr = $("#usernameSearch").val();
+       if (usr == "" || usr == null){
+         $("#usernameSearch").focus();
+       }else{
+
+         $('#usernameSearchbtn').click();
+       }
+     }
+  },
+
+  clearSearch(e){
+    document.getElementById('search_results').style.display = "none";
+    document.getElementById('usernameSearch').value = null;
+
+  },
+
+  populateResults(){
+    return (
+      <div>
+        <a onClick={this.addfriend}>Add <b>{this.state.result.user}</b> to friends list</a>
+      </div>
+    );
   }
+
+
+
 });

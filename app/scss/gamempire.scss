@@ -1464,3 +1464,18 @@ h5:hover {
     -o-user-drag: none;
     user-drag: none;
 }
+
+#search_results {
+  background: lighten($background-color, 8%);
+}
+
+.close-button:focus
+{
+    outline: none !important;
+}
+
+#populateResults{
+  background: $background-color;
+  padding: 15px;
+  border-radius: 10px;
+}
