@@ -437,7 +437,7 @@ hr {
     padding-left: 35px;
     padding-right: 8px;
     transform: translateX(192px);
-    width: calc(100% - 202px);
+    width: calc(100% - 192px);
 }
 
 #profileedit.navOpen {
@@ -926,14 +926,13 @@ label {
 /* Let's get this party started */
 
 ::-webkit-scrollbar {
-    width: 9px;
+    width: 12px;
 }
 
 
 /* Track */
 
 ::-webkit-scrollbar-track {
-    -webkit-box-shadow: none;
     -webkit-border-radius: 10px;
     border-radius: 10px;
 }
