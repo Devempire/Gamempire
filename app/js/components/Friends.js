@@ -79,7 +79,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
    }
   if (this.state.friends[i].status == "pending") {
 
-    allUsers.push(<p><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns">
+    allUsers.push(<p><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
     <h2 className="noselect">{username}</h2>
     <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
     <b className="noselect">{status}</b><br/>
@@ -90,7 +90,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
     </div><hr className="row expanded"/></p>
     );
   }else{
-    allUsers.push(<p><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns">
+    allUsers.push(<p><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
       <h2 className="noselect">{username}</h2>
       <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
       <b className="noselect">{status}</b><br/>
@@ -380,7 +380,7 @@ document.getElementById('search_results').style.display = "block";
             </ul>
           </div>
           <br/>
-          <div className="callout" id="search_results">
+          <div className="callout noselect" id="search_results">
           </div>
           <h4 className="noselect">Friends list</h4>
           <div key={"1"} id="targat">Loading friends...</div>
