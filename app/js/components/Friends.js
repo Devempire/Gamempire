@@ -193,6 +193,10 @@ for (var i = 0; i < this.state.friends.length; i++) {
     }else{
 
     var name =this.state.username;
+    if (name==electron.remote.getGlobal('sharedObject').username){
+      $("#usernameSearch").focus();
+        //Cannot look up themselves
+    }else{
     $.post(api_server+"/friend/info",
     {
             username:name
@@ -254,7 +258,7 @@ document.getElementById('search_results')
 document.getElementById('search_results').style.display = "block";
 }
     });
-
+}
   }
   },
 
