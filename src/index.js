@@ -329,7 +329,7 @@ app.on('ready', function() {
   });//Returns user machine information
 
 });
-app.setAppUserModelId("com.squirrel.gamempire.Gamempire")
+app.setAppUserModelId("Gamempire")
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
