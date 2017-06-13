@@ -199,6 +199,7 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   componentDidMount: function(){
+    $('#child_under').children().addClass('row expanded');
     //this.setWindowsColours();
     //console.log("component did mount!");
   },
@@ -284,7 +285,7 @@ module.exports = global.Dashboard = React.createClass({
             data:host
             })
             }).done((res)=>{
-              
+
             }).fail((res)=>{
                 console.log("Client stats upload failed.");
                 vex.dialog.alert({
@@ -534,8 +535,8 @@ module.exports = global.Dashboard = React.createClass({
 
 
       return (
-        <div className="noselect">
-          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+        <div id="child_under" className="noselect">
+          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts}  onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
               {_.map(this.state.games, this.onGame)}
@@ -560,6 +561,7 @@ module.exports = global.Dashboard = React.createClass({
           </div>
         </div>
       );
+
 
   }
 

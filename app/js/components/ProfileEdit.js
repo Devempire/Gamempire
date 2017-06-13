@@ -7,7 +7,6 @@ import AvatarEditor from 'react-avatar-editor'
 var vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
-const gpuReport = require("gl-info");
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
