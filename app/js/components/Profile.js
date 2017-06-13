@@ -45,8 +45,8 @@ module.exports = global.Profile = React.createClass({
         this.setState({cpu:res.comp_specs.cpu});
         this.setState({gpu:res.comp_specs.gpu});
         this.setState({harddrive:res.comp_specs.harddrive});
-        this.setState({keyboard:res.comp_specs.keyboard});
-        this.setState({mouse:res.comp_specs.mouse});
+        this.setState({ram:res.comp_specs.ram});
+        this.setState({monitor:res.comp_specs.monitor});
       }
 
       this.setState({
@@ -96,10 +96,10 @@ module.exports = global.Profile = React.createClass({
       <h6>{this.state.gpu}</h6>
       Hard Drive:
       <h6>{this.state.harddrive}</h6>
-      Keyboard:
-      <h6>{this.state.keyboard}</h6>
-      Mouse:
-      <h6>{this.state.mouse}</h6>
+      RAM:
+      <h6>{this.state.ram}</h6>
+      Monitor:
+      <h6>{this.state.monitor}</h6>
      	</div>
      	)
   },

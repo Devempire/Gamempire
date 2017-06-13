@@ -142,35 +142,70 @@ let createWindow = () => {
     //shell.exec('wmic path win32_VideoController get name', {async:true})
     shell.exec('wmic path win32_VideoController get name', {async:true, silent:true}, function(code, stdout, stderr) {
       var rawgpu = stdout.substring(5).split(/\n/)
-      var i = 1;
       var gpu = new Array();
-      for (i = 1; i < rawgpu.length-2; i++) {
+      for (var i = 1; i < rawgpu.length-2; i++) {
         gpu.push(rawgpu[i].trim());
-    console.log('GPU             : '+rawgpu[i].trim());
+        console.log('GPU             : '+rawgpu[i].trim());
       }
       global.sharedObject.gpuHTML = gpu;
-      console.log("")
-      console.log("")
-    //  global.sharedObject = {gpuHTML: gpu};
-
     });
 
     shell.exec('wmic diskdrive get Model', {async:true, silent:true}, function(code, stdout, stderr) {
       var hard = stdout.substring(6).split(/\n/)
-      var i = 1;
       var harddr = new Array();
-      for (i = 1; i < hard.length-2; i++) {
+      for (var i = 1; i < hard.length-2; i++) {
         harddr.push(hard[i].trim());
-    console.log('Hard Drive      : '+hard[i].trim());
+        console.log('Hard Drive      : '+hard[i].trim());
       }
       global.sharedObject.harddrives = harddr;
-    //  global.sharedObject = {gpuHTML: gpu};
-
     });
 
+    shell.exec('wmic ComputerSystem get TotalPhysicalMemory', {async:true, silent:true}, function(code, stdout, stderr) {
+      var ram = stdout.split(/\n/)
+      var new_ram = new Array();
+      for (var i = 1; i < ram.length-2; i++) {
+        new_ram.push(ram[i].trim());
+        console.log('RAM             : '+ram[i].trim());
+      }
+      global.sharedObject.ram = new_ram;
+    });
 
+    shell.exec('wmic path win32_desktopmonitor get monitormanufacturer', {async:true, silent:true}, function(code, stdout, stderr) {
+      var moni_manufac = stdout.split(/\n/)
+      var new_moni_manufac = new Array();
+      for (var i = 1; i < moni_manufac.length-2; i++) {
+        new_moni_manufac.push(moni_manufac[i].trim());
+        console.log('Monitor Manufacturer             : '+moni_manufac[i].trim());
+      }
+      global.sharedObject.moni_manufac = new_moni_manufac;
+    });
 
+    shell.exec('wmic path win32_VideoController get currentrefreshrate', {async:true, silent:true}, function(code, stdout, stderr) {
+      var refresh_rate = stdout.split(/\n/)
+      var new_refresh_rate = new Array();
+      for (var i = 1; i < refresh_rate.length-2; i++) {
+        new_refresh_rate.push(refresh_rate[i].trim());
+      }
+      global.sharedObject.refresh_rate = new_refresh_rate;
+    });
 
+    shell.exec('wmic path win32_VideoController get currenthorizontalresolution', {async:true, silent:true}, function(code, stdout, stderr) {
+      var horizontal = stdout.split(/\n/)
+      var new_horizontal = new Array();
+      for (var i = 1; i < horizontal.length-2; i++) {
+        new_horizontal.push(horizontal[i].trim());
+      }
+      global.sharedObject.horizontal = new_horizontal;
+    });
+
+    shell.exec('wmic path win32_VideoController get currentverticalresolution', {async:true, silent:true}, function(code, stdout, stderr) {
+      var vertical = stdout.split(/\n/)
+      var new_vertical = new Array();
+      for (var i = 1; i < vertical.length-2; i++) {
+        new_vertical.push(vertical[i].trim());
+      }
+      global.sharedObject.vertical = new_vertical;
+    });
 
     // Open the DevTools.
     if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.

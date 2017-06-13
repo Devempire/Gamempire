@@ -170,25 +170,28 @@ module.exports = global.ProfileEdit = React.createClass({
     function execute(){
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
       var option='';
-      var i =0;
+      var i = 0;
       for (i = 0; i < gpus.length; i++) {
-      var option = option+'<option value="'+gpus[i]+'">'+gpus[i]+'</option>';
+        var option = option+'<option value="'+gpus[i]+'">'+gpus[i]+'</option>';
       }
       var gpus = '<select id="gpusel">'+option+'</select>';
       document.getElementById('gpudiv').innerHTML = gpus;
 
-
-
       var hdrives = electron.remote.getGlobal('sharedObject').harddrives;
       var options='';
-      var j =0;
+      var j = 0;
       for (j = 0; j < hdrives.length; j++) {
-      var options = options+'<option value="'+hdrives[j]+'">'+hdrives[j]+'</option>';
+        var options = options+'<option value="'+hdrives[j]+'">'+hdrives[j]+'</option>';
       }
       var hardd = '<select id="hardsel">'+options+'</select>';
       document.getElementById('harddiv').innerHTML = hardd;
 
+      document.getElementById('ramdiv').innerHTML = Math.floor((electron.remote.getGlobal('sharedObject').ram)/1000000000) + 'GB';
 
+      document.getElementById('monitordiv').innerHTML = electron.remote.getGlobal('sharedObject').moni_manufac + ' '
+      + electron.remote.getGlobal('sharedObject').horizontal 
+      + 'x' + electron.remote.getGlobal('sharedObject').vertical + '@' 
+      + electron.remote.getGlobal('sharedObject').refresh_rate + 'hz'
     }
   },
 
@@ -527,11 +530,11 @@ module.exports = global.ProfileEdit = React.createClass({
             Hard Drive: <br/>
             <div id="harddiv">Loading Hard Drives...</div><br/>
 
-            Keyboard: <br/>
-            <label>kb</label>
+            RAM: <br/>
+            <div id="ramdiv">Loading RAM...</div><br/>
 
-            Mouse: <br/>
-            <label>mouse</label>
+            Monitor: <br/>
+            <div id="monitordiv">Loading Monitor...</div><br/>
         </form>
 
         <div className="row expanded button-group">
@@ -563,11 +566,11 @@ module.exports = global.ProfileEdit = React.createClass({
 
   saveCompSpecs() {
     var cpu = ipc.sendSync('hostStats')[3][0].model;
-    console.log($("#gpusel").val())
+    //console.log($("#gpusel").val())
     var gpu = $("#gpusel").val()
     var harddrive = $("#hardsel").val();
-    var keyboard = 'keyboard';
-    var mouse = 'mouse';
+    var ram = $("#ramdiv")[0].innerHTML;
+    var monitor = $("#monitordiv")[0].innerHTML;
 
     var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/login/load",
@@ -582,8 +585,8 @@ module.exports = global.ProfileEdit = React.createClass({
                        cpu:cpu,
                        gpu:gpu,
                        harddrive:harddrive,
-                       keyboard:keyboard,
-                       mouse:mouse
+                       ram:ram,
+                       monitor:monitor
                    }
                }).done((res)=>{
                    console.log("comp specs is updated");
