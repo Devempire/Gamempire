@@ -175,7 +175,7 @@ let createWindow = () => {
       var new_moni_manufac = new Array();
       for (var i = 1; i < moni_manufac.length-2; i++) {
         new_moni_manufac.push(moni_manufac[i].trim());
-        console.log('Monitor Manufacturer             : '+moni_manufac[i].trim());
+        console.log('Monitor Manufacturer: '+moni_manufac[i].trim());
       }
       global.sharedObject.moni_manufac = new_moni_manufac;
     });

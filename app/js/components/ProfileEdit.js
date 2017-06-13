@@ -169,8 +169,7 @@ module.exports = global.ProfileEdit = React.createClass({
     function execute(){
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
       var option='';
-      var i = 0;
-      for (i = 0; i < gpus.length; i++) {
+      for (var i = 0; i < gpus.length; i++) {
         var option = option+'<option value="'+gpus[i]+'">'+gpus[i]+'</option>';
       }
       var gpus = '<select id="gpusel">'+option+'</select>';
@@ -178,8 +177,7 @@ module.exports = global.ProfileEdit = React.createClass({
 
       var hdrives = electron.remote.getGlobal('sharedObject').harddrives;
       var options='';
-      var j = 0;
-      for (j = 0; j < hdrives.length; j++) {
+      for (var j = 0; j < hdrives.length; j++) {
         var options = options+'<option value="'+hdrives[j]+'">'+hdrives[j]+'</option>';
       }
       var hardd = '<select id="hardsel">'+options+'</select>';
