@@ -180,12 +180,11 @@ let createWindow = () => {
       var moni_manufac = stdout.split(/\n/);
       var new_moni_manufac = new Array();
       for (var i = 1; i < moni_manufac.length-2; i++) {
-        var moni_man = moni_manufac[i].trim();
-          var wasted_live_borys_bug_fix_attemp= (99999999999999999*99999999999999999);
-          if (moni_man.length==0){
-            var defaulmon = 'Undefined';
+        console.log('here' + moni_manufac[i].trim() + 'Go');
+          if (moni_manufac[i].trim().length < 1){
+            var defaulmon = 'Unidentified';
           }else{
-            var defaulmon = moni_man.replace('(Standard monitor types)', 'Undefined');
+            var defaulmon = moni_manufac[i].trim().replace('(Standard monitor types)', 'Unidentified');
           }
           new_moni_manufac.push(defaulmon);
       }
