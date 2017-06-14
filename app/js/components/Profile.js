@@ -42,8 +42,8 @@ module.exports = global.Profile = React.createClass({
       }
 
       if (res.privacy.compspecs == false || res.privacy.compspecs == "false") {
-        this.setState({cpu:res.comp_specs.cpu.replace("(TM)","™" ).replace("(R)","®" )});
-        this.setState({gpu:res.comp_specs.gpu});
+        this.setState({cpu:res.comp_specs.cpu.replace("(TM)","™" ).replace("(R)"," ®" )});
+        this.setState({gpu:res.comp_specs.gpu.replace("(TM)","™" ).replace("(R)"," ®" )});
         this.setState({harddrive:res.comp_specs.harddrive});
         this.setState({ram:res.comp_specs.ram});
         this.setState({monitor:res.comp_specs.monitor});

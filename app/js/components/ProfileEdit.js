@@ -170,7 +170,7 @@ module.exports = global.ProfileEdit = React.createClass({
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
       var option='';
       for (var i = 0; i < gpus.length; i++) {
-        var option = option+'<option value="'+gpus[i]+'">'+gpus[i]+'</option>';
+        var option = option+'<option value="'+gpus[i]+'">'+gpus[i].replace("(TM)","™" ).replace("(R)"," ®" )+'</option>';
       }
       var gpus = '<select id="gpusel">'+option+'</select>';
       document.getElementById('gpudiv').innerHTML = gpus;
@@ -186,8 +186,8 @@ module.exports = global.ProfileEdit = React.createClass({
       document.getElementById('ramdiv').innerHTML = Math.floor((electron.remote.getGlobal('sharedObject').ram)/1000000000) + 'GB';
 
       document.getElementById('monitordiv').innerHTML = electron.remote.getGlobal('sharedObject').moni_manufac + ' '
-      + electron.remote.getGlobal('sharedObject').horizontal 
-      + 'x' + electron.remote.getGlobal('sharedObject').vertical + '@' 
+      + electron.remote.getGlobal('sharedObject').horizontal
+      + 'x' + electron.remote.getGlobal('sharedObject').vertical + '@'
       + electron.remote.getGlobal('sharedObject').refresh_rate + 'hz'
     }
   },
@@ -519,7 +519,7 @@ module.exports = global.ProfileEdit = React.createClass({
             </div>
 
             CPU: <br/>
-            <label>{ipc.sendSync('hostStats')[3][0].model}</label>
+            <label>{ipc.sendSync('hostStats')[3][0].model.replace("(TM)","™" ).replace("(R)"," ®" )}</label>
 
             GPU: <br/>
             <div id="gpudiv">Loading GPU...</div><br/>
