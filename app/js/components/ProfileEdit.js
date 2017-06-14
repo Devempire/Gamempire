@@ -168,6 +168,7 @@ module.exports = global.ProfileEdit = React.createClass({
     setTimeout( execute, 500 );
     function execute(){
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
+      var ram = Math.ceil(((electron.remote.getGlobal('sharedObject').ram/1024)/1024)/1024)
       var option='';
       for (var i = 0; i < gpus.length; i++) {
         var option = option+'<option value="'+gpus[i]+'">'+gpus[i].replace("(TM)","™" ).replace("(R)"," ®" )+'</option>';
@@ -183,7 +184,7 @@ module.exports = global.ProfileEdit = React.createClass({
       var hardd = '<select id="hardsel">'+options+'</select>';
       document.getElementById('harddiv').innerHTML = hardd;
 
-      document.getElementById('ramdiv').innerHTML = Math.floor((electron.remote.getGlobal('sharedObject').ram)/1000000000) + 'GB';
+      document.getElementById('ramdiv').innerHTML = ram+ 'GB';
 
       document.getElementById('monitordiv').innerHTML = electron.remote.getGlobal('sharedObject').moni_manufac + ' '
       + electron.remote.getGlobal('sharedObject').horizontal

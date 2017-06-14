@@ -165,7 +165,8 @@ let createWindow = () => {
       var new_ram = new Array();
       for (var i = 1; i < ram.length-2; i++) {
         new_ram.push(ram[i].trim());
-        console.log('RAM             : '+ram[i].trim());
+        var ramS = Math.ceil(((ram[i].trim()/1024)/1024)/1024)
+        console.log('RAM             : '+Math.ceil(((ram[i].trim()/1024)/1024)/1024)+' GB');
       }
       global.sharedObject.ram = new_ram;
     });
