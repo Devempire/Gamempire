@@ -71,7 +71,7 @@ module.exports = global.Profile = React.createClass({
   },
 
   render() {
-  	var title = this.state.username+" Profile\u2014 Gamempire"
+  	var title = this.state.username+" Profile \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
 

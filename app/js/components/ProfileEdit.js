@@ -168,7 +168,6 @@ module.exports = global.ProfileEdit = React.createClass({
     setTimeout( execute, 500 );
     function execute(){
       var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
-      var ram = Math.ceil(((electron.remote.getGlobal('sharedObject').ram/1024)/1024)/1024)
       var option='';
       for (var i = 0; i < gpus.length; i++) {
         var option = option+'<option value="'+gpus[i]+'">'+gpus[i].replace("(TM)","™" ).replace("(R)"," ®" )+'</option>';
@@ -184,12 +183,18 @@ module.exports = global.ProfileEdit = React.createClass({
       var hardd = '<select id="hardsel">'+options+'</select>';
       document.getElementById('harddiv').innerHTML = hardd;
 
-      document.getElementById('ramdiv').innerHTML = ram+ 'GB';
+      var ram = electron.remote.getGlobal('sharedObject').ram
+      document.getElementById('ramdiv').innerHTML = ram;
 
-      document.getElementById('monitordiv').innerHTML = electron.remote.getGlobal('sharedObject').moni_manufac + ' '
-      + electron.remote.getGlobal('sharedObject').horizontal
-      + 'x' + electron.remote.getGlobal('sharedObject').vertical + '@'
-      + electron.remote.getGlobal('sharedObject').refresh_rate + 'hz'
+      var monitors = electron.remote.getGlobal('sharedObject').resolution;
+      var options='';
+      for (var k = 0; k < monitors.length; k++) {
+        var displydetails = electron.remote.getGlobal('sharedObject').moni_manufac[k] + ' @ ' + electron.remote.getGlobal('sharedObject').resolution[k] + ' @ ' + electron.remote.getGlobal('sharedObject').refresh_rate[k] +' Hz'
+        var options = options+'<option value="'+displydetails+'">'+displydetails+'</option>';
+      }
+      var display = '<select id="displaysel">'+options+'</select>';
+      document.getElementById('monitordiv').innerHTML = display;
+
     }
   },
 
@@ -568,7 +573,7 @@ module.exports = global.ProfileEdit = React.createClass({
     var gpu = $("#gpusel").val()
     var harddrive = $("#hardsel").val();
     var ram = $("#ramdiv")[0].innerHTML;
-    var monitor = $("#monitordiv")[0].innerHTML;
+    var monitor = $("#displaysel").val();
 
     var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/login/load",

@@ -139,7 +139,8 @@ let createWindow = () => {
     console.log("")
     console.log("HARDWARE")
     console.log("________________________________________")
-    //shell.exec('wmic path win32_VideoController get name', {async:true})
+
+    //Get GPU info
     shell.exec('wmic path win32_VideoController get name', {async:true, silent:true}, function(code, stdout, stderr) {
       var rawgpu = stdout.substring(5).split(/\n/)
       var gpu = new Array();
@@ -150,6 +151,7 @@ let createWindow = () => {
       global.sharedObject.gpuHTML = gpu;
     });
 
+    //Get Hard Drive(s)
     shell.exec('wmic diskdrive get Model', {async:true, silent:true}, function(code, stdout, stderr) {
       var hard = stdout.substring(6).split(/\n/)
       var harddr = new Array();
@@ -160,27 +162,37 @@ let createWindow = () => {
       global.sharedObject.harddrives = harddr;
     });
 
+    //Get total RAM
     shell.exec('wmic ComputerSystem get TotalPhysicalMemory', {async:true, silent:true}, function(code, stdout, stderr) {
       var ram = stdout.split(/\n/)
       var new_ram = new Array();
       for (var i = 1; i < ram.length-2; i++) {
-        new_ram.push(ram[i].trim());
-        var ramS = Math.ceil(((ram[i].trim()/1024)/1024)/1024)
-        console.log('RAM             : '+Math.ceil(((ram[i].trim()/1024)/1024)/1024)+' GB');
+
+        var ramGB = Math.ceil(((ram[i].trim()/1024)/1024)/1024)+' GB';
+        new_ram.push(ramGB);
+        console.log('RAM             : '+ramGB);
       }
       global.sharedObject.ram = new_ram;
     });
 
+    //Get monitor(s) model(s)/name(s)
     shell.exec('wmic path win32_desktopmonitor get monitormanufacturer', {async:true, silent:true}, function(code, stdout, stderr) {
-      var moni_manufac = stdout.split(/\n/)
+      var moni_manufac = stdout.split(/\n/);
       var new_moni_manufac = new Array();
       for (var i = 1; i < moni_manufac.length-2; i++) {
-        new_moni_manufac.push(moni_manufac[i].trim());
-        console.log('Monitor Manufacturer: '+moni_manufac[i].trim());
+        var moni_man = moni_manufac[i].trim();
+          var wasted_live_borys_bug_fix_attemp= (99999999999999999*99999999999999999);
+          if (moni_man.length==0){
+            var defaulmon = 'Undefined';
+          }else{
+            var defaulmon = moni_man.replace('(Standard monitor types)', 'Undefined');
+          }
+          new_moni_manufac.push(defaulmon);
       }
       global.sharedObject.moni_manufac = new_moni_manufac;
     });
 
+    //Get monitor(s) refresh rate(s)
     shell.exec('wmic path win32_VideoController get currentrefreshrate', {async:true, silent:true}, function(code, stdout, stderr) {
       var refresh_rate = stdout.split(/\n/)
       var new_refresh_rate = new Array();
@@ -190,22 +202,18 @@ let createWindow = () => {
       global.sharedObject.refresh_rate = new_refresh_rate;
     });
 
-    shell.exec('wmic path win32_VideoController get currenthorizontalresolution', {async:true, silent:true}, function(code, stdout, stderr) {
-      var horizontal = stdout.split(/\n/)
-      var new_horizontal = new Array();
-      for (var i = 1; i < horizontal.length-2; i++) {
-        new_horizontal.push(horizontal[i].trim());
+    //Get monitor(s) resolution
+    shell.exec('wmic path win32_VideoController get VideoModeDescription', {async:true, silent:true}, function(code, stdout, stderr) {
+      var resolution = stdout.split(/\n/)
+      var new_resolution = new Array();
+      for (var i = 1; i < resolution.length-2; i++) {
+        var str = resolution[i].trim()
+        var n = str.indexOf("x", str.indexOf("x")+1)
+        var resolutionPrase = str.substr(0,n-1)
+        new_resolution.push(resolutionPrase);
+        console.log('Display         : '+ global.sharedObject.moni_manufac[i-1] + ' @ ' +resolutionPrase + ' @ ' + global.sharedObject.refresh_rate[i-1]+' Hz');
       }
-      global.sharedObject.horizontal = new_horizontal;
-    });
-
-    shell.exec('wmic path win32_VideoController get currentverticalresolution', {async:true, silent:true}, function(code, stdout, stderr) {
-      var vertical = stdout.split(/\n/)
-      var new_vertical = new Array();
-      for (var i = 1; i < vertical.length-2; i++) {
-        new_vertical.push(vertical[i].trim());
-      }
-      global.sharedObject.vertical = new_vertical;
+      global.sharedObject.resolution = new_resolution;
     });
 
     // Open the DevTools.
