@@ -180,8 +180,7 @@ let createWindow = () => {
       var moni_manufac = stdout.split(/\n/);
       var new_moni_manufac = new Array();
       for (var i = 1; i < moni_manufac.length-2; i++) {
-        console.log('here' + moni_manufac[i].trim() + 'Go');
-          if (moni_manufac[i].trim().length < 1){
+          if (moni_manufac[i].trim().length <= 0){
             var defaulmon = 'Unidentified';
           }else{
             var defaulmon = moni_manufac[i].trim().replace('(Standard monitor types)', 'Unidentified');
@@ -189,30 +188,36 @@ let createWindow = () => {
           new_moni_manufac.push(defaulmon);
       }
       global.sharedObject.moni_manufac = new_moni_manufac;
-    });
 
-    //Get monitor(s) refresh rate(s)
-    shell.exec('wmic path win32_VideoController get currentrefreshrate', {async:true, silent:true}, function(code, stdout, stderr) {
-      var refresh_rate = stdout.split(/\n/)
-      var new_refresh_rate = new Array();
-      for (var i = 1; i < refresh_rate.length-2; i++) {
-        new_refresh_rate.push(refresh_rate[i].trim());
-      }
-      global.sharedObject.refresh_rate = new_refresh_rate;
-    });
 
-    //Get monitor(s) resolution
-    shell.exec('wmic path win32_VideoController get VideoModeDescription', {async:true, silent:true}, function(code, stdout, stderr) {
-      var resolution = stdout.split(/\n/)
-      var new_resolution = new Array();
-      for (var i = 1; i < resolution.length-2; i++) {
-        var str = resolution[i].trim()
-        var n = str.indexOf("x", str.indexOf("x")+1)
-        var resolutionPrase = str.substr(0,n-1)
-        new_resolution.push(resolutionPrase);
-        console.log('Display         : '+ global.sharedObject.moni_manufac[i-1] + ' @ ' +resolutionPrase + ' @ ' + global.sharedObject.refresh_rate[i-1]+' Hz');
-      }
-      global.sharedObject.resolution = new_resolution;
+      //Get monitor(s) refresh rate(s)
+      shell.exec('wmic path win32_VideoController get currentrefreshrate', {async:true, silent:true}, function(code, stdout, stderr) {
+        var refresh_rate = stdout.split(/\n/)
+        var new_refresh_rate = new Array();
+        for (var i = 1; i < refresh_rate.length-2; i++) {
+          new_refresh_rate.push(refresh_rate[i].trim());
+        }
+        global.sharedObject.refresh_rate = new_refresh_rate;
+
+
+        //Get monitor(s) resolution
+        shell.exec('wmic path win32_VideoController get VideoModeDescription', {async:true, silent:true}, function(code, stdout, stderr) {
+          var resolution = stdout.split(/\n/)
+          var new_resolution = new Array();
+          for (var i = 1; i < resolution.length-2; i++) {
+            var str = resolution[i].trim()
+            var n = str.indexOf("x", str.indexOf("x")+1)
+            var resolutionPrase = str.substr(0,n-1)
+            new_resolution.push(resolutionPrase);
+            console.log('Display         : '+ global.sharedObject.moni_manufac[i-1] + ' @ ' +resolutionPrase + ' @ ' + global.sharedObject.refresh_rate[i-1]+' Hz');
+          }
+          global.sharedObject.resolution = new_resolution;
+        });
+
+
+      });
+
+
     });
 
     // Open the DevTools.
