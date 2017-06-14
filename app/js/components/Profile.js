@@ -83,24 +83,68 @@ module.exports = global.Profile = React.createClass({
     //Set Dashbaord as active in menu
     $( "#_Profile" ).addClass('active');
 
-    return (<div>
-     	<img src={this.state.avatar} />
-     	<h3>{this.state.username}</h3>
-      <p>{this.state.aboutme}</p>
-      <h4>{this.state.firstname} {this.state.lastname}</h4>
-      <h6>{this.state.email}</h6>
-      <h6>{this.state.birthday}</h6> <br/>
-      CPU:
-      <h6>{this.state.cpu}</h6>
-      GPU:
-      <h6>{this.state.gpu}</h6>
-      Hard Drive:
-      <h6>{this.state.harddrive}</h6>
-      RAM:
-      <h6>{this.state.ram}</h6>
-      Monitor:
-      <h6>{this.state.monitor}</h6>
-     	</div>
-     	)
+    return (<div><br/><br/>
+<div className="row expanded noselect">
+  <div className="small-3 large-3 columns noselect" key={Math.random().toString(36).substr(2, 5)}>
+    <img className="thumbnail noselect" width="400" src={this.state.avatar} />
+  </div>
+  <div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
+    <h2>{this.state.username}</h2>
+    <p>{this.state.aboutme}</p>
+    <h4>{this.state.firstname} {this.state.lastname}</h4>
+    <h6>{this.state.email}</h6>
+    <h6>{this.state.birthday}</h6>
+  </div>
+</div>
+<div className="noselect">
+
+    <div className="row collapse prefix-radius">
+        <div className="small-1 columns">
+          <span className="prefix">CPU</span>
+        </div>
+        <div className="small-7 columns">
+          <span className="secondary radius label">{this.state.cpu}</span>
+        </div>
+    </div>
+
+    <div className="row collapse prefix-radius">
+        <div className="small-1 columns">
+          <span className="prefix">GPU</span>
+        </div>
+        <div className="small-7 columns">
+          <span className="secondary radius label">{this.state.gpu}</span>
+        </div>
+    </div>
+
+    <div className="row collapse prefix-radius">
+        <div className="small-1 columns">
+          <span className="prefix">RAM</span>
+        </div>
+        <div className="small-7 columns">
+          <span className="secondary radius label">{this.state.ram}</span>
+        </div>
+    </div>
+
+    <div className="row collapse prefix-radius">
+        <div className="small-1 columns">
+          <span className="prefix">Hard Drive</span>
+        </div>
+        <div className="small-7 columns">
+          <span className="secondary radius label">{this.state.harddrive}</span>
+        </div>
+    </div>
+
+    <div className="row collapse prefix-radius">
+        <div className="small-1 columns">
+          <span className="prefix">Monitor</span>
+        </div>
+        <div className="small-7 columns">
+          <span className="secondary radius label">{this.state.monitor}</span>
+        </div>
+    </div>
+
+</div>
+
+  </div>)
   },
 });
