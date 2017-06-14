@@ -209,7 +209,7 @@ let createWindow = () => {
             var n = str.indexOf("x", str.indexOf("x")+1)
             var resolutionPrase = str.substr(0,n-1)
             new_resolution.push(resolutionPrase);
-            console.log('Display         : '+ global.sharedObject.moni_manufac[i-1] + ' @ ' +resolutionPrase + ' @ ' + global.sharedObject.refresh_rate[i-1]+' Hz');
+            console.log('Display         : '+ global.sharedObject.moni_manufac[i-1] + ' (' +resolutionPrase + ' @ ' + global.sharedObject.refresh_rate[i-1]+' Hz)');
           }
           global.sharedObject.resolution = new_resolution;
         });

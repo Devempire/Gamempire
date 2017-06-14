@@ -189,7 +189,7 @@ module.exports = global.ProfileEdit = React.createClass({
       var monitors = electron.remote.getGlobal('sharedObject').resolution;
       var options='';
       for (var k = 0; k < monitors.length; k++) {
-        var displydetails = electron.remote.getGlobal('sharedObject').moni_manufac[k] + ' @ ' + electron.remote.getGlobal('sharedObject').resolution[k] + ' @ ' + electron.remote.getGlobal('sharedObject').refresh_rate[k] +' Hz'
+        var displydetails = electron.remote.getGlobal('sharedObject').moni_manufac[k] + ' (' + electron.remote.getGlobal('sharedObject').resolution[k] + ' @ ' + electron.remote.getGlobal('sharedObject').refresh_rate[k] +' Hz)'
         var options = options+'<option value="'+displydetails+'">'+displydetails+'</option>';
       }
       var display = '<select id="displaysel">'+options+'</select>';
