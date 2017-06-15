@@ -3,9 +3,7 @@ var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
 const listWidgets = require('./listWidgets.js');
-const gpuReport = require("gl-info");
-//const drivelist = require('drivelist');
-//const si = require('systeminformation');
+
 
 var vex = require('vex-js')
 vex.defaultOptions.className = 'vex-theme-os'
@@ -256,24 +254,6 @@ module.exports = global.Dashboard = React.createClass({
 
   hostStats(){
     var host = ipc.sendSync('hostStats')
-
-    var gpuinfo = gpuReport();
-    host.push(gpuinfo.unMaskedRenderer);
-
-    // si.cpu(function(data) {
-    //     console.log('CPU-Information:');
-    //     console.log(data);
-    // })
-
-    // drivelist.list((error, drives) => {
-    //     if (error) {
-    //         throw error;
-    //     }
-
-    //     drives.forEach((drive) => {
-    //         console.log(drive);
-    //     });
-    // });
 
     $.ajax({
           url:api_server+"/login/profile/dataupload",
