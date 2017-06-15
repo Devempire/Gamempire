@@ -23,6 +23,7 @@ const rename = require('gulp-rename')
 const useref = require('gulp-useref')
 const replace = require('gulp-replace')
 const electron = require('electron-connect').server.create()
+const electronPackager = require('gulp-atom-electron')
 
 const electronInstaller = require('electron-winstaller');
 
@@ -224,3 +225,13 @@ gulp.task('wininstall', ['build-production'],()=>{
   });
   resultPromise.then();
 })
+
+
+ gulp.task('package-windows', ['build-production'], () => {
+    return gulp.src('./build/**')
+	
+	.pipe(electronPackager({ version: electronVersion, platform: 'win32' }))
+    .pipe(zip.dest('./release/windows.zip'))
+	
+	})
+  

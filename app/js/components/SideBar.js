@@ -63,6 +63,7 @@ module.exports = global.Bar = React.createClass({
 
 			//go online
 			this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
+			/*
 			setTimeout(function(){
 
 				$.ajax({
@@ -76,6 +77,7 @@ module.exports = global.Bar = React.createClass({
                      		}).done((res)=>{
                      		});
 			}, 30000); //30s for testing.
+			*/
     },
 
 	render() {
