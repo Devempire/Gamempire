@@ -63,7 +63,7 @@ module.exports = global.Bar = React.createClass({
 
 			//go online
 			this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
-			setTimeout(function(){ 
+			setTimeout(function(){
 
 				$.ajax({
              			url:api_server+"/login/changestatus",
@@ -71,7 +71,7 @@ module.exports = global.Bar = React.createClass({
              			contentType: 'application/json; charset=utf-8',
              			data:JSON.stringify({
                     		 _id:electron.remote.getGlobal('sharedObject').id,
-                     		status:"online-test",
+                     		status:"online",
                          	})
                      		}).done((res)=>{
                      		});
