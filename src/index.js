@@ -1,5 +1,5 @@
 //change the value to false when package, true for developing
-let isDevelopment = false;
+let isDevelopment = true;
 
 const electron = require('electron')
 const shell = require('shelljs')
