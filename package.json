@@ -36,14 +36,8 @@
     "gulp-useref": "^3.1.2",
     "auto-updater": "^1.0.2",
     "electron-packager": "^8.6.0",
-    "vinyl-source-stream": "^1.1.0"
-  },
-  "dependencies": {
+    "vinyl-source-stream": "^1.1.0",
     "accounting-js": "^1.1.1",
-    "electron": "^1.7.3",
-    "electron-connect": "^0.6.1",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-winstaller": "^2.5.2",
     "foundation-sites": "^6.3.1",
     "jquery": "^3.1.1",
     "lodash": "^4.17.4",
@@ -58,10 +52,16 @@
     "react-soundplayer": "^0.3.6",
     "react-table": "^6.0.5",
     "react-tap-event-plugin": "^2.0.1",
-    "request": "^2.81.0",
+    "electron-squirrel-startup": "^1.0.0",
     "unirest": "^0.5.1",
-    "vex-js": "^3.1.0",
-    "shelljs": "^0.7.8"
+    "request": "^2.81.0",
+    "electron-connect": "^0.6.1",
+    "electron-winstaller": "^2.6.2"
+  },
+  "dependencies": {
+    "electron": "^1.7.3",
+    "shelljs": "^0.7.8",
+    "vex-js": "^3.1.0"
   },
   "scripts": {
     "package-win": "electron-packager . --version-string.ProductName=Gamempire --overwrite --asar=false --platform=win32 --arch=ia32 --icon=./app/img/logo.ico --prune=true --out=../release/windows "
