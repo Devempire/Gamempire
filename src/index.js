@@ -2,6 +2,7 @@
 let isDevelopment = true;
 
 const electron = require('electron')
+const shell = require('shelljs')
 // Module to control application life.
 const app = electron.app
 const systemPreferences = electron.systemPreferences
@@ -12,7 +13,6 @@ var os = require('os');
 
 const path = require('path')
 var iconPath = __dirname + '../../app/img/logo.ico';
-
 
 // this should be placed at top of main.js to handle setup events quickly
 if (handleSquirrelEvent()) {
@@ -92,11 +92,15 @@ global.sharedObject = {
   layout:null,
   avatar:null,
   data:null,
+  gpuHTML:null,
+  viewProfileID:null,
+  harddrives:null,
 }
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+
 
 let createWindow = () => {
   // Create the browser window.
@@ -116,12 +120,105 @@ let createWindow = () => {
 
   if (isDevelopment) {
 
-    console.log("System: " + os.platform()); // "win32"
+
     //output compile completion time for debugging
     var m = new Date();
     var dateString = (m.getUTCFullYear() +"/"+ (m.getUTCMonth()+1) +"/"+ m.getUTCDate() + " " + (m.getUTCHours()-4) + ":" + m.getUTCMinutes() + ":" + m.getUTCSeconds()); //(m.getUTCHours()-4) MINUS 4 for our Toronto Timezone
-    console.log("Finished compiling at: " + dateString)
-    console.log("Node version: " + process.version) //prints node version installed on machine.
+    console.log("FINISHED compiling at: " + dateString)
+    console.log("")
+    console.log("")
+    console.log("VERSIONS")
+    console.log("________________________________________")
+    console.log("Node version    : " + process.versions.node)
+    console.log("Chrome version  : " + process.versions.chrome)
+    console.log("Electron version: " + process.versions.electron)
+    console.log("V8 version      : " + process.versions.v8)
+    console.log("Modules         : " + process.versions.modules)
+    console.log("System          : " + os.platform());
+    console.log("")
+    console.log("")
+    console.log("HARDWARE")
+    console.log("________________________________________")
+
+    //Get GPU info
+    shell.exec('wmic path win32_VideoController get name', {async:true, silent:true}, function(code, stdout, stderr) {
+      var rawgpu = stdout.substring(5).split(/\n/)
+      var gpu = new Array();
+      for (var i = 1; i < rawgpu.length-2; i++) {
+        gpu.push(rawgpu[i].trim());
+        console.log('GPU             : '+rawgpu[i].trim());
+      }
+      global.sharedObject.gpuHTML = gpu;
+    });
+
+    //Get Hard Drive(s)
+    shell.exec('wmic diskdrive get Model', {async:true, silent:true}, function(code, stdout, stderr) {
+      var hard = stdout.substring(6).split(/\n/)
+      var harddr = new Array();
+      for (var i = 1; i < hard.length-2; i++) {
+        harddr.push(hard[i].trim());
+        console.log('Hard Drive      : '+hard[i].trim());
+      }
+      global.sharedObject.harddrives = harddr;
+    });
+
+    //Get total RAM
+    shell.exec('wmic ComputerSystem get TotalPhysicalMemory', {async:true, silent:true}, function(code, stdout, stderr) {
+      var ram = stdout.split(/\n/)
+      var new_ram = new Array();
+      for (var i = 1; i < ram.length-2; i++) {
+
+        var ramGB = Math.ceil(((ram[i].trim()/1024)/1024)/1024)+' GB';
+        new_ram.push(ramGB);
+        console.log('RAM             : '+ramGB);
+      }
+      global.sharedObject.ram = new_ram;
+    });
+
+    //Get monitor(s) model(s)/name(s)
+    shell.exec('wmic path win32_desktopmonitor get monitormanufacturer', {async:true, silent:true}, function(code, stdout, stderr) {
+      var moni_manufac = stdout.split(/\n/);
+      var new_moni_manufac = new Array();
+      for (var i = 1; i < moni_manufac.length-2; i++) {
+          if (moni_manufac[i].trim().length <= 0){
+            var defaulmon = 'Unidentified';
+          }else{
+            var defaulmon = moni_manufac[i].trim().replace('(Standard monitor types)', 'Unidentified');
+          }
+          new_moni_manufac.push(defaulmon);
+      }
+      global.sharedObject.moni_manufac = new_moni_manufac;
+
+
+      //Get monitor(s) refresh rate(s)
+      shell.exec('wmic path win32_VideoController get currentrefreshrate', {async:true, silent:true}, function(code, stdout, stderr) {
+        var refresh_rate = stdout.split(/\n/)
+        var new_refresh_rate = new Array();
+        for (var i = 1; i < refresh_rate.length-2; i++) {
+          new_refresh_rate.push(refresh_rate[i].trim());
+        }
+        global.sharedObject.refresh_rate = new_refresh_rate;
+
+
+        //Get monitor(s) resolution
+        shell.exec('wmic path win32_VideoController get VideoModeDescription', {async:true, silent:true}, function(code, stdout, stderr) {
+          var resolution = stdout.split(/\n/)
+          var new_resolution = new Array();
+          for (var i = 1; i < resolution.length-2; i++) {
+            var str = resolution[i].trim()
+            var n = str.indexOf("x", str.indexOf("x")+1)
+            var resolutionPrase = str.substr(0,n-1)
+            new_resolution.push(resolutionPrase);
+            console.log('Display         : '+ global.sharedObject.moni_manufac[i-1] + ' (' +resolutionPrase + ' @ ' + global.sharedObject.refresh_rate[i-1]+' Hz)');
+          }
+          global.sharedObject.resolution = new_resolution;
+        });
+
+
+      });
+
+
+    });
 
     // Open the DevTools.
     if (os.hostname() == "DESKTOP-9L9QIKH" || "DESKTOP-SRR0P4D" || "Dillons-PC"){ //Borys likes his dev tools detached from Gamempire.
@@ -143,6 +240,7 @@ let createWindow = () => {
     mainWindow = null
   })
 }
+
 
 //auto update
 // app.on('ready', function(){
@@ -279,7 +377,7 @@ app.on('ready', function() {
   });//Returns user machine information
 
 });
-app.setAppUserModelId("com.squirrel.gamempire.Gamempire")
+app.setAppUserModelId("Gamempire")
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   // On OS X it is common for applications and their menu bar
@@ -296,7 +394,3 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
-app.on('before-quit', (ev)=>{
-  ev.preventDefault();
-  });

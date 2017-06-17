@@ -3,9 +3,7 @@ var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
 const listWidgets = require('./listWidgets.js');
-const gpuReport = require("gl-info");
-//const drivelist = require('drivelist');
-//const si = require('systeminformation');
+
 
 var vex = require('vex-js')
 vex.defaultOptions.className = 'vex-theme-os'
@@ -199,6 +197,7 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   componentDidMount: function(){
+    $('#child_under').children().addClass('row expanded');
     //this.setWindowsColours();
     //console.log("component did mount!");
   },
@@ -256,24 +255,6 @@ module.exports = global.Dashboard = React.createClass({
   hostStats(){
     var host = ipc.sendSync('hostStats')
 
-    var gpuinfo = gpuReport();
-    host.push(gpuinfo.unMaskedRenderer);
-
-    // si.cpu(function(data) {
-    //     console.log('CPU-Information:');
-    //     console.log(data);
-    // })
-
-    // drivelist.list((error, drives) => {
-    //     if (error) {
-    //         throw error;
-    //     }
-
-    //     drives.forEach((drive) => {
-    //         console.log(drive);
-    //     });
-    // });
-
     $.ajax({
           url:api_server+"/login/profile/dataupload",
           type:"PUT",
@@ -284,7 +265,7 @@ module.exports = global.Dashboard = React.createClass({
             data:host
             })
             }).done((res)=>{
-              //TODOSet client global var of all CPU stats to populate text field suggestions in Profile Edit screen.
+
             }).fail((res)=>{
                 console.log("Client stats upload failed.");
                 vex.dialog.alert({
@@ -534,8 +515,8 @@ module.exports = global.Dashboard = React.createClass({
 
 
       return (
-        <div className="noselect">
-          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts} onLayoutChange={this.onLayoutChange}
+        <div id="child_under" className="noselect">
+          <ResponsiveReactGridLayout draggableCancel={".widget"} layouts={this.state.layouts}  onLayoutChange={this.onLayoutChange}
               onBreakpointChange={this.onBreakpointChange} {...this.props}>
 
               {_.map(this.state.games, this.onGame)}
@@ -560,6 +541,7 @@ module.exports = global.Dashboard = React.createClass({
           </div>
         </div>
       );
+
 
   }
 

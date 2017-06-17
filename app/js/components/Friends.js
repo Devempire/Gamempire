@@ -67,37 +67,44 @@ for (var i = 0; i < this.state.friends.length; i++) {
   var username=this.state.friends[i].username;
   var online=this.state.friends[i].online;
   if (!this.state.friends[i].avatar || this.state.friends[i].privacy.avatar == true || this.state.friends[i].privacy.avatar == 'true'){
-
-    allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src="./../app/img/user.jpg" /></div>);
+    var avatar =(<div className="small-3 large-2 columns noselect" key={Math.random().toString(36).substr(2, 5)}><img className="thumbnail noselect" width="200" src="./../app/img/user.jpg" /></div>);
    }else{
      var img = [api_server+'/img/avatars/'+id+'.jpg?'+new Date().getTime()];
-     allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}><br/><br/><img width="75" src={img[0]} /></div>);
+     var avatar =(<div className="small-3 large-2 columns noselect" key={Math.random().toString(36).substr(2, 5)}><img className="thumbnail noselect" width="200" src={img[0]} /></div>);
+   }
+   if (online == 'online'){
+     var status = (<span className="success round label noselect">Online</span>);
+   }else if (online == 'offline'){
+     var status = (<span className="alert round label noselect">Offline</span>);
    }
   if (this.state.friends[i].status == "pending") {
-    allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
-    <a data-tag={id} onClick={this.viewprofile} >
-    <b>{username}</b></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <b>{online}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <button className="button" onClick={()=>{this.acceptfriend(id)}}> Accept </button>
-    <button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Decline</button>
+
+    allUsers.push(<div><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
+    <h2 className="noselect">{username}</h2>
+    <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
+    <b className="noselect">{status}</b><br/>
+    <b className="noselect">{this.state.friends[i].status}</b><br/>
+    <button className="button small-6 large-3 noselect" onClick={()=>{this.acceptfriend(id)}}>Accept</button>
+    <button className="button small-6 large-3 noselect" onClick={this.removeFriendConfirm.bind(this,id,username)}>Decline</button>
     </div>
-   );
+    </div><hr className="row expanded"/></div>
+    );
   }else{
-allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display: 'inline'}}>
-<a data-tag={id} onClick={this.viewprofile} >
-<b>{username}</b></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<b>{online}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<b>{this.state.friends[i].status}</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<button className="button" onClick={this.removeFriendConfirm.bind(this,id,username)}> Remove</button>
-</div>
-);
+    allUsers.push(<div><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
+      <h2 className="noselect">{username}</h2>
+      <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
+      <b className="noselect">{status}</b><br/>
+      <b className="noselect">{this.state.friends[i].status}</b><br/>
+      <button className="button small-6 large-4 noselect" onClick={this.removeFriendConfirm.bind(this,id,username)}>Remove friend</button>
+      </div>
+      </div><hr className="row expanded"/></div>
+    );
   }
 }
 
 
     ReactDOM.render(
-      <div key={Math.random().toString(36).substr(2, 5)}>{allUsers}</div>,
+      <div key={i}>{allUsers}</div>,
       document.getElementById('targat')
     );
 
@@ -111,6 +118,7 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
   },
 
   componentDidMount: function(){
+    document.getElementById('search_results').style.display = "none";
     //this.setWindowsColours();
   },
 
@@ -175,20 +183,86 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
 
   username(event){
     this.setState({username:event.target.value});
+    document.getElementById('search_results').style.display = "none";
   },
 
   search(){
+    var usr = $("#usernameSearch").val();
+    if (usr == "" || usr == null){
+      $("#usernameSearch").focus();
+    }else{
+
     var name =this.state.username;
+    if (name==electron.remote.getGlobal('sharedObject').username){
+      $("#usernameSearch").focus();
+        //Cannot look up themselves
+    }else{
     $.post(api_server+"/friend/info",
     {
             username:name
         }).done((res)=>{
       this.setState({result:res});
+if(res.msg =="No results found."){
+  ReactDOM.render(
+  <div className="row expanded">
+    <p className="noselect">No results found for <b><i>{this.state.username}</i></b>.</p><br/>
+    <button title="Clear search" className="close-button" type="button" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
+  </div>,
+  document.getElementById('search_results')
+  );
+  document.getElementById('search_results').style.display = "block";
+}else{
+
+var isFriend = null;
+for (var i = 0; i < this.state.friends.length; i++) {
+
+  if (this.state.friends[i].username === this.state.username){
+
+    if (this.state.friends[i].online == 'online'){
+      var status = (<span className="success round label noselect">Online</span>);
+    }else if (this.state.friends[i].online == 'offline'){
+      var status = (<span className="alert round label noselect">Offline</span>);
+    }
+    isFriend = true;
+    break;
+  }else{
+    isFriend = null;
+  }
+}
+
+
+
+ReactDOM.render(
+<div className="row expanded">
+  <p>Showing results for <b><i>{this.state.username}</i></b>.</p><br/>
+  <div className="media-object stack-for-small small-12 columns expanded" id="populateResults">
+    <div key={Math.random().toString(36).substr(2, 5)}>
+      <div className="media-object-section">
+        <div>
+          {this.state.result.avatar ? <img className='thumbnail noselect' src={api_server+'/img/avatars/'+this.state.result._id+'.jpg?' + new Date().getTime()} /> : <img className='thumbnail noselect' src='./../app/img/user.jpg' /> }
+        </div>
+      </div>
+      <div className="media-object-section">
+        <h3>{this.state.result.user}</h3>
+        <p>{isFriend ? 'Friends since TODO GET FRIENDS SINCE DATE' : <p><span className="label" onClick={this.addfriend}><b aria-hidden="true">+</b> Add <b>{this.state.result.user}</b></span></p> }</p>
+        <p className="noselect">{status ? status : ''}</p>
+      </div>
+    </div>
+    <button title="Clear search" className="close-button" type="button" onClick={this.clearSearch}><span aria-hidden="true">&times;</span></button>
+  </div>
+</div>,
+document.getElementById('search_results')
+);
+
+document.getElementById('search_results').style.display = "block";
+}
     });
+}
+  }
   },
 
   addfriend(){
-    if(this.state.result.msg =="no result found !"){
+    if(this.state.result.msg =="No results found."){
       return ;
     }else{
     var id =electron.remote.getGlobal('sharedObject').id;
@@ -299,14 +373,41 @@ allUsers.push(<div key={Math.random().toString(36).substr(2, 5)} style={{display
 
       return (
         <div>
-          <div>
-            <input type="text" placeholder=" enter username here" onChange={this.username}/>
-            <button className="button" onClick={this.search} >Search</button>
-            <p>{this.state.result.msg ? this.state.result.msg :<a onClick={this.addfriend}>{this.state.result.user}</a>}</p>
+        <br/><br/>
+          <div className="row search_input expanded">
+            <ul className="menu noselect">
+              <li><h4>Search friends</h4></li>
+              <li>   </li>
+              <li><input type="search" id="usernameSearch" placeholder="Search by username" onChange={this.username} onKeyPress={this.usernameSearch}/></li>
+              <li><button type="button" id="usernameSearchbtn" className="button" onClick={this.search}>Search</button></li>
+            </ul>
           </div>
-
+          <br/>
+          <div className="callout noselect" id="search_results">
+          </div>
+          <h4 className="noselect">Friends list</h4>
           <div key={"1"} id="targat">Loading friends...</div>
         </div>
       );
-  }
+  },
+
+  usernameSearch(e) {
+     if (e.key == 'Enter') {
+       var usr = $("#usernameSearch").val();
+       if (usr == "" || usr == null){
+         $("#usernameSearch").focus();
+       }else{
+
+         $('#usernameSearchbtn').click();
+       }
+     }
+  },
+
+  clearSearch(e){
+    document.getElementById('search_results').style.display = "none";
+    document.getElementById('usernameSearch').value = null;
+
+  },
+
+
 });

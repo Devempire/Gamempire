@@ -9,6 +9,7 @@ const ReactGridLayout = require('react-grid-layout');
 const os = require('os');
 //const {systemPreferences} = require('electron')
 
+
 global.jquery = $
 window.React = React
 window.ReactDOM = ReactDOM

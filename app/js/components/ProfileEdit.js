@@ -7,7 +7,6 @@ import AvatarEditor from 'react-avatar-editor'
 var vex = require('vex-js')
 vex.registerPlugin(require('vex-dialog'))
 vex.defaultOptions.className = 'vex-theme-os'
-const gpuReport = require("gl-info");
 
 module.exports = global.ProfileEdit = React.createClass({
   mixins: [PureRenderMixin],
@@ -164,6 +163,41 @@ module.exports = global.ProfileEdit = React.createClass({
     global.avatar_scale = this.state.scale;
     global.rotate = 0;
   },
+
+  componentDidMount: function(){
+    setTimeout( execute, 500 );
+    function execute(){
+      var gpus = electron.remote.getGlobal('sharedObject').gpuHTML;
+      var option='';
+      for (var i = 0; i < gpus.length; i++) {
+        var option = option+'<option value="'+gpus[i]+'">'+gpus[i].replace("(TM)","™" ).replace("(R)"," ®" )+'</option>';
+      }
+      var gpus = '<select id="gpusel">'+option+'</select>';
+      document.getElementById('gpudiv').innerHTML = gpus;
+
+      var hdrives = electron.remote.getGlobal('sharedObject').harddrives;
+      var options='';
+      for (var j = 0; j < hdrives.length; j++) {
+        var options = options+'<option value="'+hdrives[j]+'">'+hdrives[j]+'</option>';
+      }
+      var hardd = '<select id="hardsel">'+options+'</select>';
+      document.getElementById('harddiv').innerHTML = hardd;
+
+      var ram = electron.remote.getGlobal('sharedObject').ram
+      document.getElementById('ramdiv').innerHTML = ram;
+
+      var monitors = electron.remote.getGlobal('sharedObject').resolution;
+      var options='';
+      for (var k = 0; k < monitors.length; k++) {
+        var displydetails = electron.remote.getGlobal('sharedObject').moni_manufac[k] + ' (' + electron.remote.getGlobal('sharedObject').resolution[k] + ' @ ' + electron.remote.getGlobal('sharedObject').refresh_rate[k] +' Hz)'
+        var options = options+'<option value="'+displydetails+'">'+displydetails+'</option>';
+      }
+      var display = '<select id="displaysel">'+options+'</select>';
+      document.getElementById('monitordiv').innerHTML = display;
+
+    }
+  },
+
 
   setWindowsColours(){
     var primaryElements = [
@@ -491,19 +525,19 @@ module.exports = global.ProfileEdit = React.createClass({
             </div>
 
             CPU: <br/>
-            <label>{ipc.sendSync('hostStats')[3][0].model}</label>
+            <label>{ipc.sendSync('hostStats')[3][0].model.replace("(TM)","™" ).replace("(R)"," ®" )}</label>
 
             GPU: <br/>
-            <label>{gpuReport().unMaskedRenderer}</label>
+            <div id="gpudiv">Loading GPU...</div><br/>
 
             Hard Drive: <br/>
-            <label>hd</label>
+            <div id="harddiv">Loading Hard Drives...</div><br/>
 
-            Keyboard: <br/>
-            <label>kb</label>
+            RAM: <br/>
+            <div id="ramdiv">Loading RAM...</div><br/>
 
-            Mouse: <br/>
-            <label>mouse</label>
+            Monitor: <br/>
+            <div id="monitordiv">Loading Monitor...</div><br/>
         </form>
 
         <div className="row expanded button-group">
@@ -529,15 +563,17 @@ module.exports = global.ProfileEdit = React.createClass({
           <button className="button secondary" onClick={this.backToDashboard}>Back to Dashboard</button>
         </div>
       </div>
+
     );
   },
 
   saveCompSpecs() {
     var cpu = ipc.sendSync('hostStats')[3][0].model;
-    var gpu = gpuReport().unMaskedRenderer;
-    var harddrive = 'hd';
-    var keyboard = 'keyboard';
-    var mouse = 'mouse';
+    //console.log($("#gpusel").val())
+    var gpu = $("#gpusel").val()
+    var harddrive = $("#hardsel").val();
+    var ram = $("#ramdiv")[0].innerHTML;
+    var monitor = $("#displaysel").val();
 
     var token = electron.remote.getGlobal('sharedObject').token;
       $.post(api_server+"/login/load",
@@ -552,8 +588,8 @@ module.exports = global.ProfileEdit = React.createClass({
                        cpu:cpu,
                        gpu:gpu,
                        harddrive:harddrive,
-                       keyboard:keyboard,
-                       mouse:mouse
+                       ram:ram,
+                       monitor:monitor
                    }
                }).done((res)=>{
                    console.log("comp specs is updated");

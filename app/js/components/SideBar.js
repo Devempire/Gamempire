@@ -63,15 +63,30 @@ module.exports = global.Bar = React.createClass({
 
 			//go online
 			this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
+			/*
+			setTimeout(function(){
+
+				$.ajax({
+             			url:api_server+"/login/changestatus",
+             			type:"PUT",
+             			contentType: 'application/json; charset=utf-8',
+             			data:JSON.stringify({
+                    		 _id:electron.remote.getGlobal('sharedObject').id,
+                     		status:"online",
+                         	})
+                     		}).done((res)=>{
+                     		});
+			}, 30000); //30s for testing.
+			*/
     },
 
 	render() {
-		return <div>
+		return <div className="noselect">
 		    <div id="mySidenav" className="sidenav noselect">
-					<a href="#" onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
-					<a href="#" onClick={this._Profile} id="_Profile">Profile</a>
-          <a href="#" onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
-					<a href="#" onClick={this._Friends} id="_Friends">Friends</a>
+					<a onClick={this._Dashboard} id="_Dashboard">Dashboard</a>
+					<a onClick={this._Profile} id="_Profile">Profile</a>
+          <a onClick={this._ProfileEdit} id="_ProfileEdit">Edit Profile</a>
+					<a onClick={this._Friends} id="_Friends">Friends</a>
 	{/*
 					<a href="#" onClick={this._Playground} id="_Playground">Playground [Buggy]</a>
 					<a id="8" >Add custom page</a>
