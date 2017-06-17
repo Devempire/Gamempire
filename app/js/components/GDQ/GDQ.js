@@ -5,6 +5,7 @@ import InkTabBar from 'rc-tabs/lib/InkTabBar';
 import GDQManager from './GDQManager';
 import TwitchView from '../Standalones/TwitchView.js';
 import ContainerDimensions from 'react-container-dimensions';
+import GDQTwitch from './GDQTwitch.js';
 
 var WidthProvider = require('react-grid-layout').WidthProvider;
 var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
@@ -49,9 +50,7 @@ export class GDQ extends React.Component {
           renderTabContent={() => <TabContent />}
         >
           <TabPane tab='Twitch' key='1'>
-            <ContainerDimensions>
-              <TwitchView channel={gdqTwitch} />
-            </ContainerDimensions>
+            <GDQTwitch />
           </TabPane>
           <TabPane tab='Schedule' key='2'>
             <GDQSchedule manager={this.manager} />
