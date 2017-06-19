@@ -38,6 +38,25 @@ module.exports = global.Bar = React.createClass({
         });
 	},
 
+	statusping(){
+
+
+		if ($(".statusSelect").val()=='online'){
+				$.ajax({
+							url:api_server+"/login/pingstatus",
+							type:"PUT",
+							contentType: 'application/json; charset=utf-8',
+							data:JSON.stringify({
+										 _id:electron.remote.getGlobal('sharedObject').id,
+										status:"online",
+											})
+										}).done((res)=>{
+										});
+		 }
+		setTimeout(this.statusping, 10000);
+
+	},
+
 	getInitialState() {
 		var username = electron.remote.getGlobal('sharedObject').username;
 		var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
@@ -63,19 +82,8 @@ module.exports = global.Bar = React.createClass({
 
 			//go online
 			this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
-			setTimeout(function(){
+			this.statusping();
 
-				$.ajax({
-             			url:api_server+"/login/changestatus",
-             			type:"PUT",
-             			contentType: 'application/json; charset=utf-8',
-             			data:JSON.stringify({
-                    		 _id:electron.remote.getGlobal('sharedObject').id,
-                     		status:"online",
-                         	})
-                     		}).done((res)=>{
-                     		});
-			}, 30000); //30s for testing.
     },
 
 	render() {
@@ -210,7 +218,7 @@ module.exports = global.Bar = React.createClass({
 
   updatestatus(){
   	$.ajax({
-             			url:api_server+"/login/changestatus",
+             			url:api_server+"/login/pingstatus",
              			type:"PUT",
              			contentType: 'application/json; charset=utf-8',
              			data:JSON.stringify({
@@ -296,7 +304,7 @@ module.exports = global.Bar = React.createClass({
 
 		//console.log(electron.remote.getGlobal('sharedObject'));
 		$.ajax({
-                    url:api_server+"/login/changestatus",
+                    url:api_server+"/login/pingstatus",
                     type:"PUT",
                     contentType: 'application/json; charset=utf-8',
                     data:JSON.stringify({

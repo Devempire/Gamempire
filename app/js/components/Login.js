@@ -184,7 +184,7 @@ module.exports = class Login extends React.Component {
                   electron.remote.getGlobal('sharedObject').data=res2.data;
 
                   $.ajax({
-                    url:api_server+"/login/changestatus",
+                    url:api_server+"/login/pingstatus",
                     type:"PUT",
                     contentType: 'application/json; charset=utf-8',
                     data:JSON.stringify({
