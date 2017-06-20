@@ -25,6 +25,11 @@ export class GDQEvent {
     return this.shortName;
   }
 
+  isCurrent () {
+    // Placeholder
+    return this.date > (new Date()).getDate - 14;
+  }
+
   statusString () {
     if (this.date > new Date()) {
       return 'Upcoming: Starts on ' + Formatters.formatDate(this.date);
@@ -86,6 +91,24 @@ export class GDQEvent {
       }
     });
   }
+
+  getFutureRuns () {
+    return this.runs.filter((run) => {
+      return run.startTime > new Date();
+    });
+  }
+
+  getFutureWatchedRuns () {
+    return this.getFutureRuns().filter((run) => {
+      return run.watching;
+    });
+  }
+
+  getCurrentRun () {
+    return this.runs.find((run) => {
+      return run.starTime > new Date() > run.endTime;
+    });
+  }
 }
 
 export class GDQRunner {
@@ -114,23 +137,12 @@ export class GDQRun {
     console.log(this.watching);
   }
 
-  checkbox () {
-    return <GDQRunChecbox handleChecked={this.handleWatchChange.bind(this)} />;
-  }
-
   toString () {
     return this.name + this.category;
   }
 
-  runnerString (runners) {
-    var ret = '';
-    if (this.runners instanceof Array && this.runners.length > 0) {
-      ret += runners[this.runners[0]].name;
-      for (var i = 1; i < this.runners.length; i++) {
-        ret += ', ' + runners[this.runners[i]].name;
-      }
-    }
-    return ret;
+  endtime () {
+    return this.startTime + 10000; // placeholder
   }
 
   runnerCell (runners) {
