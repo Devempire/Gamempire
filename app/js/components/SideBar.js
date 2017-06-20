@@ -39,10 +39,17 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	getInitialState() {
+		// var games = electron.remote.getGlobal('sharedObject').games;
+		// while (games == null) {
+		// 	continue;
+		// }
 		var username = electron.remote.getGlobal('sharedObject').username;
 		var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
 		var id = electron.remote.getGlobal('sharedObject').id;
 		var avatar = electron.remote.getGlobal('sharedObject').avatar;
+		
+		// console.log(games);
+		// console.log(games[0].widgetname);
 
 		if (avatar == false) {
 			avatar = './../app/img/user.jpg';
@@ -172,6 +179,7 @@ module.exports = global.Bar = React.createClass({
 					<h5 className="topbar_username" title="Edit profile" onClick={this._ProfileEdit}> {this.state.username}</h5>
 					{spanabout}
   				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
+  				<input type="button" id="remote" onClick={this.remote} value="Submit" />
 					<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
         </div>
   		);
@@ -181,6 +189,41 @@ module.exports = global.Bar = React.createClass({
   		document.getElementById('top_bar')
   		);
 
+    },
+
+    remote() {
+    	var games = electron.remote.getGlobal('sharedObject').games;
+    	var i = 0;
+		// while (games == null) {
+		// 	continue;
+		// }
+		console.log(games);
+		console.log(games.length);
+		console.log(games[0].widgetname);
+    	vex.dialog.open({
+	        overlayClosesOnClick: false,
+	        input: [
+	        '<script type="text/javascript">',
+	        	'for (i = 0; i < games.length; i++) {',
+	        		'var x = document.createElement("label")',
+	        		'var y = document.createTextNode(games[i])',
+	        		'x.appendChild(y)',
+	        		'document.getElementById("widgetlist").appendChild(x)',
+	        	'}',
+	        '</script>',
+	        '<div class="vex-custom-field-wrapper" id="widgetlist">',
+	            '<label for="widget11">' + games[0].widgetname + '</label>',
+	            '<label for="widget22">' + games[1].widgetname + '</label>',
+	        '</div>'
+		    ].join(''),
+	        callback: function (value){
+	            if (value) {
+	              	return;
+	            } else {
+	            	return;
+	            }
+	        }.bind(this)
+	    })
     },
 
     handleChange(event) {
