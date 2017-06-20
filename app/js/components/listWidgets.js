@@ -1,17 +1,17 @@
 //This file is intended to be the only place we currently have to hardcode the WidgetIDs.
 
 const discord = '58b93e79a7c98c3001ad48a4';
-const messenger = '58b93e8ca7c98c3001ad48a5';
-const steamchat = '58b93e97a7c98c3001ad48a6';
+const messenger = '5948716f9946ff8e74fd134f';
+const steamchat = '594871cc9946ff8e74fd1351';
 
-const soundcloud = '58b93eafa7c98c3001ad48a7';
-const googleplaymusic = '58b93ee3a7c98c3001ad48a8';
+const soundcloud = '594871ff9946ff8e74fd1352';
+const googleplaymusic = '594872129946ff8e74fd1354';
 
-const heathstonebuilder = '58b93f03a7c98c3001ad48a9';
-const soundcloudapp = '58be7102884985c454420bbd';
-const notepad ='58c32d942ca0d464773a4dbb';
+const heathstonebuilder = '5948727c9946ff8e74fd1359';
+const soundcloudapp = '594872299946ff8e74fd1355';
+const notepad ='5948720c9946ff8e74fd1353';
 
-const gdq = '591502ee4d8bb70c6dfbd89d' ;
+const gdq = '5948719b9946ff8e74fd1350' ;
 
 class listWidgets {
   loadwid(widgetID) {
