@@ -27,7 +27,7 @@ module.exports = global.Friends = React.createClass({
              username:res[i].friend.username,
              avatar:res[i].friend.avatar,
              privacy:res[i].friend.privacy,
-             online:res[i].friend.status,
+             online:res[i].friend.status.status,
            })
          });
 
@@ -83,7 +83,7 @@ for (var i = 0; i < this.state.friends.length; i++) {
     <h2 className="noselect">{username}</h2>
     <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
     <b className="noselect">{status}</b><br/>
-    <b className="noselect">{this.state.friends[i].status}</b><br/>
+    <b className="noselect">{this.state.friends[i].status.status}</b><br/>
     <button className="button small-6 large-3 noselect" onClick={()=>{this.acceptfriend(id)}}>Accept</button>
     <button className="button small-6 large-3 noselect" onClick={this.removeFriendConfirm.bind(this,id,username)}>Decline</button>
     </div>
