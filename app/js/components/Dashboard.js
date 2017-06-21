@@ -367,7 +367,7 @@ module.exports = global.Dashboard = React.createClass({
     var widgetTitle=el.widgetname;
     var el = el;
 
-    if (el.i ==  "594872639946ff8e74fd1356"||"594872709946ff8e74fd1357"||"5948727f9946ff8e74fd135a"||"594873849946ff8e74fd135b") {
+    if (widgetID ==  "594872639946ff8e74fd1356"||widgetID =="594872709946ff8e74fd1357"||widgetID =="5948727f9946ff8e74fd135a"||widgetID =="594873849946ff8e74fd135b") {
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle}
@@ -405,7 +405,7 @@ module.exports = global.Dashboard = React.createClass({
             </div>
           </div>
         );
-    } else if (el.i === '594871ff9946ff8e74fd1352'|| "59499ed12b0e8c5d0108707f" || '5948716f9946ff8e74fd134f' || '594871cc9946ff8e74fd1351' || '594872129946ff8e74fd1354' ) {
+    } else if (widgetID === "594871ff9946ff8e74fd1352"|| widgetID =="59499ed12b0e8c5d0108707f" || widgetID =="5948716f9946ff8e74fd134f" || widgetID =="594871cc9946ff8e74fd1351" || widgetID == "594872129946ff8e74fd1354" ) {
       return (
         <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
@@ -415,7 +415,7 @@ module.exports = global.Dashboard = React.createClass({
         {listWidgets.loadwid(widgetID)}
         </div>
       );
-    } else if (el.i == '5948727c9946ff8e74fd1359'||'594872299946ff8e74fd1355'||'5948720c9946ff8e74fd1353'||'5948719b9946ff8e74fd1350') {
+    } else if (widgetID == "5948727c9946ff8e74fd1359"||widgetID =="594872299946ff8e74fd1355"||widgetID =="5948720c9946ff8e74fd1353"||widgetID =="5948719b9946ff8e74fd1350") {
       return (
       <div key={widgetID} data-grid={el} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
