@@ -361,11 +361,9 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   onGame(el){
-    var i =el.i;
     var widgettype = el.widgettype;
     var widgetID =el.i;
     var widgetTitle=el.widgetname;
-    var el = el;
 
     if (widgetID ==  "594872639946ff8e74fd1356"||widgetID =="594872709946ff8e74fd1357"||widgetID =="5948727f9946ff8e74fd135a"||widgetID =="594873849946ff8e74fd135b") {
         return (
