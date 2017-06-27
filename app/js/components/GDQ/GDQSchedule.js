@@ -10,7 +10,6 @@ const gdqapi = 'https://gamesdonequick.com/tracker/search';
 
 var unirest = require('unirest');
 
-
 export default class GDQSchedule extends React.Component {
   constructor(props) {
     super(props);

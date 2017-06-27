@@ -95,6 +95,7 @@ global.sharedObject = {
   gpuHTML:null,
   viewProfileID:null,
   harddrives:null,
+  games:null
 }
 
 // Keep a global reference of the window object, if you don't, the window will

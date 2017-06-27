@@ -52,16 +52,31 @@ module.exports = global.Bar = React.createClass({
         });
 	},
 
+	statusping(){
+		if ($(".statusSelect").val()=='online'){
+				$.ajax({
+							url:api_server+"/login/pingstatus",
+							type:"PUT",
+							contentType: 'application/json; charset=utf-8',
+							data:JSON.stringify({
+										 _id:electron.remote.getGlobal('sharedObject').id,
+										status:"online",
+											})
+										}).done((res)=>{
+										});
+		}
+		setTimeout(this.statusping, 10000);
+	},
+
 	getInitialState() {
+		// var games = electron.remote.getGlobal('sharedObject').games;
+		// while (games == null) {
+		// 	continue;
+		// }
 		var username = electron.remote.getGlobal('sharedObject').username;
 		var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
 		var id = electron.remote.getGlobal('sharedObject').id;
 		var avatar = electron.remote.getGlobal('sharedObject').avatar;
-		//var games = Dashboard.getWidgets();
-		//console.log(games);
-		//var games = electron.remote.getGlobal('sharedObject').games;
-		//console.log(games);
-		//console.log(electron.remote.getGlobal('sharedObject').games);
 
 		if (avatar == false) {
 			avatar = './../app/img/user.jpg';
@@ -85,21 +100,9 @@ module.exports = global.Bar = React.createClass({
     componentDidMount: function(){
     	this.topbar();
 
-			//go online
-			this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
-			setTimeout(function(){ 
-
-				$.ajax({
-             			url:api_server+"/login/changestatus",
-             			type:"PUT",
-             			contentType: 'application/json; charset=utf-8',
-             			data:JSON.stringify({
-                    		 _id:electron.remote.getGlobal('sharedObject').id,
-                     		status:"online-test",
-                         	})
-                     		}).done((res)=>{
-                     		});
-			}, 30000); //30s for testing.
+		//go online
+		this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
+		this.statusping();
     },
 
 	render() {
@@ -184,7 +187,7 @@ module.exports = global.Bar = React.createClass({
 				<h5 className="topbar_username" title="Edit profile" onClick={this._ProfileEdit}> {this.state.username}</h5>
 				{spanabout}
 				<input type="text" id="topbar_aboutme" onChange={this.editAboutMe} onKeyPress={this.extendaboutme} />
-				<input type="button" onClick={this._OpenRemote} id="remote" value="Remote"/>
+				<input type="button" onClick={this.openRemote} id="remote" value="Remote"/>
 				<a title="Logout" onClick={this._LogoutConfirm} id="logout">🔐</a>
 	        </div>
 	  	);
@@ -193,6 +196,41 @@ module.exports = global.Bar = React.createClass({
   			topbart,
   		document.getElementById('top_bar')
   		);
+    },
+
+    openRemote() {
+    	var games = electron.remote.getGlobal('sharedObject').games;
+    	var i = 0;
+		// while (games == null) {
+		// 	continue;
+		// }
+		console.log(games);
+		console.log(games.length);
+		console.log(games[0].widgetname);
+    	vex.dialog.open({
+	        overlayClosesOnClick: false,
+	        input: [
+	        '<script type="text/javascript">',
+	        	'for (i = 0; i < games.length; i++) {',
+	        		'var x = document.createElement("label")',
+	        		'var y = document.createTextNode(games[i])',
+	        		'x.appendChild(y)',
+	        		'document.getElementById("widgetlist").appendChild(x)',
+	        	'}',
+	        '</script>',
+	        '<div class="vex-custom-field-wrapper" id="widgetlist">',
+	            '<label for="widget11">' + games[0].widgetname + '</label>',
+	            '<label for="widget22">' + games[1].widgetname + '</label>',
+	        '</div>'
+		    ].join(''),
+	        callback: function (value){
+	            if (value) {
+	              	return;
+	            } else {
+	            	return;
+	            }
+	        }.bind(this)
+	    })
     },
 
     handleChange(event) {
@@ -216,137 +254,115 @@ module.exports = global.Bar = React.createClass({
 	            }
 	        }.bind(this)
 	    })
+  	},
+
+  	updatestatus(){
+	  	$.ajax({
+			url:api_server+"/login/pingstatus",
+			type:"PUT",
+			contentType: 'application/json; charset=utf-8',
+			data:JSON.stringify({
+				_id:electron.remote.getGlobal('sharedObject').id,
+	 			status:this.state.select,
+	     	})
+	 	}).done((res)=>{
+	 	});
+    },
+
+	_Dashboard(){
+		ReactDOM.render(
+		  	<Dashboard />,
+	  		document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
 	},
 
-	updatestatus() {
-	  	$.ajax({
- 			url:api_server+"/login/changestatus",
- 			type:"PUT",
- 			contentType: 'application/json; charset=utf-8',
- 			data:JSON.stringify({
-        		 _id:electron.remote.getGlobal('sharedObject').id,
-         		status:this.state.select,
-             	})
-         		}).done((res)=>{
-         		});
-	    },
+	_Friends(){
+		ReactDOM.render(
+			<Friends />,
+			document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+	},
 
-		_Dashboard(){
-			ReactDOM.render(
-			  	<Dashboard />,
-		  		document.getElementById('content')
-			);
-			document.getElementById('playgroundFrame').style.visibility = "hidden";
-			document.getElementById('content').style.visibility = "visible";
-			$("#mySidenav>a").css("background-color", "");
-		},
+	_ProfileEdit(){
+		ReactDOM.render(
+			<ProfileEdit />,
+			document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+	},
 
-		_Friends(){
-			ReactDOM.render(
-				<Friends />,
-				document.getElementById('content')
-			);
-			document.getElementById('playgroundFrame').style.visibility = "hidden";
-			document.getElementById('content').style.visibility = "visible";
-			$("#mySidenav>a").css("background-color", "");
-		},
+	_Playground(){
+		document.getElementById('content').style.visibility = "hidden";
+		document.getElementById('playgroundFrame').style.visibility = "visible";
+		var title = "Playground - Gamempire"
+		document.title = title
+		document.getElementById('title').textContent = title
+		$("#mySidenav>a.active").removeClass("active");
+		$( "#_Playground" ).addClass('active');
+	},
 
-		_ProfileEdit(){
-			ReactDOM.render(
-				<ProfileEdit />,
-				document.getElementById('content')
-			);
-			document.getElementById('playgroundFrame').style.visibility = "hidden";
-			document.getElementById('content').style.visibility = "visible";
-			$("#mySidenav>a").css("background-color", "");
-		},
+	_Profile(){
+		electron.remote.getGlobal('sharedObject').viewProfileID = electron.remote.getGlobal('sharedObject').id;
+		ReactDOM.render(
+			<Profile />,
+			document.getElementById('content')
+		);
+		document.getElementById('playgroundFrame').style.visibility = "hidden";
+		document.getElementById('content').style.visibility = "visible";
+		$("#mySidenav>a").css("background-color", "");
+	},
 
-		_Playground(){
-			document.getElementById('content').style.visibility = "hidden";
-			document.getElementById('playgroundFrame').style.visibility = "visible";
-			var title = "Playground - Gamempire"
-			document.title = title
-			document.getElementById('title').textContent = title
-			$("#mySidenav>a.active").removeClass("active");
-			$( "#_Playground" ).addClass('active');
-		},
+	_LogoutConfirm(){
+	    vex.dialog.confirm({
+	        overlayClosesOnClick: false,
+	        message: 'Are you sure you want to logout?',
+	        callback: function (value){
+	            if (value) {
+	              	this._Logout();
+	            } else {
+	            	return;
+	            }
+	        }.bind(this)
+	    })
+	},
 
-		_Profile(){
-			electron.remote.getGlobal('sharedObject').viewProfileID = electron.remote.getGlobal('sharedObject').id;
-			ReactDOM.render(
-				<Profile />,
-				document.getElementById('content')
-			);
-			document.getElementById('playgroundFrame').style.visibility = "hidden";
-			document.getElementById('content').style.visibility = "visible";
-			$("#mySidenav>a").css("background-color", "");
-		},
+	_Logout(){
+    $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
+		//console.log(electron.remote.getGlobal('sharedObject'));
+		$.ajax({
+            url:api_server+"/login/pingstatus",
+            type:"PUT",
+            contentType: 'application/json; charset=utf-8',
+            data:JSON.stringify({
+                _id:electron.remote.getGlobal('sharedObject').id,
+                status:"offline",
+            })
+        }).done((res)=>{
+        document.getElementById('top_bar').innerHTML = "";
+		electron.remote.getGlobal('sharedObject').username=null;
+		electron.remote.getGlobal('sharedObject').aboutme=null;
+		electron.remote.getGlobal('sharedObject').widget=null;
+		electron.remote.getGlobal('sharedObject').token=null;
+		electron.remote.getGlobal('sharedObject').id=null;
+		electron.remote.getGlobal('sharedObject').layout=null;
+		electron.remote.getGlobal('sharedObject').avatar=null;
+		electron.remote.getGlobal('sharedObject').data=null;
+		ipc.sendSync('loggedOut')
+		ReactDOM.render(
+		  <Login />,
+		  document.getElementById('main-content')
+		);
 
-		_LogoutConfirm(){
-		    vex.dialog.confirm({
-		        overlayClosesOnClick: false,
-		        message: 'Are you sure you want to logout?',
-		        callback: function (value){
-		            if (value) {
-		              	this._Logout();
-		            } else {
-		            	return;
-		            }
-		        }.bind(this)
-		    })
-		},
-
-		_OpenRemote(){
-		    vex.dialog.confirm({
-		        overlayClosesOnClick: false,
-		        message: 'Toggle Widget Visibility',
-		     //    input: [
-		     //    '<script>'
-		     //    	'for (var i = 0; i < this.state.widgets.length; i++) {'
-		     //    		'<p>this.state.widgets[i].widgetname</p>'
-		     //    	'}'
-		     //    '</script>'
-			    // ].join(''),
-		        callback: function (value){
-		            if (value) {
-		              	return;
-		            } else {
-		            	return;
-		            }
-		        }.bind(this)
-		    })
-		},
-
-		_Logout(){
-	    $("#mySidenav, #top_bar, #content, #playgroundFrame").removeClass("navOpen");
-
-			//console.log(electron.remote.getGlobal('sharedObject'));
-			$.ajax({
-	                    url:api_server+"/login/changestatus",
-	                    type:"PUT",
-	                    contentType: 'application/json; charset=utf-8',
-	                    data:JSON.stringify({
-	                             _id:electron.remote.getGlobal('sharedObject').id,
-	                             status:"offline",
-	                         })
-	                     }).done((res)=>{
-	        document.getElementById('top_bar').innerHTML = "";
-			electron.remote.getGlobal('sharedObject').username=null;
-			electron.remote.getGlobal('sharedObject').aboutme=null;
-			electron.remote.getGlobal('sharedObject').widget=null;
-			electron.remote.getGlobal('sharedObject').token=null;
-			electron.remote.getGlobal('sharedObject').id=null;
-			electron.remote.getGlobal('sharedObject').layout=null;
-			electron.remote.getGlobal('sharedObject').avatar=null;
-			electron.remote.getGlobal('sharedObject').data=null;
-			ipc.sendSync('loggedOut')
-			ReactDOM.render(
-			  <Login />,
-			  document.getElementById('main-content')
-			);
-
-			}).fail((err)=>{
-	            console.log("status failed to update to the server.")
-	        })
+		}).fail((err)=>{
+        	console.log("status failed to update to the server.")
+        })
 	}
 });

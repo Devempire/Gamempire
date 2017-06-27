@@ -27,7 +27,7 @@ module.exports = global.Friends = React.createClass({
              username:res[i].friend.username,
              avatar:res[i].friend.avatar,
              privacy:res[i].friend.privacy,
-             online:res[i].friend.status,
+             online:res[i].friend.status.status,
            })
          });
 
@@ -79,32 +79,32 @@ for (var i = 0; i < this.state.friends.length; i++) {
    }
   if (this.state.friends[i].status == "pending") {
 
-    allUsers.push(<p><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
+    allUsers.push(<div><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
     <h2 className="noselect">{username}</h2>
     <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
     <b className="noselect">{status}</b><br/>
-    <b className="noselect">{this.state.friends[i].status}</b><br/>
+    <b className="noselect">{this.state.friends[i].status.status}</b><br/>
     <button className="button small-6 large-3 noselect" onClick={()=>{this.acceptfriend(id)}}>Accept</button>
     <button className="button small-6 large-3 noselect" onClick={this.removeFriendConfirm.bind(this,id,username)}>Decline</button>
     </div>
-    </div><hr className="row expanded"/></p>
+    </div><hr className="row expanded"/></div>
     );
   }else{
-    allUsers.push(<p><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
+    allUsers.push(<div><div className="row expanded">{avatar}<div key={Math.random().toString(36).substr(2, 5)} className="small-6 columns noselect">
       <h2 className="noselect">{username}</h2>
       <a className="noselect" data-tag={id} onClick={this.viewprofile} ><b>View profile</b></a><br/>
       <b className="noselect">{status}</b><br/>
       <b className="noselect">{this.state.friends[i].status}</b><br/>
       <button className="button small-6 large-4 noselect" onClick={this.removeFriendConfirm.bind(this,id,username)}>Remove friend</button>
       </div>
-      </div><hr className="row expanded"/></p>
+      </div><hr className="row expanded"/></div>
     );
   }
 }
 
 
     ReactDOM.render(
-      <div key={Math.random().toString(36).substr(2, 5)}>{allUsers}</div>,
+      <div key={i}>{allUsers}</div>,
       document.getElementById('targat')
     );
 
@@ -203,7 +203,6 @@ for (var i = 0; i < this.state.friends.length; i++) {
         }).done((res)=>{
       this.setState({result:res});
 if(res.msg =="No results found."){
-  console.log("no results found.")
   ReactDOM.render(
   <div className="row expanded">
     <p className="noselect">No results found for <b><i>{this.state.username}</i></b>.</p><br/>
@@ -379,7 +378,7 @@ document.getElementById('search_results').style.display = "block";
             <ul className="menu noselect">
               <li><h4>Search friends</h4></li>
               <li>   </li>
-              <li><input type="search" id="usernameSearch" placeholder="Search by username" onChange={this.username} onKeyPress={this.usernameSearch.bind(this)}/></li>
+              <li><input type="search" id="usernameSearch" placeholder="Search by username" onChange={this.username} onKeyPress={this.usernameSearch}/></li>
               <li><button type="button" id="usernameSearchbtn" className="button" onClick={this.search}>Search</button></li>
             </ul>
           </div>

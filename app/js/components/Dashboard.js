@@ -154,34 +154,28 @@ module.exports = global.Dashboard = React.createClass({
             ww=mdl[j].w;
             hh=mdl[j].h;
           }
-
-            //Debugging
-            //console.log('x: '+ xx);
-            //console.log('y: '+yy);
-            //console.log('w: '+ww);
-            //console.log('h: '+hh);
+          //Debugging
+          //console.log('x: '+ xx);
+          //console.log('y: '+yy);
+          //console.log('w: '+ww);
+          //console.log('h: '+hh);
         }
 
         this.setState({
-          games: this.state.games.concat({
-            i: res2._id,
-            widgettype:res2.widgettype,
-            widgetname:res2.widgetname,
-            x:xx,
-            y:yy,
-            h:hh,
-            w:ww,
-            minH: res2.minH,
-            maxH: res2.maxH,
-            minW: res2.minW,
-            maxW: res2.maxW,
-          })
+            games: this.state.games.concat({
+                i: res2._id,
+                widgettype:res2.widgettype,
+                widgetname:res2.widgetname,
+                x:xx,
+                y:yy,
+                h:hh,
+                w:ww,
+                minH: res2.minH,
+                maxH: res2.maxH,
+                minW: res2.minW,
+                maxW: res2.maxW,
+            })
         });
-
-        //electron.remote.getGlobal('sharedObject').games = this.state.games;
-        //console.log(electron.remote.getGlobal('sharedObject').games);
-        // global.games = this.state.games;
-        // console.log(global.games);
       });
     }
   },
@@ -197,10 +191,6 @@ module.exports = global.Dashboard = React.createClass({
     $('#child_under').children().addClass('row expanded');
     //this.setWindowsColours();
     //electron.remote.getGlobal('sharedObject').games = this.state.games;
-  },
-
-  getWidgets() {
-    return this.state.games;
   },
 
   // setWindowsColours(){
@@ -360,13 +350,11 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   onGame(el){
-    var i = el.i;
     var widgettype = el.widgettype;
     var widgetID = el.i;
     var widgetTitle = el.widgetname;
-    var el = el;
 
-    if (widgettype == 'game') {
+    if (widgetID ==  "594872639946ff8e74fd1356"||widgetID =="594872709946ff8e74fd1357"||widgetID =="5948727f9946ff8e74fd135a"||widgetID =="594873849946ff8e74fd135b") {
         return (
           <div key={widgetID} data-grid={el} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle}
@@ -404,9 +392,7 @@ module.exports = global.Dashboard = React.createClass({
             </div>
           </div>
         );
-    } else if (widgettype == 'social' || widgettype == 'music') {
-    //                                                                                                                                          LOL = 58a7a0dd27b83be81d3008e3
-    //if (el.i === "58a73d8a27b83be81d3008b3"|| "58a7fd3c27b83be81d30091c" || "58a7fd4827b83be81d30091d" || "58a7fd5027b83be81d30091e" || "58a7fd6227b83be81d30091f" || "58a7a0dd27b83be81d3008e3") {
+    } else if (widgetID === "594871ff9946ff8e74fd1352"|| widgetID =="59499ed12b0e8c5d0108707f" || widgetID =="5948716f9946ff8e74fd134f" || widgetID =="594871cc9946ff8e74fd1351" || widgetID == "594872129946ff8e74fd1354" ) {
       return (
         <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
@@ -416,7 +402,7 @@ module.exports = global.Dashboard = React.createClass({
         {listWidgets.loadwid(widgetID)}
         </div>
       );
-    } else if (widgettype == 'other') {
+    } else if (widgetID == "5948727c9946ff8e74fd1359"||widgetID =="594872299946ff8e74fd1355"||widgetID =="5948720c9946ff8e74fd1353"||widgetID =="5948719b9946ff8e74fd1350") {
       return (
       <div key={widgetID} data-grid={el} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
@@ -432,7 +418,7 @@ module.exports = global.Dashboard = React.createClass({
 
   onwidget(item){
     return (
-      <option key={item.value} id={item.text} value={item.value} name={item.widgettype}>{item.text}</option>
+      <option key={item.value} id={item.text} value={item.value} name={item.text}>{item.text}</option>
     );
   },
 
@@ -509,7 +495,7 @@ module.exports = global.Dashboard = React.createClass({
     // const newState = [];
     // this.setState({ newState: this.state.games});
     // this.props.callbackParent(newState);
-    console.log(this.getWidgets());
+    electron.remote.getGlobal('sharedObject').games = this.state.games;
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
