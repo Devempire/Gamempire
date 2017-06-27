@@ -1323,6 +1323,16 @@ h5:hover {
     position: fixed;
 }
 
+#top_bar #remote {
+    background-color: red;
+    border: none;
+    display: block;
+    float: right;
+    color: white;
+    right: 50px;
+    position: fixed;
+}
+
 .remove {
     position: absolute;
     right: 5px;
