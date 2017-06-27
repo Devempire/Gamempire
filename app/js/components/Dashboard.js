@@ -3,9 +3,6 @@ var ResponsiveReactGridLayout = require('react-grid-layout').Responsive;
 ResponsiveReactGridLayout = WidthProvider(ResponsiveReactGridLayout);
 
 const listWidgets = require('./listWidgets.js');
-const gpuReport = require("gl-info");
-//const drivelist = require('drivelist');
-//const si = require('systeminformation');
 
 var vex = require('vex-js')
 vex.defaultOptions.className = 'vex-theme-os'
@@ -81,15 +78,13 @@ module.exports = global.Dashboard = React.createClass({
       }
       for (var i = 0; i < res.length; i++) {
           this.setState({
-          widgets: this.state.widgets.concat({
-            value:res[i]._id,
-            text:res[i].widgetname,
-            widgettype:res[i].widgettype
-          })
-         });
-
+            widgets: this.state.widgets.concat({
+              value:res[i]._id,
+              text:res[i].widgetname,
+              widgettype:res[i].widgettype
+            })
+          });
       }
-
     }).fail((err)=>{
       console.log('Something is wrong with loading widgets.');
       vex.dialog.alert({
@@ -105,7 +100,6 @@ module.exports = global.Dashboard = React.createClass({
 
   reRender(widgetID) {
     this.setState({games: _.reject(this.state.games, {i: widgetID})});
-
 
     $.get(api_server+'/widget/find/'+ widgetID + '/info').done((res2)=>{
       console.log(res2.widgetname+' widget was reset.');
@@ -144,95 +138,100 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   loadLayout(){
-    var mdl =this.state.layouts.md;
-
-    var g =this.state.widget.length;
+    var mdl = this.state.layouts.md;
+    var g = this.state.widget.length;
     for (var h = 0; h < g; h++) {
       //this.removeWidget(this.state.widget[h].widgetid)
-        $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
-            var xx=res2.x;
-            var yy=res2.y;
-            var ww=res2.w;
-            var hh=res2.h;
-            for(var j=0; j<mdl.length; j++){
-              if(mdl[j].i == res2._id){
-                xx=mdl[j].x;
-                yy=mdl[j].y;
-                ww=mdl[j].w;
-                hh=mdl[j].h;
-                }
+      $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+        var xx=res2.x;
+        var yy=res2.y;
+        var ww=res2.w;
+        var hh=res2.h;
+        for(var j=0; j<mdl.length; j++){
+          if(mdl[j].i == res2._id){
+            xx=mdl[j].x;
+            yy=mdl[j].y;
+            ww=mdl[j].w;
+            hh=mdl[j].h;
+          }
 
-                //Debugging
-                //console.log('x: '+ xx);
-                //console.log('y: '+yy);
-                //console.log('w: '+ww);
-                //console.log('h: '+hh);
-            }
-
-
-
-            this.setState({
-                games: this.state.games.concat({
-                    i: res2._id,
-                    widgettype:res2.widgettype,
-                    widgetname:res2.widgetname,
-                    x:xx,
-                    y:yy,
-                    h:hh,
-                    w:ww,
-                    minH: res2.minH,
-                    maxH: res2.maxH,
-                    minW: res2.minW,
-                    maxW: res2.maxW,
-                    })
-                });
-
-              });
-
+            //Debugging
+            //console.log('x: '+ xx);
+            //console.log('y: '+yy);
+            //console.log('w: '+ww);
+            //console.log('h: '+hh);
         }
+
+        this.setState({
+          games: this.state.games.concat({
+            i: res2._id,
+            widgettype:res2.widgettype,
+            widgetname:res2.widgetname,
+            x:xx,
+            y:yy,
+            h:hh,
+            w:ww,
+            minH: res2.minH,
+            maxH: res2.maxH,
+            minW: res2.minW,
+            maxW: res2.maxW,
+          })
+        });
+
+        //electron.remote.getGlobal('sharedObject').games = this.state.games;
+        //console.log(electron.remote.getGlobal('sharedObject').games);
+        // global.games = this.state.games;
+        // console.log(global.games);
+      });
+    }
   },
 
   componentWillMount: function(){
     this.loadLayout();
     this.loadWidgets();
     this.hostStats();
+    //electron.remote.getGlobal('sharedObject').games = this.state.games;
   },
 
   componentDidMount: function(){
     $('#child_under').children().addClass('row expanded');
     //this.setWindowsColours();
-    //console.log("component did mount!");
+    //electron.remote.getGlobal('sharedObject').games = this.state.games;
   },
 
-  setWindowsColours(){
-    var accentColor = ipc.sendSync('getAccentColor');
-    var activeCaption = ipc.sendSync('getActiveCaption');
-    var inactiveCaption = ipc.sendSync('getInactiveCaption');
-    //var experiment = ipc.sendSync('experiment');
-    const red = accentColor.substr(0, 2);
-    const green = accentColor.substr(2, 2);
-    const blue = accentColor.substr(4, 2);
-    const alpha = accentColor.substr(6, 2);
-    //console.log(accentColor);
-    //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
-    //console.log(activeCaption);
-    //console.log(inactiveCaption);
-    //console.log(experiment);
-    var red_decimal = parseInt(red, 16);
-    var green_decimal = parseInt(green, 16);
-    var blue_decimal = parseInt(blue, 16);
-    var alpha_percent = ((parseInt(alpha, 16)) / 255)
-
-    $.each(primaryElements, function(index, value) {
-        $(value).css("background-color", activeCaption);
-    });
-    $.each(backgroundElements, function(index, value) {
-        $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
-    });
-    $.each(secondaryElements, function(index, value) {
-        $(value).css("background-color", inactiveCaption);
-    });
+  getWidgets() {
+    return this.state.games;
   },
+
+  // setWindowsColours(){
+  //   var accentColor = ipc.sendSync('getAccentColor');
+  //   var activeCaption = ipc.sendSync('getActiveCaption');
+  //   var inactiveCaption = ipc.sendSync('getInactiveCaption');
+  //   //var experiment = ipc.sendSync('experiment');
+  //   const red = accentColor.substr(0, 2);
+  //   const green = accentColor.substr(2, 2);
+  //   const blue = accentColor.substr(4, 2);
+  //   const alpha = accentColor.substr(6, 2);
+  //   //console.log(accentColor);
+  //   //console.log('R: '+red+'   G: '+green+'   B: '+blue+'   A:'+alpha);
+  //   //console.log(activeCaption);
+  //   //console.log(inactiveCaption);
+  //   //console.log(experiment);
+  //   var red_decimal = parseInt(red, 16);
+  //   var green_decimal = parseInt(green, 16);
+  //   var blue_decimal = parseInt(blue, 16);
+  //   var alpha_percent = ((parseInt(alpha, 16)) / 255)
+
+  //   $.each(primaryElements, function(index, value) {
+  //       $(value).css("background-color", activeCaption);
+  //   });
+  //   $.each(backgroundElements, function(index, value) {
+  //       $(value).css("background-color", 'rgba(' + red_decimal + ', ' + green_decimal + ', ' + blue_decimal + ', ' + alpha_percent + ')');
+  //   });
+  //   $.each(secondaryElements, function(index, value) {
+  //       $(value).css("background-color", inactiveCaption);
+  //   });
+  // },
 
   onBreakpointChange(breakpoint, cols) {
     //console.log('onBreakpointChange Triggered \n    Breakpoint: '+ breakpoint+'\n     Cols: ' + cols );
@@ -246,8 +245,8 @@ module.exports = global.Dashboard = React.createClass({
     $( "#add_widget_button" ).prop( "disabled", false );
 
     this.setState({
-          selectwidget: event.target.value,
-         });
+      selectwidget: event.target.value,
+    });
   },
 
   show() {
@@ -256,24 +255,6 @@ module.exports = global.Dashboard = React.createClass({
 
   hostStats(){
     var host = ipc.sendSync('hostStats')
-
-    var gpuinfo = gpuReport();
-    host.push(gpuinfo.unMaskedRenderer);
-
-    // si.cpu(function(data) {
-    //     console.log('CPU-Information:');
-    //     console.log(data);
-    // })
-
-    // drivelist.list((error, drives) => {
-    //     if (error) {
-    //         throw error;
-    //     }
-
-    //     drives.forEach((drive) => {
-    //         console.log(drive);
-    //     });
-    // });
 
     $.ajax({
           url:api_server+"/login/profile/dataupload",
@@ -297,8 +278,6 @@ module.exports = global.Dashboard = React.createClass({
                     }.bind(this)
                 })
             });
-
-
   },
 
   handleSubmit(event) {
@@ -381,10 +360,10 @@ module.exports = global.Dashboard = React.createClass({
   },
 
   onGame(el){
-    var i =el.i;
+    var i = el.i;
     var widgettype = el.widgettype;
-    var widgetID =el.i;
-    var widgetTitle=el.widgetname;
+    var widgetID = el.i;
+    var widgetTitle = el.widgetname;
     var el = el;
 
     if (widgettype == 'game') {
@@ -525,6 +504,12 @@ module.exports = global.Dashboard = React.createClass({
     var title = "Dashboard \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
+    // electron.remote.getGlobal('sharedObject').games = this.state.games;
+    // console.log(electron.remote.getGlobal('sharedObject').games);
+    // const newState = [];
+    // this.setState({ newState: this.state.games});
+    // this.props.callbackParent(newState);
+    console.log(this.getWidgets());
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
@@ -532,7 +517,6 @@ module.exports = global.Dashboard = React.createClass({
 
     //Set Dashbaord as active in menu
     $( "#_Dashboard" ).addClass("active");
-
 
       return (
         <div id="child_under" className="noselect">
@@ -561,9 +545,5 @@ module.exports = global.Dashboard = React.createClass({
           </div>
         </div>
       );
-
-
   }
-
-
 });
