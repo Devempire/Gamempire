@@ -184,7 +184,8 @@ module.exports = global.Dashboard = React.createClass({
                     maxW: res2.maxW,
                     })
                 });
-
+              //electron.remote.getGlobal('sharedObject').games=this.state.games;
+              //console.log(electron.remote.getGlobal('sharedObject').games);
               });
 
         }
@@ -505,6 +506,7 @@ module.exports = global.Dashboard = React.createClass({
     var title = "Dashboard \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
+    electron.remote.getGlobal('sharedObject').games = this.state.games;
 
     //Removes all Active class from Menu
     $("#mySidenav>a.active").removeClass("active");
