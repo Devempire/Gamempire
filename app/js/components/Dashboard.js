@@ -184,13 +184,11 @@ module.exports = global.Dashboard = React.createClass({
     this.loadLayout();
     this.loadWidgets();
     this.hostStats();
-    //electron.remote.getGlobal('sharedObject').games = this.state.games;
   },
 
   componentDidMount: function(){
     $('#child_under').children().addClass('row expanded');
     //this.setWindowsColours();
-    //electron.remote.getGlobal('sharedObject').games = this.state.games;
   },
 
   // setWindowsColours(){
@@ -490,11 +488,6 @@ module.exports = global.Dashboard = React.createClass({
     var title = "Dashboard \u2014 Gamempire"
     document.title = title
     document.getElementById('title').textContent = title
-    // electron.remote.getGlobal('sharedObject').games = this.state.games;
-    // console.log(electron.remote.getGlobal('sharedObject').games);
-    // const newState = [];
-    // this.setState({ newState: this.state.games});
-    // this.props.callbackParent(newState);
     electron.remote.getGlobal('sharedObject').games = this.state.games;
 
     //Removes all Active class from Menu

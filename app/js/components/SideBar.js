@@ -200,28 +200,21 @@ module.exports = global.Bar = React.createClass({
 
     openRemote() {
     	var games = electron.remote.getGlobal('sharedObject').games;
-    	var i = 0;
 		// while (games == null) {
 		// 	continue;
 		// }
 		console.log(games);
 		console.log(games.length);
 		console.log(games[0].widgetname);
-    	vex.dialog.open({
+
+		vex.dialog.open({
 	        overlayClosesOnClick: false,
-	        content: [
-	        <script type="text/javascript">
-	        	for (i = 0; i < games.length; i++) {,
-	        		var x = document.createElement("label")
-	        		var y = document.createTextNode(games[i].widgetname)
-	        		x.appendChild(y)
-	        		document.getElementById("widgetlist").appendChild(x)
-	        	}
-	        </script>
-	        <div class="vex-custom-field-wrapper" id="widgetlist">
-	            <label for="widget">games[0].widgetname</label>
-	        </div>
-	        ].join(''),
+	        input: [
+	        '<div class="vex-custom-field-wrapper" id="widgetlist">',
+	            '<label for="widget11">' + games[0].widgetname + '</label>',
+	            '<label for="widget22">' + games[1].widgetname + '</label>',
+	        '</div>'
+		    ].join(''),
 	        callback: function (value){
 	            if (value) {
 	              	return;
@@ -230,6 +223,35 @@ module.exports = global.Bar = React.createClass({
 	            }
 	        }.bind(this)
 	    })
+
+    	// vex.dialog.open({
+	    //     overlayClosesOnClick: false,
+	    //     content: [
+	    //     // <script type="text/javascript">
+	    //     // 	for (var i = 0; i < games.length; i++) {,
+	    //     // 		var x = document.createElement("label")
+	    //     // 		var y = document.createTextNode(games[i].widgetname)
+	    //     // 		x.appendChild(y)
+	    //     // 		document.getElementById("widgetlist").appendChild(x)
+	    //     // 	}
+	    //     // </script>
+	    //     <div class="vex-custom-field-wrapper" id="widgetlist">
+	    //         <label>games[0].widgetname</label>
+	    //         <p>games[0].widgetname</p>
+	    //     </div>
+	    //     ].join(''),
+	    //     buttons: [
+		   //      $.extend({}, vex.dialog.buttons.YES, { text: 'OK' }),
+		   //      $.extend({}, vex.dialog.buttons.NO, { text: 'CANCEL' })
+		   //  ].join(''),
+	    //     callback: function (value){
+	    //         if (value) {
+	    //           	return;
+	    //         } else {
+	    //         	return;
+	    //         }
+	    //     }.bind(this)
+	    // })
     },
 
     handleChange(event) {
