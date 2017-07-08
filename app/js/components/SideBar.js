@@ -7,16 +7,6 @@ import Dashboard from './Dashboard.js';
 
 module.exports = global.Bar = React.createClass({
 
-	// getInitialState() {
-	//     return {
-	//       	games:[]
-	//     };
-	// },
-
-	// componentWillMount: function() {
-	// 	<Dashboard callbackParent={this.onChildChanged(newState)} />
-	// },
-
 	editAboutMe(event) {
 		this.setState({aboutMe:event.target.value});
 	},
@@ -69,10 +59,6 @@ module.exports = global.Bar = React.createClass({
 	},
 
 	getInitialState() {
-		// var games = electron.remote.getGlobal('sharedObject').games;
-		// while (games == null) {
-		// 	continue;
-		// }
 		var username = electron.remote.getGlobal('sharedObject').username;
 		var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
 		var id = electron.remote.getGlobal('sharedObject').id;
@@ -89,13 +75,8 @@ module.exports = global.Bar = React.createClass({
 			username:username,
 			aboutMe:aboutme,
 			avatar:avatar,
-			//games:games
 		};
 	},
-
-	// onChildChanged(newState) {
- //      this.setState({ games: newState })
- //    },
 
     componentDidMount: function(){
     	this.topbar();
@@ -200,21 +181,29 @@ module.exports = global.Bar = React.createClass({
 
     openRemote() {
     	var games = electron.remote.getGlobal('sharedObject').games;
+    	var widgetlist = document.createElement('div');
+    	widgetlist.setAttribute('id', 'widgetlist');
+
+    	//console.log(widgetlist);
 		// while (games == null) {
 		// 	continue;
 		// }
-		console.log(games);
-		console.log(games.length);
-		console.log(games[0].widgetname);
+		//console.log(games);
+		//console.log(games.length);
+		//console.log(games[0].widgetname);
+
+		for (var i = 0; i < games.length; i++) {
+    		var label = document.createElement('label');
+    		var widget_name = document.createTextNode(games[i].widgetname);
+    		label.appendChild(widget_name);
+    		widgetlist.appendChild(label);
+
+			console.log(widgetlist);
+    	}
 
 		vex.dialog.open({
-	        overlayClosesOnClick: false,
-	        input: [
-	        '<div class="vex-custom-field-wrapper" id="widgetlist">',
-	            '<label for="widget11">' + games[0].widgetname + '</label>',
-	            '<label for="widget22">' + games[1].widgetname + '</label>',
-	        '</div>'
-		    ].join(''),
+	        overlayClosesOnClick: true,
+	        unsafeMessage: widgetlist,
 	        callback: function (value){
 	            if (value) {
 	              	return;
@@ -252,6 +241,24 @@ module.exports = global.Bar = React.createClass({
 	    //         }
 	    //     }.bind(this)
 	    // })
+
+
+		// vex.dialog.open({
+	 //        overlayClosesOnClick: false,
+	 //        input: [
+	 //        '<div class="vex-custom-field-wrapper" id="widgetlist">',
+	 //            '<label for="widget1">' + games[0].widgetname + '</label>',
+	 //            '<label for="widget2">' + games[1].widgetname + '</label>',
+	 //        '</div>'
+		//     ].join(''),
+	 //        callback: function (value){
+	 //            if (value) {
+	 //              	return;
+	 //            } else {
+	 //            	return;
+	 //            }
+	 //        }.bind(this)
+	 //    })
     },
 
     handleChange(event) {
