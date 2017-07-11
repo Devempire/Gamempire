@@ -191,12 +191,23 @@ module.exports = global.Bar = React.createClass({
 		//console.log(games);
 		//console.log(games.length);
 		//console.log(games[0].widgetname);
+		//<input type="checkbox" name="vehicle" value="Car" checked='checked'>
 
 		for (var i = 0; i < games.length; i++) {
     		var label = document.createElement('label');
     		var widget_name = document.createTextNode(games[i].widgetname);
     		label.appendChild(widget_name);
     		widgetlist.appendChild(label);
+
+    		var input = document.createElement('input');
+    		input.setAttribute('type', 'checkbox');
+    		input.setAttribute('id', 'widget' + i);
+    		input.addEventListener('click', this.hideWidget);
+    		input.setAttribute('checked', 'checked');
+    		widgetlist.appendChild(input);
+
+    		var br = document.createElement('br');
+    		widgetlist.appendChild(br);
 
 			console.log(widgetlist);
     	}
@@ -261,8 +272,12 @@ module.exports = global.Bar = React.createClass({
 	 //    })
     },
 
+    hideWidget() {
+    	console.log(event.target.id);
+    },
+
     handleChange(event) {
-	    var status =event.target.value;
+	    var status = event.target.value;
 		$(".statusSelect").css('background', 'url("../app/img/' + status + '.ico")  97% / 17% no-repeat #eee');
 
 	    vex.dialog.confirm({
