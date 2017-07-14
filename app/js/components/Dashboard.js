@@ -352,9 +352,9 @@ module.exports = global.Dashboard = React.createClass({
     var widgetID = el.i;
     var widgetTitle = el.widgetname;
 
-    if (widgetID ==  "594872639946ff8e74fd1356"||widgetID =="594872709946ff8e74fd1357"||widgetID =="5948727f9946ff8e74fd135a"||widgetID =="594873849946ff8e74fd135b") {
+    if (widgetID == "594872639946ff8e74fd1356" || widgetID == "594872709946ff8e74fd1357" || widgetID == "5948727f9946ff8e74fd135a"|| widgetID == "594873849946ff8e74fd135b") {
         return (
-          <div key={widgetID} data-grid={el} className="widgetFrame">
+          <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
           <p className="widgetTitle noselect">{widgetTitle}
             <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
             <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>
@@ -402,7 +402,7 @@ module.exports = global.Dashboard = React.createClass({
       );
     } else if (widgetID == "5948727c9946ff8e74fd1359"||widgetID =="594872299946ff8e74fd1355"||widgetID =="5948720c9946ff8e74fd1353"||widgetID =="5948719b9946ff8e74fd1350") {
       return (
-      <div key={widgetID} data-grid={el} className="widgetFrame">
+      <div key={widgetID} data-grid={el} id={widgetID} className="widgetFrame">
         <p className="widgetTitle noselect">{widgetTitle}
           <span title="Reload widget" className="rerender" onClick={this.reRender.bind(this, widgetID)}>⟳</span>
           <span title="Remove widget" className="remove" onClick={this.removeWidgetConfirm.bind(this, widgetID, widgetTitle)}>✖</span>

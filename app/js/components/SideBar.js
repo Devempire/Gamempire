@@ -191,7 +191,6 @@ module.exports = global.Bar = React.createClass({
 		//console.log(games);
 		//console.log(games.length);
 		//console.log(games[0].widgetname);
-		//<input type="checkbox" name="vehicle" value="Car" checked='checked'>
 
 		for (var i = 0; i < games.length; i++) {
     		var label = document.createElement('label');
@@ -201,7 +200,7 @@ module.exports = global.Bar = React.createClass({
 
     		var input = document.createElement('input');
     		input.setAttribute('type', 'checkbox');
-    		input.setAttribute('id', 'widget' + i);
+    		input.setAttribute('id', games[i].i);
     		input.addEventListener('click', this.hideWidget);
     		input.setAttribute('checked', 'checked');
     		widgetlist.appendChild(input);
@@ -223,57 +222,18 @@ module.exports = global.Bar = React.createClass({
 	            }
 	        }.bind(this)
 	    })
-
-    	// vex.dialog.open({
-	    //     overlayClosesOnClick: false,
-	    //     content: [
-	    //     // <script type="text/javascript">
-	    //     // 	for (var i = 0; i < games.length; i++) {,
-	    //     // 		var x = document.createElement("label")
-	    //     // 		var y = document.createTextNode(games[i].widgetname)
-	    //     // 		x.appendChild(y)
-	    //     // 		document.getElementById("widgetlist").appendChild(x)
-	    //     // 	}
-	    //     // </script>
-	    //     <div class="vex-custom-field-wrapper" id="widgetlist">
-	    //         <label>games[0].widgetname</label>
-	    //         <p>games[0].widgetname</p>
-	    //     </div>
-	    //     ].join(''),
-	    //     buttons: [
-		   //      $.extend({}, vex.dialog.buttons.YES, { text: 'OK' }),
-		   //      $.extend({}, vex.dialog.buttons.NO, { text: 'CANCEL' })
-		   //  ].join(''),
-	    //     callback: function (value){
-	    //         if (value) {
-	    //           	return;
-	    //         } else {
-	    //         	return;
-	    //         }
-	    //     }.bind(this)
-	    // })
-
-
-		// vex.dialog.open({
-	 //        overlayClosesOnClick: false,
-	 //        input: [
-	 //        '<div class="vex-custom-field-wrapper" id="widgetlist">',
-	 //            '<label for="widget1">' + games[0].widgetname + '</label>',
-	 //            '<label for="widget2">' + games[1].widgetname + '</label>',
-	 //        '</div>'
-		//     ].join(''),
-	 //        callback: function (value){
-	 //            if (value) {
-	 //              	return;
-	 //            } else {
-	 //            	return;
-	 //            }
-	 //        }.bind(this)
-	 //    })
     },
 
     hideWidget() {
-    	console.log(event.target.id);
+    	var widget = document.getElementById(event.target.id);
+    	console.log(widget);
+    	//console.log(widget.getAttribute('style'));
+    	//console.log(widget.getAttribute('hidden'));
+    	if (widget.getAttribute('hidden') == null) {
+    		widget.setAttribute('hidden', true);
+    	} else {
+    		widget.removeAttribute('hidden');
+    	}
     },
 
     handleChange(event) {
