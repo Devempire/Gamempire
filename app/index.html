@@ -28,26 +28,25 @@ var ipc = electron.ipcRenderer;
       vex.defaultOptions.className = 'vex-theme-os';
       function closeWindowConfirm(){
         vex.dialog.confirm({
-            overlayClosesOnClick: false,
-            message: 'Are you sure you want to exit Gamempire?',
-            callback: function (value){
-                if (value) {
-                  $.ajax({
-                  url:"http://gamempire.net/login/changestatus",
-                  type:"PUT",
-                  contentType: 'application/json; charset=utf-8',
-                  data:JSON.stringify({
-                         _id:electron.remote.getGlobal('sharedObject').id,
-                        status:"offline",
-                          })
-                        }).done((res)=>{
-                          ipc.sendSync('closeWindow')
-                        });
-                  
-                } else {
-                  return;
-                }
+          overlayClosesOnClick: false,
+          message: 'Are you sure you want to exit Gamempire?',
+          callback: function (value){
+            if (value) {
+              $.ajax({
+                url:api_server+"/login/pingstatus",
+                type:"PUT",
+                contentType: 'application/json; charset=utf-8',
+                data:JSON.stringify({
+                  _id:electron.remote.getGlobal('sharedObject').id,
+                  status:"offline"
+                })
+              }).done((res)=>{
+                ipc.sendSync('closeWindow')
+              });
+            } else {
+              return;
             }
+          }
         })
       }
       </script>
