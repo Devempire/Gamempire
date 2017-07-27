@@ -103,10 +103,10 @@ module.exports = global.Dashboard = React.createClass({
 
     $.get(api_server+'/widget/find/'+ widgetID + '/info').done((res2)=>{
       console.log(res2.widgetname+' widget was reset.');
-    var i=this.state.games.length;
+    var i = this.state.games.length;
 
     if (i == 0) {
-      var x=0;
+      var x = 0;
       var y = 0;
     } else {
       var y = 4*(i/2);
@@ -145,13 +145,13 @@ module.exports = global.Dashboard = React.createClass({
       var hidden = this.state.widget[h].hidden;
       console.log(hidden);
       //this.removeWidget(this.state.widget[h].widgetid)
-      $.get(api_server+'/widget/find/'+ this.state.widget[h].widgetid + '/info').done((res2)=>{
+      $.get(api_server + '/widget/find/' + this.state.widget[h].widgetid + '/info').done((res2)=>{
         var xx=res2.x;
         var yy=res2.y;
         var ww=res2.w;
         var hh=res2.h;
         //var hidden = this.state.widget[h].hidden;
-        for(var j=0; j<mdl.length; j++){
+        for(var j = 0; j < mdl.length; j++){
           if(mdl[j].i == res2._id){
             xx=mdl[j].x;
             yy=mdl[j].y;
