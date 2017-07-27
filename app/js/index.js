@@ -9,7 +9,6 @@ const ReactGridLayout = require('react-grid-layout');
 const os = require('os');
 //const {systemPreferences} = require('electron')
 
-
 global.jquery = $
 window.React = React
 window.ReactDOM = ReactDOM
@@ -22,7 +21,7 @@ window.PureRenderMixin = PureRenderMixin
 window.ReactGridLayout = ReactGridLayout
 window.os = os
 global.api_server = "http://gamempire.net";
-//global.api_server = "http://localhost:80";
+//global.api_server = "http://localhost:8080";
 
 global.Login = require('./components/Login.js')
 global.Registration = require('./components/Registration.js')

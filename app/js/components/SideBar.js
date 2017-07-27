@@ -75,6 +75,7 @@ module.exports = global.Bar = React.createClass({
 			username:username,
 			aboutMe:aboutme,
 			avatar:avatar,
+			hidden:false
 		};
 	},
 
@@ -181,16 +182,9 @@ module.exports = global.Bar = React.createClass({
 
     openRemote() {
     	var games = electron.remote.getGlobal('sharedObject').games;
+    	console.log(games);
     	var widgetlist = document.createElement('div');
     	widgetlist.setAttribute('id', 'widgetlist');
-
-    	//console.log(widgetlist);
-		// while (games == null) {
-		// 	continue;
-		// }
-		//console.log(games);
-		//console.log(games.length);
-		//console.log(games[0].widgetname);
 
 		for (var i = 0; i < games.length; i++) {
     		var label = document.createElement('label');
@@ -202,7 +196,12 @@ module.exports = global.Bar = React.createClass({
     		input.setAttribute('type', 'checkbox');
     		input.setAttribute('id', games[i].i);
     		input.addEventListener('click', this.hideWidget);
-    		input.setAttribute('checked', 'checked');
+    		console.log(games[i].hidden);
+
+    		if (games[i].hidden == false || games[i].hidden == "false") {
+    			input.setAttribute('checked', 'checked');
+    		}
+    		
     		widgetlist.appendChild(input);
 
     		var br = document.createElement('br');
@@ -231,9 +230,33 @@ module.exports = global.Bar = React.createClass({
     	//console.log(widget.getAttribute('hidden'));
     	if (widget.getAttribute('hidden') == null) {
     		widget.setAttribute('hidden', true);
+    		this.setState({hidden: true});
     	} else {
     		widget.removeAttribute('hidden');
+    		this.setState({hidden: false});
     	}
+    	
+       	$.ajax({
+            url:api_server+"/login/profile/updatewidget",
+            type:"PUT",
+            data:{
+	            _id:this.state.id,
+	            widgetid:event.target.id,
+	            hidden:this.state.hidden
+            }
+        }).done((res)=>{
+            console.log("widget visibility is updated");
+        }).fail((err)=>{
+            console.log("Widget Visibility is not updated in the server.");
+            vex.dialog.alert({
+                message: "Widget Visibility is not updated in the server.",
+                callback: function (value){
+                    if (value) {
+                      	return;
+                    }
+                }.bind(this)
+            })
+        });
     },
 
     handleChange(event) {
