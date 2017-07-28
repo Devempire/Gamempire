@@ -63,6 +63,7 @@ module.exports = global.Bar = React.createClass({
 		var aboutme = electron.remote.getGlobal('sharedObject').aboutme;
 		var id = electron.remote.getGlobal('sharedObject').id;
 		var avatar = electron.remote.getGlobal('sharedObject').avatar;
+		//var widget = electron.remote.getGlobal('sharedObject').widget;
 
 		if (avatar == false) {
 			avatar = './../app/img/user.jpg';
@@ -75,12 +76,15 @@ module.exports = global.Bar = React.createClass({
 			username:username,
 			aboutMe:aboutme,
 			avatar:avatar,
-			hidden:false
+			hidden:false,
+			//widgets:[],
+			//widget:widget
 		};
 	},
 
-    componentDidMount: function(){
+    componentDidMount: function() {
     	this.topbar();
+    	//this.loadWidgets();
 
 		//go online
 		this.setState({status:$(".statusSelect").val()}); //set online default on login first load.
@@ -180,9 +184,44 @@ module.exports = global.Bar = React.createClass({
   		);
     },
 
+ //    loadWidgets() {
+	//     $.get(api_server+"/widget/show").done((res)=>{
+	//         var i = res.length;
+	//         while (i--) {
+	//           var id = res[i]._id;
+	//           for(var j=0; j<this.state.widget.length;j++){
+	//           if (id ==this.state.widget[j].widgetid) {
+	//             res.splice(i, 1);
+	//           }
+	//         }
+	//       }
+	//       for (var i = 0; i < res.length; i++) {
+	//           this.setState({
+	//             widgets: this.state.widgets.concat({
+	//               value:res[i]._id,
+	//               text:res[i].widgetname,
+	//               widgettype:res[i].widgettype
+	//             })
+	//           });
+	//       }
+	//     }).fail((err)=>{
+	//       console.log('Something is wrong with loading widgets.');
+	//       vex.dialog.alert({
+	//           message: 'Something is wrong with loading widgets.',
+	//           callback: function (value){
+	//               if (value) {
+	//                 return;
+	//               }
+	//           }.bind(this)
+	//       })
+	//     });
+	// },
+
     openRemote() {
     	var games = electron.remote.getGlobal('sharedObject').games;
-    	console.log(games);
+    	//console.log(games);
+    	//console.log(this.state.widgets);
+    	//console.log(this.state.widget);
     	var widgetlist = document.createElement('div');
     	widgetlist.setAttribute('id', 'widgetlist');
 
@@ -196,7 +235,24 @@ module.exports = global.Bar = React.createClass({
     		input.setAttribute('type', 'checkbox');
     		input.setAttribute('id', games[i].i);
     		input.addEventListener('click', this.hideWidget);
-    		console.log(games[i].hidden);
+    		//console.log(games[i].hidden);
+
+    		$.get(api_server+"/widget/find/" + games[i].i + "/info").done((res)=>{
+    			console.log(res);
+		        //hidden = res.hidden;
+		    }).fail((err)=>{
+		      console.log('Something is wrong with loading the widget.');
+		      vex.dialog.alert({
+		          message: 'Something is wrong with loading the widget.',
+		          callback: function (value){
+		              if (value) {
+		                return;
+		              }
+		          }.bind(this)
+		      })
+		    });
+
+		    //console.log(hidden);
 
     		if (games[i].hidden == false || games[i].hidden == "false") {
     			input.setAttribute('checked', 'checked');
@@ -225,15 +281,33 @@ module.exports = global.Bar = React.createClass({
 
     hideWidget() {
     	var widget = document.getElementById(event.target.id);
+    	var games = electron.remote.getGlobal('sharedObject').games;
     	console.log(widget);
+    	console.log(games[0].i);
+    	console.log(event.target.id);
+
     	//console.log(widget.getAttribute('style'));
     	//console.log(widget.getAttribute('hidden'));
     	if (widget.getAttribute('hidden') == null) {
     		widget.setAttribute('hidden', true);
     		this.setState({hidden: true});
+    		// for (var i = 0; i < games.length; i++) {
+    		// 	if (games[i].i == event.target.id) {
+    		// 		console.log('hi');
+    		// 		games[i].hidden = true;
+    		// 		console.log(games[i].hidden);
+    		// 	}
+    		// }
     	} else {
     		widget.removeAttribute('hidden');
     		this.setState({hidden: false});
+    		// for (var i = 0; i < games.length; i++) {
+    		// 	if (games[i].i == event.target.id) {
+    		// 		console.log('hey');
+    		// 		games[i].hidden = false;
+    		// 		console.log(games[i].hidden);
+    		// 	}
+    		// }
     	}
     	
        	$.ajax({
