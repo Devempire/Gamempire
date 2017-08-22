@@ -143,7 +143,7 @@ module.exports = global.Dashboard = React.createClass({
     console.log(this.state.widget);
     for (var h = 0; h < g; h++) {
       var hidden = this.state.widget[h].hidden;
-      console.log(hidden);
+      //console.log(hidden);
       //this.removeWidget(this.state.widget[h].widgetid)
       $.get(api_server + '/widget/find/' + this.state.widget[h].widgetid + '/info').done((res2)=>{
         var xx=res2.x;

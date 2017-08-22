@@ -98,7 +98,6 @@ module.exports = class Login extends React.Component {
        }
      }
 
-
     render() {
       document.getElementById('top_bar').style.visibility = "hidden";
        var title = "Login \u2014 Gamempire"
@@ -130,80 +129,68 @@ module.exports = class Login extends React.Component {
          );
      }
 
-
     _handleLogin() {
       if ($('#remember_me').is(':checked')) {
-           localStorage.usrname = $('#username').val();
-           localStorage.pass = $('#passsword').val();
-           localStorage.chkbx = $('#remember_me').val();
-       } else {
-           localStorage.usrname = '';
-           localStorage.pass = '';
-           localStorage.chkbx = '';
-       }
-    var user_id = this.state.userName;
-    var pwrd = this.state.password;
-    if (user_id==null || user_id=="" || pwrd==null || pwrd=="")
-      {
+        localStorage.usrname = $('#username').val();
+        localStorage.pass = $('#passsword').val();
+        localStorage.chkbx = $('#remember_me').val();
+      } else {
+        localStorage.usrname = '';
+        localStorage.pass = '';
+        localStorage.chkbx = '';
+      }
+      var user_id = this.state.userName;
+      var pwrd = this.state.password;
+      if (user_id == null || user_id == "" || pwrd == null || pwrd == "") {
         $("#loginmsg").html("All fields must be filled in.<button id='close' onclick='$(this).parent().hide();' ></button>");
         $("#loginmsg").addClass('label warning input-group-field');
         $("#loginmsg").addClass("shake");
         $("#loginmsg").show();
-        setTimeout(function () {
+        setTimeout(function() {
           $("#loginmsg").removeClass("shake");
         },200);
         return false;
       }
       $( ".content-loading" ).css("display:block;");
-        $( ".content-loading" ).show();
+      $( ".content-loading" ).show();
 
-        $.post(api_server+'/login/find',
-        {
-            username:this.state.userName,
-            password:this.state.password
-        })
+      $.post(api_server+'/login/find',
+      {
+        username:this.state.userName,
+        password:this.state.password
+      }).done((res) =>{
+        $( ".content-loading" ).fadeOut( "slow" );
+        var token = electron.remote.getGlobal('sharedObject').token = res;
+        $.post(api_server+"/login/load",{
+          'token': token
+        }).done((d)=> {
+          electron.remote.getGlobal('sharedObject').id=d._id;
+          $.ajax({
+            url:api_server+'/login/profile/'+ d._id + '/info',
+            type:"GET"
+          }).done((res2)=>{
+            electron.remote.getGlobal('sharedObject').layout=res2.layout;
+            electron.remote.getGlobal('sharedObject').username=res2.username;
+            electron.remote.getGlobal('sharedObject').aboutme=res2.aboutme;
+            electron.remote.getGlobal('sharedObject').widget=res2.widgets;
+            electron.remote.getGlobal('sharedObject').avatar=res2.avatar;
+            electron.remote.getGlobal('sharedObject').data=res2.data;
 
-            .done((res) =>{
-
-              $( ".content-loading" ).fadeOut( "slow" );
-              var token =electron.remote.getGlobal('sharedObject').token = res;
-              $.post(api_server+"/login/load",{
-                'token': token
-              }).done((d)=> {
-                electron.remote.getGlobal('sharedObject').id=d._id;
-                $.ajax({
-                  url:api_server+'/login/profile/'+ d._id + '/info',
-                  type:"GET"
-                        }).done((res2)=>{
-
-                  electron.remote.getGlobal('sharedObject').layout=res2.layout;
-                  electron.remote.getGlobal('sharedObject').username=res2.username;
-                  electron.remote.getGlobal('sharedObject').aboutme=res2.aboutme;
-                  electron.remote.getGlobal('sharedObject').widget=res2.widgets;
-                  electron.remote.getGlobal('sharedObject').avatar=res2.avatar;
-                  electron.remote.getGlobal('sharedObject').data=res2.data;
-
-                  $.ajax({
-                    url:api_server+"/login/pingstatus",
-                    type:"PUT",
-                    contentType: 'application/json; charset=utf-8',
-                    data:JSON.stringify({
-                             _id:electron.remote.getGlobal('sharedObject').id,
-                             status:"online",
-                         })
-                     }).done((res)=>{
-
-
-
-                   ipc.sendSync('loggedIn')
-                   document.getElementById('top_bar').style.visibility = "visible";
+            $.ajax({
+              url:api_server+"/login/pingstatus",
+              type:"PUT",
+              contentType: 'application/json; charset=utf-8',
+              data:JSON.stringify({
+                _id:electron.remote.getGlobal('sharedObject').id,
+                status:"online",
+              })
+            }).done((res)=>{
+              ipc.sendSync('loggedIn')
+              document.getElementById('top_bar').style.visibility = "visible";
               ReactDOM.render(
                 <SideBar />,
                 document.getElementById('main-content')
               )
-
-
-
 
               //The <SideBar> loads a content div which will allow the screens to change while the sidebar remains untouched
 
@@ -211,28 +198,23 @@ module.exports = class Login extends React.Component {
               //currently displays white screen for split second when rendering the elements in sidebar.js
               //TODO: find faster way to way.
               document.getElementById('playgroundFrame').style.visibility = "hidden";
-
-              }).fail((err)=>{
-                      console.log("status failed to update to the server.")
-
-                    })
-
-              });
-
-
+            }).fail((err)=>{
+              console.log("status failed to update to the server.")
             })
-            })
+          });
+        })
+      })
 
-            .fail((res)=>{
-            $( ".content-loading" ).hide();
-            $("#loginmsg").html("Wrong Username or Password<button id='close' onclick='$(this).parent().hide();' >");
-            $("#loginmsg").addClass('label warning');
-            $("#loginmsg").addClass("shake");
-            $("#loginmsg").show();
-            setTimeout(function () {
-              $("#loginmsg").removeClass("shake");
-            },200);
-            });
+      .fail((res)=>{
+        $( ".content-loading" ).hide();
+        $("#loginmsg").html("Wrong Username or Password<button id='close' onclick='$(this).parent().hide();' >");
+        $("#loginmsg").addClass('label warning');
+        $("#loginmsg").addClass("shake");
+        $("#loginmsg").show();
+        setTimeout(function () {
+          $("#loginmsg").removeClass("shake");
+        },200);
+      });
     }
 
     _handleRegistry() {
@@ -241,5 +223,4 @@ module.exports = class Login extends React.Component {
         document.getElementById('main-content')
       )
     }
-
 }

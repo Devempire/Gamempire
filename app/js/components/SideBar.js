@@ -225,58 +225,60 @@ module.exports = global.Bar = React.createClass({
     	var widgetlist = document.createElement('div');
     	widgetlist.setAttribute('id', 'widgetlist');
 
-		for (var i = 0; i < games.length; i++) {
-    		var label = document.createElement('label');
-    		var widget_name = document.createTextNode(games[i].widgetname);
-    		label.appendChild(widget_name);
-    		widgetlist.appendChild(label);
+        // $.ajax({
+        //     url:api_server+'/login/profile/'+ electron.remote.getGlobal('sharedObject').id + '/info',
+        //     type:"GET"
+        // }).done((res2)=>{
+        //     var widgets=res2.widgets;
+        //     console.log(widgets[0].hidden);
+        // });
 
-    		var input = document.createElement('input');
-    		input.setAttribute('type', 'checkbox');
-    		input.setAttribute('id', games[i].i);
-    		input.addEventListener('click', this.hideWidget);
-    		//console.log(games[i].hidden);
+	    $.ajax({
+	    	url:api_server+'/login/profile/'+ electron.remote.getGlobal('sharedObject').id + '/info',
+	        type:"GET"
+	    }).done((res2)=>{
+	        var widgets = res2.widgets;
+	        console.log(widgets);
+	        console.log(widgets[0].hidden);
+	        for (var i = 0; i < games.length; i++) {
+	    		var label = document.createElement('label');
+	    		var widget_name = document.createTextNode(games[i].widgetname);
+	    		label.appendChild(widget_name);
+	    		widgetlist.appendChild(label);
 
-    		$.get(api_server+"/widget/find/" + games[i].i + "/info").done((res)=>{
-    			console.log(res);
-		        //hidden = res.hidden;
-		    }).fail((err)=>{
-		      console.log('Something is wrong with loading the widget.');
-		      vex.dialog.alert({
-		          message: 'Something is wrong with loading the widget.',
-		          callback: function (value){
-		              if (value) {
-		                return;
-		              }
-		          }.bind(this)
-		      })
-		    });
+	    		var input = document.createElement('input');
+	    		input.setAttribute('type', 'checkbox');
+	    		input.setAttribute('id', games[i].i);
+	    		input.addEventListener('click', this.hideWidget);
 
-		    //console.log(hidden);
+	    		for (var j = 0; j < widgets.length; j++) {
+	    			if (games[i].i == widgets[j].widgetid) {
+	    				if (widgets[j].hidden == false || widgets[j].hidden == "false") {
+			    			input.setAttribute('checked', 'checked');
+			    		}
+	    			}
+	    		}
+	    		
+	    		widgetlist.appendChild(input);
 
-    		if (games[i].hidden == false || games[i].hidden == "false") {
-    			input.setAttribute('checked', 'checked');
-    		}
-    		
-    		widgetlist.appendChild(input);
+	    		var br = document.createElement('br');
+	    		widgetlist.appendChild(br);
 
-    		var br = document.createElement('br');
-    		widgetlist.appendChild(br);
+				console.log(widgetlist);
+	    	}
 
-			console.log(widgetlist);
-    	}
-
-		vex.dialog.open({
-	        overlayClosesOnClick: true,
-	        unsafeMessage: widgetlist,
-	        callback: function (value){
-	            if (value) {
-	              	return;
-	            } else {
-	            	return;
-	            }
-	        }.bind(this)
-	    })
+			vex.dialog.open({
+		        overlayClosesOnClick: true,
+		        unsafeMessage: widgetlist,
+		        callback: function (value){
+		            if (value) {
+		              	return;
+		            } else {
+		            	return;
+		            }
+		        }.bind(this)
+		    })
+	    });
     },
 
     hideWidget() {
